@@ -1,9 +1,13 @@
-﻿namespace Pip_Boy
+﻿using Pip_Boy.Sounds;
+
+namespace Pip_Boy
 {
     internal class Program
     {
-        public static readonly Random random = new();
-        public static readonly Player player = new("Player", [5, 5, 5, 5, 5, 5, 5]);
+        public static Random random = new();
+        public static Player player = new("Player", [5, 5, 5, 5, 5, 5, 5]);
+        public static Radio radio = new("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\Pip-Boy\\Sounds\\");
+        public static PipBoy pipBoy = new();
 
         #region ASCII Images
         public static readonly string vaultTechLogo = @"
@@ -108,6 +112,9 @@
             Thread.Sleep(1250);
             Console.Clear();
             Console.WriteLine(player);
+            Thread radioThread = new(radio.Play);
+            radio.Play();
+            Thread.Sleep(1000000);
         }
 
         #region Slow Typing
