@@ -1,14 +1,7 @@
-﻿using Pip_Boy.Sounds;
-
-namespace Pip_Boy
+﻿namespace Pip_Boy
 {
     internal class Program
     {
-        public static Random random = new();
-        public static Player player = new("Player", [5, 5, 5, 5, 5, 5, 5]);
-        public static Radio radio = new("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\Pip-Boy\\Sounds\\");
-        public static PipBoy pipBoy = new();
-
         #region ASCII Images
         public static readonly string vaultTechLogo = @"
                                                           ########                     
@@ -85,68 +78,63 @@ namespace Pip_Boy
                                                           ██▒▒▒▒▒▒▒▒▒▒██          ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██      ░░▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒██";
         #endregion
 
-        static void Main(string[] args)
+        public static PipBoy pipBoy = new(ConsoleColor.Yellow, "C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\Pip-Boy\\Sounds\\");
+
+        static void Main()
         {
-            Console.ForegroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = pipBoy.color;
             Console.Title = "PIP-Boy";
-            SlowType("Hello, World!");
             SlowType("PIP-Boy 3000 MKIV");
             SlowType("Copyright 2075 RobCo Industries");
             SlowType("64kb Memory");
+            Console.WriteLine(new string('-', Console.WindowWidth));
 
-            for (int i = 0; i < Console.BufferWidth; i++)
-            {
-                Console.Write('-');
-            }
-            Console.WriteLine();
-
-            for (int i = 0; i < Console.BufferHeight; i++)
-            {
-                Thread.Sleep(random.Next(25));
-                Console.WriteLine();
-            }
             Console.Clear();
             Console.Write(vaultTechLogo);
             Console.WriteLine();
             Console.WriteLine("VAULT-TEC");
             Thread.Sleep(1250);
             Console.Clear();
-            Console.WriteLine(player);
-            Thread radioThread = new(radio.Play);
-            radio.Play();
-            Thread.Sleep(1000000);
+
+            Console.WriteLine(vaultBoyLogo);
+            Console.WriteLine("LOADING...");
+            Thread.Sleep(2500);
+            Console.Clear();
+
+            ConsoleKeyInfo keyInfo;
+            do
+            {
+                Console.Clear();
+                Console.WriteLine(pipBoy);
+                Console.WriteLine(pipBoy.ShowMenu());
+
+                keyInfo = Console.ReadKey();
+                if (keyInfo.Key == ConsoleKey.LeftArrow)
+                {
+                    pipBoy.ChangeMenu(false);
+                }
+                if (keyInfo.Key == ConsoleKey.RightArrow)
+                {
+                    pipBoy.ChangeMenu(true);
+                }
+                if (keyInfo.Key == ConsoleKey.B)
+                {
+                    Console.Beep();
+                    Console.Beep();
+                    Console.Beep();
+                }
+            }
+            while (keyInfo.Key != ConsoleKey.Q);
         }
 
-        #region Slow Typing
         public static void SlowType(string text)
         {
             foreach (char c in text)
             {
                 Console.Write(c);
-                Thread.Sleep(25);
+                Thread.Sleep(10);
             }
             Console.WriteLine();
         }
-
-        public static void SlowType(string text, int delay)
-        {
-            foreach (char c in text)
-            {
-                Console.Write(c);
-                Thread.Sleep(delay);
-            }
-            Console.WriteLine();
-        }
-
-        public static void SlowType(string text, bool isRandom, int lower, int upper)
-        {
-            foreach (char c in text)
-            {
-                Console.Write(c);
-                Thread.Sleep(random.Next(lower, upper));
-            }
-            Console.WriteLine();
-        }
-        #endregion
     }
 }

@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Sounds\" />
     <Folder Include="Text Files\" />
   </ItemGroup>
 
