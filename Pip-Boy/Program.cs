@@ -78,7 +78,7 @@
                                                           ██▒▒▒▒▒▒▒▒▒▒██          ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██      ░░▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒██";
         #endregion
 
-        public static PipBoy pipBoy = new(ConsoleColor.Yellow, "C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\Pip-Boy\\Sounds\\");
+        public static PipBoy pipBoy = new();
 
         static void Main()
         {
@@ -94,37 +94,59 @@
             Console.WriteLine();
             Console.WriteLine("VAULT-TEC");
             Thread.Sleep(1250);
-            Console.Clear();
 
+            Console.Clear();
             Console.WriteLine(vaultBoyLogo);
             Console.WriteLine("LOADING...");
             Thread.Sleep(2500);
             Console.Clear();
 
-            ConsoleKeyInfo keyInfo;
+            pipBoy.player = pipBoy.CreatePlayer();
+
+            ConsoleKey key;
             do
             {
                 Console.Clear();
-                Console.WriteLine(pipBoy);
-                Console.WriteLine(pipBoy.ShowMenu());
 
-                keyInfo = Console.ReadKey();
-                if (keyInfo.Key == ConsoleKey.LeftArrow)
+                pipBoy.Highlight(pipBoy.currentPage.ToString(), true);
+                Console.WriteLine();
+
+                Console.WriteLine(pipBoy.ShowMenu());
+                Console.WriteLine();
+
+                pipBoy.ShowSubMenu(pipBoy.GetSubMenu());
+
+                key = Console.ReadKey().Key;
+
+                switch (key)
                 {
-                    pipBoy.ChangeMenu(false);
-                }
-                if (keyInfo.Key == ConsoleKey.RightArrow)
-                {
-                    pipBoy.ChangeMenu(true);
-                }
-                if (keyInfo.Key == ConsoleKey.B)
-                {
-                    Console.Beep();
-                    Console.Beep();
-                    Console.Beep();
+                    case ConsoleKey.A:
+                        pipBoy.ChangeMenu(false);
+                        break;
+                    case ConsoleKey.D:
+                        pipBoy.ChangeMenu(true);
+                        break;
+
+                    case ConsoleKey.LeftArrow:
+                        pipBoy.ChangeSubMenu(false);
+                        break;
+                    case ConsoleKey.RightArrow:
+                        pipBoy.ChangeSubMenu(true);
+                        break;
+
+                    case ConsoleKey.UpArrow:
+                        pipBoy.Scroll(true);
+                        break;
+                    case ConsoleKey.DownArrow:
+                        pipBoy.Scroll(false);
+                        break;
+
+                    case ConsoleKey.Enter when pipBoy.currentPage == PipBoy.Pages.DATA && pipBoy.dataPage == PipBoy.DataPages.Radio:
+                        pipBoy.radio.Play();
+                        break;
                 }
             }
-            while (keyInfo.Key != ConsoleKey.Q);
+            while (key != ConsoleKey.Q);
         }
 
         public static void SlowType(string text)

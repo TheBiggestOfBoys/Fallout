@@ -3,53 +3,41 @@ using System.Text;
 
 namespace Pip_Boy
 {
-    internal class Radio(string folderPath)
+    internal class Radio
     {
+        public static readonly Random random = new();
         public static readonly SoundPlayer soundPlayer = new();
-        public List<string> songs = [.. Directory.GetFiles(folderPath, "*.wav")];
+        public List<Song> songs = [];
 
-        /// <summary>
-        /// Parses the file path to get jus the song's name
-        /// </summary>
-        /// <param name="filePath">The path of the audio file</param>
-        /// <returns></returns>
-        public static string GetSongName(string filePath)
+        public Radio(string folderPath)
         {
-            return filePath.Split('\\')[^1].Split(".wav")[0];
-        }
-
-        public void Play(int songIndex)
-        {
-            soundPlayer.SoundLocation = songs[songIndex];
-            soundPlayer.Load();
-            soundPlayer.Play();
+            foreach (string path in Directory.GetFiles(folderPath, "*.wav"))
+            {
+                songs.Add(new(path));
+            }
         }
 
         public void Play()
         {
-            soundPlayer.SoundLocation = songs[0];
-            soundPlayer.Load();
-            soundPlayer.Play();
+            soundPlayer.SoundLocation = songs[random.Next(songs.Count)].Path;
+            soundPlayer.PlaySync();
         }
 
-        public void ShufflePlay()
+        public void AddSong(string path)
         {
-            foreach (string song in songs)
-            {
-                soundPlayer.SoundLocation = song;
-                soundPlayer.Load();
-                soundPlayer.Play();
-            }
+            if (path.Split('\\')[^1].Split('.')[^1] == "wav")
+                songs.Add(new(path));
+            else
+                Console.Error.Write("Please give a '.wav' file!");
         }
 
         public override string ToString()
         {
             StringBuilder stringBuilder = new();
             stringBuilder.AppendLine("Songs:\t" + songs.Count);
-            foreach (string song in songs)
-            {
-                stringBuilder.AppendLine('\t' + GetSongName(song));
-            }
+            foreach (Song song in songs)
+                stringBuilder.AppendLine('\t' + song.Name);
+
             return stringBuilder.ToString();
         }
     }

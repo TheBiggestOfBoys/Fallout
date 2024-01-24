@@ -16,7 +16,7 @@ namespace Pip_Boy
             '#', // Settlement
             '@', // Base
             '+'  // Doctor
-                 ];
+        ];
 
         public static char[][] GenerateMap(int height, int width, int density)
         {
@@ -27,16 +27,12 @@ namespace Pip_Boy
                 // and width
                 tempMap[i] = new char[width];
                 for (int j = 0; j < width; j++)
-                {
                     tempMap[i][j] = ' ';
-                }
             }
 
             // Now randomly assign markers in the array
             for (int i = 0; i < density; i++)
-            {
                 tempMap[random.Next(height)][random.Next(width)] = markers[random.Next(markers.Length)];
-            }
 
             return tempMap;
         }
