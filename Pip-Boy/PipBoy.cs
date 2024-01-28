@@ -10,6 +10,10 @@ namespace Pip_Boy
         public Player player = new("Player", [5, 5, 5, 5, 5, 5, 5]);
         public Radio radio = new("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\Pip-Boy\\Songs\\");
         public Map map = new(25, 75, 15);
+        public SoundPlayer soundEffects = new();
+        #endregion
+
+        #region Lists
         public List<Item> inventory = [
             new("10mm Pistol", "A common weapon in the wasteland", 5.5, 55, Item.Types.WEAPON),
             new("Sniper Rifle", "A high damage, low fire rate marksman rifle", 12.75, 250, Item.Types.WEAPON),
@@ -17,7 +21,7 @@ namespace Pip_Boy
             new("10mm Ammo", "A common ammo for many weapons", 0, 1, Item.Types.AMMO),
             new("Stimpack", "A healing device", 1, 30, Item.Types.AID),
             new("Journal Entry", "Exposition thingy", 1, 15, Item.Types.MISC)];
-        public SoundPlayer soundEffects = new();
+        public List<Quest> Quests = [new("Finish the game", [new("Do stuff", 16, 16), new("Do things", 32, 32)])];
         #endregion
 
         public ConsoleColor color = ConsoleColor.Green;
@@ -26,7 +30,7 @@ namespace Pip_Boy
         public Pages currentPage = Pages.STATS;
         public StatsPages statPage = StatsPages.Status;
         public ItemsPages itemPage = ItemsPages.Weapons;
-        public DataPages dataPage = DataPages.LocalMap;
+        public DataPages dataPage = DataPages.Map;
         #endregion
 
         #region Sounds
@@ -36,7 +40,11 @@ namespace Pip_Boy
         public string[] radiationSounds = Directory.GetFiles("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\Pip-Boy\\Sounds\\radiation\\", "*wav");
         #endregion
 
-        #region Menu
+        #region Menu Navigation
+        /// <summary>
+        /// Changes the current menu page
+        /// </summary>
+        /// <param name="right">Move right?</param>
         public void ChangeMenu(bool right)
         {
             soundEffects.SoundLocation = sounds[^3];
@@ -47,6 +55,10 @@ namespace Pip_Boy
                 currentPage--;
         }
 
+        /// <summary>
+        /// Changes the current sub menu page
+        /// </summary>
+        /// <param name="right">Move right?</param>
         public void ChangeSubMenu(bool right)
         {
             soundEffects.SoundLocation = sounds[^3];
@@ -54,36 +66,38 @@ namespace Pip_Boy
 
             switch (currentPage)
             {
-                case Pages.STATS:
-                    if (right && statPage < StatsPages.General)
-                        statPage++;
-                    if (!right && statPage > StatsPages.Status)
-                        statPage--;
+                case Pages.STATS when right && statPage < StatsPages.General:
+                    statPage++;
                     break;
-                case Pages.ITEMS:
-                    if (right && itemPage < ItemsPages.Misc)
-                        itemPage++;
-                    if (!right && itemPage > ItemsPages.Weapons)
-                        itemPage--;
+                case Pages.STATS when !right && statPage > StatsPages.Status:
+                    statPage--;
                     break;
-                case Pages.DATA:
-                    if (right && dataPage < DataPages.Radio)
-                        dataPage++;
-                    if (!right && dataPage > DataPages.LocalMap)
-                        dataPage--;
+
+                case Pages.ITEMS when right && itemPage < ItemsPages.Misc:
+                    itemPage++;
+                    break;
+                case Pages.ITEMS when !right && itemPage > ItemsPages.Weapons:
+                    itemPage--;
+                    break;
+
+                case Pages.DATA when right && dataPage < DataPages.Radio:
+                    dataPage++;
+                    break;
+                case Pages.DATA when !right && dataPage > DataPages.Map:
+                    dataPage--;
                     break;
             }
         }
+        #endregion
 
-        public void Scroll(bool up)
-        {
-            soundEffects.SoundLocation = sounds[^2];
-            soundEffects.PlaySync();
-        }
-
+        #region Menu
+        /// <summary>
+        /// Shows strings based in the selected page
+        /// </summary>
+        /// <returns>The corresponding string</returns>
         public string ShowMenu() => currentPage switch
         {
-            Pages.STATS => player.ToString(),
+            Pages.STATS => ShowStats(),
             Pages.ITEMS => ShowInventory(),
             Pages.DATA => ShowData()
         };
@@ -107,6 +121,10 @@ namespace Pip_Boy
             return [.. footer];
         }
 
+        /// <summary>
+        /// Shows and highlights the selected submenu for the page
+        /// </summary>
+        /// <param name="subMenuItems">The submenu items of the current page</param>
         public void ShowSubMenu(string[] subMenuItems)
         {
             foreach (string item in subMenuItems)
@@ -122,22 +140,24 @@ namespace Pip_Boy
         }
         #endregion
 
-        public Player CreatePlayer()
+        #region Page Logic
+        /// <summary>
+        /// Logic behind showing the Stats Page's submenus
+        /// </summary>
+        /// <returns>The corresponding string</returns>
+        public string ShowStats() => statPage switch
         {
-            Player tempPlayer = new();
-            byte[] tempAttributes = [0, 0, 0, 0, 0, 0, 0];
-            Console.Write("Enter Player Name: ");
-            string name = Console.ReadLine();
+            StatsPages.Status => player.ShowStatus(),
+            StatsPages.SPECIAL => player.ShowSPECIAL(),
+            StatsPages.Skills => player.ShowSkills(),
+            StatsPages.Perks => player.ShowPeks(),
+            StatsPages.General => "GENERAL STUFF GOES HERE!"
+        };
 
-            for (byte x = 0; x < tempPlayer.attributeNames.Length; x++)
-            {
-                Console.Write($"Enter {tempPlayer.attributeNames[x]} value (1 - 10): ");
-                if (byte.TryParse(Console.ReadLine(), out byte y) && y > 0 && y < 11)
-                    tempAttributes[x] = y;
-            }
-            return new Player(name, tempAttributes);
-        }
-
+        /// <summary>
+        /// Shows the items with the current submenu type
+        /// </summary>
+        /// <returns>A table of every `Type` item's name, description, value and weight</returns>
         public string ShowInventory()
         {
             StringBuilder stringBuilder = new();
@@ -157,26 +177,44 @@ namespace Pip_Boy
             return stringBuilder.ToString();
         }
 
+        /// <summary>
+        /// Logic behind showing the Data Page's submenus
+        /// </summary>
+        /// <returns>The corresponding string</returns>
         public string ShowData() => dataPage switch
         {
-            DataPages.LocalMap => "LOCAL MAP GOES HERE!!!",
-            DataPages.WorldMap => map.ToString(),
-            DataPages.Quests => "QUESTS GOES HERE!!!",
+            DataPages.Map => map.ToString(),
+            DataPages.Quests => ShowQuests(),
             DataPages.Misc => "MISC NOTES GOES HERE!!!",
             DataPages.Radio => radio.ToString()
         };
+
+        /// <summary>
+        /// Shows all active quests and their steps
+        /// </summary>
+        /// <returns>A table of all quests and their steps</returns>
+        public string ShowQuests()
+        {
+            StringBuilder stringBuilder = new();
+            foreach (Quest quest in Quests)
+                stringBuilder.AppendLine(quest.ToString());
+
+            return stringBuilder.ToString();
+        }
+        #endregion
+
 
         #region Console Functions
         /// <summary>
         /// Error message and sound
         /// </summary>
-        /// <param name="errorMessage">The error message to display</param>
-        public void Error(string errorMessage)
+        /// <param name="message">The error message to display</param>
+        public void Error(string message)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Error.WriteLine(errorMessage);
-            Console.Beep(1000, 750);
-            Console.Beep(1000, 750);
+            Console.Error.WriteLine(message);
+            Console.Beep(500, 500);
+            Console.Beep(500, 500);
             Console.ForegroundColor = color;
         }
 
@@ -220,14 +258,13 @@ namespace Pip_Boy
             Weapons,
             Apparel,
             Aid,
-            Misc,
-            Ammo
+            Ammo,
+            Misc
         }
 
         public enum DataPages
         {
-            LocalMap,
-            WorldMap,
+            Map,
             Quests,
             Misc,
             Radio

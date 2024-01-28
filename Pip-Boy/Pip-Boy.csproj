@@ -8,12 +8,17 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Sounds\" />
-    <Folder Include="Text Files\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="Sounds\**\*.wav">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>Sounds\%(RecursiveDir)%(Filename)%(Extension)</Link>
+		</Content>
+		<Content Include="Songs\*.wav">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
-  <ItemGroup>
+	<ItemGroup>
     <PackageReference Include="System.Windows.Extensions" Version="8.0.0" />
   </ItemGroup>
 

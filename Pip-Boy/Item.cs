@@ -2,13 +2,13 @@
 {
     internal readonly struct Item(string name, string description, double weight, int value, Item.Types type)
     {
-        public string Name { get; } = name;
-        public string Description { get; } = description;
+        public readonly string Name = name;
+        public readonly string Description = description;
 
-        public Types Type { get; } = type;
+        public readonly Types Type = type;
 
-        public double Weight { get; } = weight;
-        public int Value { get; } = value;
+        public readonly double Weight = weight;
+        public readonly int Value = value;
 
         public enum Types
         {
