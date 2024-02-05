@@ -20,14 +20,19 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x
+        
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore /p:EnableWindowsTargeting=true
+      
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore /p:EnableWindowsTargeting=true
+      
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal /p:EnableWindowsTargeting=true
+      
     - name: Publish
-      run: dotnet publish --configuration Release --output ./publish --runtime win-x86 --self-contained false
+      run: dotnet publish --configuration Release --output ./publish /p:EnableWindowsTargeting=true --runtime win-x86 --self-contained false
+      
     - name: Create Release
       uses: ncipollo/release-action@v1
       with:
