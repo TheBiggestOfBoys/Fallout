@@ -1,84 +1,10 @@
-﻿namespace Pip_Boy
+﻿using System;
+
+namespace Pip_Boy
 {
     internal class Program
     {
-        #region ASCII Images
-        public static readonly string vaultTechLogo = @"
-                                                          ########                     
-                                                         ###########                   
-                                                       ###############                 
-                                                      #################                
-                                                     #######     ######                
-                                           ###############         ##############      
-                                        #################           ################   
-                                        ################    #####    ###############   
-                                           ############   ########   ############      
-                                                   ####   #########  ####              
-                                     ##################   #########   ################ 
-                                    ###################  ##########   #################
-                                     ##################   #########   ################ 
-                                                   ####   #########   ####             
-                                           #############   #######   ############      
-                                        ################    #####   ################   
-                                        #################           ################   
-                                           ###############         ##############      
-                                                     #######    #######                
-                                                      ################                 
-                                                       ##############                  
-                                                         ###########                    ";
-
-        public static readonly string vaultBoyLogo = @"
-                                                                                      ▒▒▒▒                                        
-                                                                                    ▒▒░░░░▒▒▒▒                                    
-                                                                            ████████░░    ░░░░████                                
-                                                                ██        ██                      ██                              
-                                                              ██░░▓▓    ▓▓░░                      ░░▓▓                            
-                                                              ██    ▓▓▓▓                              ▓▓                          
-                                                              ██            ██████████████              ██                        
-                                                              ██          ██              ██    ████      ██                      
-                                                            ██  ██      ██                  ████    ██    ██                      
-                                                            ██    ▒▒▒▒▒▒                    ░░      ██    ██                      
-                                                              ▒▒  ░░██░░▒▒                        ▒▒░░    ██                      
-                                                              ██████▒▒██░░            ████      ██▒▒██    ██                      
-                                                                  ██                      ██  ██  ██  ██  ██                      
-              ▓▓▓▓▓▓                                            ██░░                            ██░░▓▓░░▓▓                        
-            ██    ██                                            ██    ██      ██    ████      ██  ██  ██                          
-          ██        ██                                          ██    ██    ██          ██      ██  ██████                        
-          ██        ██                                        ██            ██                            ██                      
-          ██        ██                                        ██          ▒▒░░                            ██                      
-          ██        ██                                        ██          ▒▒▒▒                            ██                      
-          ██        ▒▒▒▒                                      ██            ██                            ██                      
-          ░░▓▓        ██▓▓                                    ██            ░░      ██                ██▓▓░░                      
-        ██▓▓██▓▓▓▓        ██                                  ██    ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ▓▓            ▓▓                            
-    ▓▓▓▓          ████      ▓▓                                ██    ██                  ▓▓          ██                            
-░░██                  ██      ██                                ██    ██              ████        ██                              
-░░██                  ██      ██                                ██      ██████████████            ██                              
-░░██    ████████████    ██      ████                              ██                            ██                                
-    ████▒▒░░░░░░░░░░██████      ██▓▓████████                  ████████                        ████████                            
-░░██                      ██    ████▒▒▒▒▒▒▒▒██████████████████        ████████              ██  ██    ████                        
-░░██                      ██    ██░░▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██        ░░██░░░░              ░░▓▓░░    ██▓▓▓▓                      
-    ▓▓▓▓    ▓▓▓▓▓▓▓▓    ██░░  ▓▓░░  ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██          ████                ▓▓        ██▒▒▒▒▓▓▓▓                  
-        ██▓▓        ████      ██  ▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██            ██▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓          ██▒▒▒▒▒▒██▓▓                
-      ██                ██    ██  ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██                                    ██▒▒▒▒▒▒▒▒▒▒▒▒██              
-      ██                ██  ██    ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██                                ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██            
-        ████    ████████    ██  ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██                            ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██          
-        ░░░░▒▒▒▒░░░░░░    ▒▒▒▒  ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▒▒▒▒▒▒▒▒▓▓▒▒                      ▒▒▒▒▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██        
-            ░░░░▒▒▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓▓▓██▒▒▒▒▒▒▒▒▒▒▒▒▒▒            ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██      
-                ░░░░░░░░░░▓▓▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒██▓▓▓▓▓▓░░  ██▒▒▒▒▒▒▒▒▒▒▒▒██          ▓▓▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▓▓    
-                              ██████████████            ██▒▒▒▒▒▒▒▒▒▒▒▒██          ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██▓▓  
-                                                        ██▒▒▒▒▒▒▒▒▒▒▒▒██          ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██  
-                                                        ██▒▒▒▒▒▒▒▒▒▒▒▒██          ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██
-                                                        ██▒▒▒▒▒▒▒▒▒▒▒▒██          ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██
-                                                        ██▒▒▒▒▒▒▒▒▒▒▒▒██          ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██
-                                                          ██▒▒▒▒▒▒▒▒▒▒██          ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██
-                                                          ██▒▒▒▒▒▒▒▒▒▒██          ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒████▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██
-                                                          ██▒▒▒▒▒▒▒▒▒▒██          ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██░░░░▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██
-                                                          ██▒▒▒▒▒▒▒▒▒▒██          ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██        ████▒▒▒▒▒▒▒▒▒▒▒▒██
-                                                          ██▒▒▒▒▒▒▒▒▒▒██          ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██        ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒██
-                                                          ██▒▒▒▒▒▒▒▒▒▒██          ██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒██      ░░▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒██";
-        #endregion
-
-        public static PipBoy pipBoy = new();
+        public static readonly PipBoy pipBoy = new();
 
         static void Main()
         {
@@ -88,35 +14,18 @@
             Console.ForegroundColor = pipBoy.color;
             Console.Title = "PIP-Boy 3000 MKIV";
             if (boot)
-            {
-                SlowType("PIP-Boy 3000 MKIV");
-                SlowType("Copyright 2075 RobCo Industries");
-                SlowType("64kb Memory");
-                SlowType(new string('-', Console.WindowWidth));
-
-                Console.Clear();
-                Console.Write(vaultTechLogo);
-                Console.WriteLine();
-                SlowType("VAULT-TEC");
-                Thread.Sleep(1250);
-
-                Console.Clear();
-                Console.WriteLine(vaultBoyLogo);
-                SlowType("LOADING...");
-                Thread.Sleep(2500);
-                Console.Clear();
-            }
+                pipBoy.Boot();
 
             if (createPlayer)
-                pipBoy.player = new Player();
+                pipBoy.player = new();
             else
-                pipBoy.player = new Player("Jake Scott", [5, 6, 7, 8, 9, 3, 4]);
+                pipBoy.player = new("Jake Scott", [5, 6, 7, 8, 9, 3, 4]);
 
             pipBoy.map.MovePlayer(null, null);
 
             #region Main Loop
-            ConsoleKey key;
-            do
+            ConsoleKey key = ConsoleKey.Escape;
+            while (key != ConsoleKey.Q)
             {
                 Console.Clear();
 
@@ -148,6 +57,13 @@
                     case ConsoleKey.RightArrow:
                         pipBoy.ChangeSubMenu(true);
                         break;
+
+                    case ConsoleKey.UpArrow when pipBoy.currentPage == PipBoy.Pages.STATS && pipBoy.statPage == PipBoy.StatsPages.General:
+                        pipBoy.ChangeSelectedFation(false);
+                        break;
+                    case ConsoleKey.DownArrow when pipBoy.currentPage == PipBoy.Pages.STATS && pipBoy.statPage == PipBoy.StatsPages.General:
+                        pipBoy.ChangeSelectedFation(true);
+                        break;
                     #endregion
 
                     #region Radio
@@ -175,22 +91,7 @@
                         #endregion
                 }
             }
-            while (key != ConsoleKey.Q);
             #endregion
-        }
-
-        /// <summary>
-        /// Slowly Type out a message to the console
-        /// </summary>
-        /// <param name="message">The message</param>
-        public static void SlowType(string message)
-        {
-            foreach (char c in message)
-            {
-                Console.Write(c);
-                Thread.Sleep(10);
-            }
-            Console.WriteLine();
         }
     }
 }

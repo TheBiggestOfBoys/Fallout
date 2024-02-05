@@ -1,11 +1,12 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace Pip_Boy
 {
-    internal class Map(int height, int width, int density)
+    internal struct Map(byte height, byte width, byte density)
     {
         private static readonly Random random = new();
-        public readonly char[][] Grid = GenerateMap(height, width, density);
+        public readonly char[][] Grid = GenerateMap(width, height, density);
 
         public byte PlayerX = 0;
         public byte PlayerY = 0;
@@ -22,27 +23,33 @@ namespace Pip_Boy
         ];
 
         /// <summary>
+        /// The key telling what the markers represent
+        /// </summary>
+        public readonly string key = "! = Quest, ? = Undiscovered, # = Settlement, @ = Base, + = Doctor";
+
+        /// <summary>
         /// Create a map with the given parameters
         /// </summary>
         /// <param name="height">The height of the map</param>
         /// <param name="width">The width of the map</param>
         /// <param name="density">How many points of interest there should be</param>
         /// <returns></returns>
-        public static char[][] GenerateMap(int height, int width, int density)
+        public static char[][] GenerateMap(byte height, byte width, byte density)
         {
-            char[][] tempMap = new char[height][];
-            // Size the map's height..
-            for (int i = 0; i < height; i++)
+            char[][] tempMap = new char[width][];
+            // Size the map's width.
+            for (byte i = 0; i < width; i++)
             {
-                // and width
-                tempMap[i] = new char[width];
-                for (int j = 0; j < width; j++)
+                // and height
+                tempMap[i] = new char[height];
+                // set every cell to an empty space
+                for (byte j = 0; j < height; j++)
                     tempMap[i][j] = ' ';
             }
 
             // Now randomly assign markers in the array
             for (int i = 0; i < density; i++)
-                tempMap[random.Next(height)][random.Next(width)] = markers[random.Next(markers.Length)];
+                tempMap[random.Next(width)][random.Next(height)] = markers[random.Next(markers.Length)];
 
             return tempMap;
         }
@@ -56,19 +63,15 @@ namespace Pip_Boy
         {
             Grid[PlayerY][PlayerX] = ' ';
 
-            if (up == true)
-                if (PlayerY > 0)
-                    PlayerY--;
-            if (up == false)
-                if (PlayerY < Grid.Length)
-                    PlayerY++;
+            if (up == true && PlayerY > 0)
+                PlayerY--;
+            if (up == false && PlayerY < Grid.Length)
+                PlayerY++;
 
-            if (right == true)
-                if (PlayerX < Grid[0].Length)
-                    PlayerX++;
-            if (right == false)
-                if (PlayerX > 0)
-                    PlayerX--;
+            if (right == true && PlayerX < Grid[0].Length)
+                PlayerX++;
+            if (right == false && PlayerX > 0)
+                PlayerX--;
 
             // Player will be represented by '>' on the map
             // X & Y are intentionally flipped
@@ -79,7 +82,7 @@ namespace Pip_Boy
         /// Shows the map
         /// </summary>
         /// <returns>The 2D array as a string</returns>
-        public override string ToString()
+        public override readonly string ToString()
         {
             StringBuilder stringBuilder = new();
             foreach (char[] row in Grid)

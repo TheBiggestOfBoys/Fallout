@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Pip_Boy
 {
@@ -14,7 +16,7 @@ namespace Pip_Boy
             new("Agility", 5),
             new("Luck", 5)];
 
-        public Skill[] Skills = [
+        public Attribute[] Skills = [
             new("Barter", 10),
             new("Energy Weapons", 10),
             new("Explosives", 10),
@@ -32,7 +34,7 @@ namespace Pip_Boy
         public List<Perk> Perks = [new("No Perks", "You have no perks, you get one every 2 levels", 0)];
         #endregion
 
-        public string name;
+        public readonly string name;
         public byte level = 1;
         public ushort maxHealth = 100;
         public ushort currentHealth = 100;
@@ -55,39 +57,38 @@ namespace Pip_Boy
         /// </summary>
         public Player()
         {
-            do
+            while (name == null)
             {
                 Console.Write("Enter Player Name: ");
                 name = Console.ReadLine();
                 Console.Clear();
-            } while (name == null);
+            }
 
-            byte value = 5;
-
-            for (int index = 0; index < SPECIAL.Length; index++)
+            // You have 21 points to disperse across all the SPPECIAL attributes, and each one starts at 1, so 28 total
+            byte totalPoints = 28;
+            for (byte index = 0; index < SPECIAL.Length; index++)
             {
-                Console.WriteLine($"Enter {SPECIAL[index].Name} value (1 - 10): {value}");
+                byte value = 1;
 
-                value = 5;
-                ConsoleKey key;
-                do
+                ConsoleKey key = ConsoleKey.Escape;
+                while (key != ConsoleKey.Enter)
                 {
+                    Console.WriteLine($"Total Points: {totalPoints - value}");
+                    Console.WriteLine($"Enter {SPECIAL[index].Name} value (1 - 10): {value}");
                     key = Console.ReadKey().Key;
-
                     switch (key)
                     {
-                        case ConsoleKey.LeftArrow when value > 1:
+                        case ConsoleKey.LeftArrow when value > 1 && value < totalPoints:
                             value--;
                             break;
-                        case ConsoleKey.RightArrow when value < 10:
+                        case ConsoleKey.RightArrow when value < 10 && value < totalPoints:
                             value++;
                             break;
                     }
                     Console.Clear();
-                    Console.WriteLine($"Enter {SPECIAL[index].Name} value (1 - 10): {value}");
                 }
-                while (key != ConsoleKey.Enter);
 
+                totalPoints -= value;
                 SPECIAL[index].Value = value;
             }
         }
@@ -130,7 +131,7 @@ namespace Pip_Boy
         {
             StringBuilder stringBuilder = new();
             stringBuilder.AppendLine("Skills:");
-            foreach (Skill skill in Skills)
+            foreach (Attribute skill in Skills)
                 stringBuilder.AppendLine($"\t{skill.Name}:\t{skill.Value}");
 
             return stringBuilder.ToString();
