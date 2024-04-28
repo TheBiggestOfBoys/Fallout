@@ -14,18 +14,26 @@ namespace Pip_Boy
         /// <summary>
         /// Locations of interest on the map
         /// </summary>
-        private static readonly char[] markers = [
-            '!', // Quest
-            '?', // Undiscovered
-            '#', // Settlement
-            '@', // Base
-            '+'  // Doctor
-        ];
+        private static readonly char[] markers = ['!', '?', '#', '@', '+'];
 
         /// <summary>
         /// The key telling what the markers represent
         /// </summary>
-        public readonly string key = "! = Quest, ? = Undiscovered, # = Settlement, @ = Base, + = Doctor";
+        public static readonly string[] keys = ["Quest", "Undiscovered", "Settlement", "Base", "Doctor"];
+
+        /// <summary>
+        /// Generates the Legend with the corresponding marker/key pairs
+        /// </summary>
+        /// <returns>The Map's Legend</returns>
+        public string GenerateLegend()
+        {
+            StringBuilder stringBuilder = new();
+            if (markers.Length == keys.Length)
+                for (byte x = 0; x < markers.Length; x++)
+                    stringBuilder.Append($"{markers[x]} = {keys[x]}, ");
+
+            return stringBuilder.ToString();
+        }
 
         /// <summary>
         /// Create a map with the given parameters

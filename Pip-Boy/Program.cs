@@ -70,8 +70,18 @@ namespace Pip_Boy
                     case ConsoleKey.Enter when pipBoy.currentPage == PipBoy.Pages.DATA && pipBoy.dataPage == PipBoy.DataPages.Radio:
                         pipBoy.radio.Play();
                         break;
+
                     case ConsoleKey.Add when pipBoy.currentPage == PipBoy.Pages.DATA && pipBoy.dataPage == PipBoy.DataPages.Radio:
                         pipBoy.radio.AddSong(pipBoy);
+                        break;
+
+                    case ConsoleKey.UpArrow when pipBoy.radio.songIndex > 0:
+                        pipBoy.radio.ChangeSong(false);
+                        pipBoy.radio.Play();
+                        break;
+                    case ConsoleKey.DownArrow when pipBoy.radio.songIndex < pipBoy.radio.songs.Count:
+                        pipBoy.radio.ChangeSong(true);
+                        pipBoy.radio.Play();
                         break;
                     #endregion
 

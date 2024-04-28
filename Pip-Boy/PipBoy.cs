@@ -212,7 +212,7 @@ namespace Pip_Boy
                 Pages.ITEMS => typeof(ItemsPages),
                 Pages.DATA => typeof(DataPages)
             };
-            foreach (var subPage in Enum.GetValues(enumType))
+            foreach (object? subPage in Enum.GetValues(enumType))
                 footer.Add(subPage.ToString());
 
             return [.. footer];
@@ -294,7 +294,7 @@ namespace Pip_Boy
         /// <returns>The corresponding string</returns>
         public string ShowData() => dataPage switch
         {
-            DataPages.Map => map.ToString() + '\n' + "Key: " + map.key,
+            DataPages.Map => map.ToString() + '\n' + "Key: " + map.GenerateLegend(),
             DataPages.Quests => ShowQuests(),
             DataPages.Misc => "MISC NOTES GOES HERE!!!",
             DataPages.Radio => radio.ToString()

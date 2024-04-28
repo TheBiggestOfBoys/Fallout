@@ -8,9 +8,9 @@ namespace Pip_Boy
 {
     internal class Radio
     {
-        public static readonly Random random = new();
         public static readonly SoundPlayer soundPlayer = new();
         public List<Song> songs = [];
+        public byte songIndex = 0;
 
         /// <summary>
         /// Initialize a radio object with '.wav' files from a folder
@@ -27,7 +27,7 @@ namespace Pip_Boy
         /// </summary>
         public void Play()
         {
-            soundPlayer.SoundLocation = songs[random.Next(songs.Count)].Path;
+            soundPlayer.SoundLocation = songs[songIndex].Path;
             soundPlayer.Load();
             soundPlayer.Play();
         }
@@ -44,6 +44,14 @@ namespace Pip_Boy
                 songs.Add(new(path));
             else
                 pipBoy.Error("Please give a '.wav' file!");
+        }
+
+        public void ChangeSong(bool up)
+        {
+            if (up)
+                songIndex++;
+            else
+                songIndex--;
         }
 
         /// <summary>

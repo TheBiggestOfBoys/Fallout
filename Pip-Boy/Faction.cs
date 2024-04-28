@@ -2,8 +2,8 @@
 {
     internal struct Faction(string name, string description)
     {
-        readonly string Name = name;
-        readonly public string Description = description;
+        public readonly string Name = name;
+        public readonly string Description = description;
         public sbyte ReputationValue = 0;
         public Reputation reputation = Reputation.Neutral;
 
