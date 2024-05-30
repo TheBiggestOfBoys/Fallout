@@ -14,7 +14,8 @@ namespace Pip_Boy
             new("Charisma", 5),
             new("Intelligence", 5),
             new("Agility", 5),
-            new("Luck", 5)];
+            new("Luck", 5)
+        ];
 
         public Attribute[] Skills = [
             new("Barter", 10),
@@ -29,15 +30,18 @@ namespace Pip_Boy
             new("Sneak", 10),
             new("Speech", 10),
             new("Survival", 10),
-            new("Unarmed", 10)];
+            new("Unarmed", 10)
+        ];
 
         public List<Perk> Perks = [new("No Perks", "You have no perks, you get one every 2 levels", 0)];
+
+        public List<Effect> Effects = [];
         #endregion
 
-        public readonly string name;
-        public byte level = 1;
+        public readonly string Name;
+        public byte Level { get; private set; } = 1;
         public ushort maxHealth = 100;
-        public ushort currentHealth = 100;
+        public int currentHealth = 100;
 
         #region Constructors
         /// <summary>
@@ -47,7 +51,7 @@ namespace Pip_Boy
         /// <param name="attributeValues">The special values</param>
         public Player(string name, byte[] attributeValues)
         {
-            this.name = name;
+            this.Name = name;
             for (byte index = 0; index < 7; index++)
                 SPECIAL[index].Value = attributeValues[index];
         }
@@ -57,10 +61,10 @@ namespace Pip_Boy
         /// </summary>
         public Player()
         {
-            while (name == null)
+            while (Name == null)
             {
                 Console.Write("Enter Player Name: ");
-                name = Console.ReadLine();
+                Name = Console.ReadLine();
                 Console.Clear();
             }
 
@@ -94,6 +98,15 @@ namespace Pip_Boy
         }
         #endregion
 
+        public void LevelUp()
+        {
+            Level++;
+            if (Level % 2 == 0)
+            {
+                Perks.Add(new());
+            }
+        }
+
         #region Show Player Info
         /// <summary>
         /// Shows the player's current status
@@ -102,8 +115,8 @@ namespace Pip_Boy
         public string ShowStatus()
         {
             StringBuilder stringBuilder = new();
-            stringBuilder.AppendLine("Name:\t" + name);
-            stringBuilder.AppendLine("Level:\t" + level);
+            stringBuilder.AppendLine("Name:\t" + Name);
+            stringBuilder.AppendLine("Level:\t" + Level);
             stringBuilder.AppendLine("Health:\t" + currentHealth + '/' + maxHealth);
 
             return stringBuilder.ToString();
@@ -118,7 +131,7 @@ namespace Pip_Boy
             StringBuilder stringBuilder = new();
             stringBuilder.AppendLine("S.P.E.C.I.A.L.:");
             foreach (Attribute attribute in SPECIAL)
-                stringBuilder.AppendLine($"\t{attribute.Name}:\t{attribute.Value}");
+                stringBuilder.AppendLine(attribute.ToString());
 
             return stringBuilder.ToString();
         }
@@ -132,7 +145,7 @@ namespace Pip_Boy
             StringBuilder stringBuilder = new();
             stringBuilder.AppendLine("Skills:");
             foreach (Attribute skill in Skills)
-                stringBuilder.AppendLine($"\t{skill.Name}:\t{skill.Value}");
+                stringBuilder.AppendLine('\t' + skill.ToString());
 
             return stringBuilder.ToString();
         }
@@ -146,7 +159,7 @@ namespace Pip_Boy
             StringBuilder stringBuilder = new();
             stringBuilder.AppendLine("Perks:");
             foreach (Perk perk in Perks)
-                stringBuilder.AppendLine($"\t{perk.ToString()}");
+                stringBuilder.AppendLine('\t' + perk.ToString());
 
             return stringBuilder.ToString();
         }

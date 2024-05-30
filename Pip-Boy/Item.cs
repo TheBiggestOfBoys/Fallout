@@ -1,22 +1,36 @@
 ﻿namespace Pip_Boy
 {
-    internal readonly struct Item(string name, string description, double weight, int value, Item.ItemTypes type)
+    internal abstract class Item(string name, string description, double weight, ushort value)
     {
         public readonly string Name = name;
         public readonly string Description = description;
 
-        public readonly ItemTypes Type = type;
-
         public readonly double Weight = weight;
-        public readonly int Value = value;
+        public ushort Value = value;
 
-        public enum ItemTypes
+        public override string ToString()
         {
-            WEAPON,
-            APPAREL,
-            AID,
-            AMMO,
-            MISC
+            string defaultHeading = $"\t{Name}: {Description}";
+            defaultHeading += "\n\t\tValue: ";
+            if (Value == 0)
+            {
+                defaultHeading += "--";
+            }
+            else
+            {
+                defaultHeading += Value;
+            }
+
+            defaultHeading += "\n\t\tWeight: ";
+            if (Value == 0)
+            {
+                defaultHeading += "--";
+            }
+            else
+            {
+                defaultHeading += Weight;
+            }
+            return defaultHeading;
         }
     }
 }
