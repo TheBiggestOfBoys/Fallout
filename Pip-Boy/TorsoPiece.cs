@@ -1,9 +1,9 @@
 ﻿namespace Pip_Boy
 {
-    internal class TorsoPiece(string name, string description, double weight, ushort value, string[] effects) : Apparrel(name, description, weight, value, effects)
+    internal class TorsoPiece(string name, string description, double weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : Apparrel(name, description, weight, value, effects, DT)
     {
-        public ArmorType TypeOfArmor = DetermineType(weight);
-        public bool RequiresPowerArmorTraining = false;
+        public readonly ArmorType TypeOfArmor = DetermineType(weight);
+        public bool RequiresPowerArmorTraining = powerArmor;
 
         public static ArmorType DetermineType(double Weight)
         {

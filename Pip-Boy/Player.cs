@@ -107,6 +107,40 @@ namespace Pip_Boy
             }
         }
 
+        public void ApplyEffects()
+        {
+            foreach (Effect effect in Effects)
+            {
+                for (byte i = 0; i < SPECIAL.Length; i++)
+                {
+                    if (effect.Effector == SPECIAL[i].Name)
+                    {
+                        if (SPECIAL[i].Value + effect.Value >= 1)
+                        {
+                            SPECIAL[i].Value = (byte)(SPECIAL[i].Value + effect.Value);
+                        }
+                        break;
+                    }
+                }
+                for (byte i = 0; i < Skills.Length; i++)
+                {
+                    if (effect.Effector == Skills[i].Name)
+                    {
+                        if (Skills[i].Value + effect.Value >= 1)
+                        {
+                            Skills[i].Value = (byte)(Skills[i].Value + effect.Value);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        public void ResetEffects()
+        {
+
+        }
+
         #region Show Player Info
         /// <summary>
         /// Shows the player's current status

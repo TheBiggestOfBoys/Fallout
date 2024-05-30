@@ -21,9 +21,9 @@ namespace Pip_Boy
         /// All items in the inventory
         /// </summary>
         public List<Item> inventory = [
-            new Weapon("10mm Pistol", "A common weapon in the wasteland", 5.5, 55, [], Weapon.WeaponType.Gun, 3),
-            new Weapon("Sniper Rifle", "A high damage, low fire rate marksman rifle", 12.75, 250, [], Weapon.WeaponType.Gun, 5),
-            new TorsoPiece("Vault 13 Jumpsuit", "The standard jumpsuit for all Vault 13 residents", 5, 25, []),
+            new Weapon("10mm Pistol", "A common weapon in the wasteland", 5.5, 55, [], Weapon.WeaponType.Gun, 3, 10, 100),
+            new Weapon("Sniper Rifle", "A high damage, low fire rate marksman rifle", 12.75, 250, [], Weapon.WeaponType.Gun, 5, 50, 25),
+            new TorsoPiece("Vault 13 Jumpsuit", "The standard jumpsuit for all Vault 13 residents", 5, 25, [], 3, false),
             new Ammo("10mm Ammo", "A common ammo for many weapons", 0, 1, [], Ammo.AmmoType.Bullet, Ammo.AmmoModification.Standard),
             new Aid("Stimpack", "A healing device", 1, 30, []),
             new Misc("Journal Entry", "Exposition thingy", 1, 15)
@@ -75,7 +75,7 @@ namespace Pip_Boy
         /// <summary>
         /// The color of the PIP-Boy's text
         /// </summary>
-        public ConsoleColor color = ConsoleColor.Green;
+        public ConsoleColor color = ConsoleColor.DarkYellow;
 
         public void Boot()
         {
@@ -104,11 +104,14 @@ namespace Pip_Boy
         public void EquipItem(Equippable item)
         {
             item.Equip(player);
+            player.ApplyEffects();
         }
 
         public void UnequipItem(Equippable item)
         {
             item.Unequip(player);
+            player.ResetEffects();
+            player.ApplyEffects();
         }
 
         #region Page Info
@@ -299,7 +302,14 @@ namespace Pip_Boy
 
             foreach (Item item in inventory)
             {
-                if (item.GetType() == sortType)
+                if (item.GetType() == typeof(Apparrel))
+                {
+                    if ((item.GetType() == typeof(TorsoPiece)) || (item.GetType() == typeof(HeadPiece)))
+                    {
+                        stringBuilder.AppendLine(item.ToString());
+                    }
+                }
+                else if (item.GetType() == sortType)
                 {
                     stringBuilder.AppendLine(item.ToString());
                 }

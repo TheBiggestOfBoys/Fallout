@@ -4,9 +4,10 @@ namespace Pip_Boy
 {
     internal abstract class Equippable(string name, string description, double weight, ushort value, Effect[] effects) : Item(name, description, weight, value)
     {
+        private readonly ushort originalValue = value;
         public decimal Condition { get; private set; } = 1;
         public bool IsEquipped { get; private set; } = false;
-        public List<Effect> Effects = [.. effects];
+        public readonly List<Effect> Effects = [.. effects];
 
         public void Equip(Player player)
         {
@@ -21,6 +22,11 @@ namespace Pip_Boy
             {
                 Effects.Remove(effect);
             }
+        }
+
+        public void UpdateValue()
+        {
+            Value = (ushort)(originalValue * Condition);
         }
 
         public override string ToString()

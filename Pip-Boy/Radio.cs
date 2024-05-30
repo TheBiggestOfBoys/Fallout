@@ -19,7 +19,9 @@ namespace Pip_Boy
         public Radio(string folderPath)
         {
             foreach (string path in Directory.GetFiles(folderPath, "*.wav"))
+            {
                 songs.Add(new(path));
+            }
         }
 
         /// <summary>
@@ -41,17 +43,39 @@ namespace Pip_Boy
             Console.Write("Enter path to '.wav' file: ");
             string path = Console.ReadLine();
             if (path.EndsWith(".wav"))
+            {
                 songs.Add(new(path));
+            }
             else
+            {
                 pipBoy.Error("Please give a '.wav' file!");
+            }
         }
 
         public void ChangeSong(bool up)
         {
             if (up)
-                songIndex++;
+            {
+                if (songIndex < songs.Count)
+                {
+                    songIndex++;
+                }
+                else
+                {
+                    songIndex = 0;
+                }
+            }
             else
-                songIndex--;
+            {
+                if (songIndex > 0)
+                {
+                    songIndex--;
+                }
+                else
+                {
+                    songIndex = (byte)(songs.Count - 1);
+                }
+            }
         }
 
         /// <summary>
@@ -63,7 +87,9 @@ namespace Pip_Boy
             StringBuilder stringBuilder = new();
             stringBuilder.AppendLine("Songs:\t" + songs.Count);
             foreach (Song song in songs)
+            {
                 stringBuilder.AppendLine('\t' + song.Name);
+            }
 
             return stringBuilder.ToString();
         }
