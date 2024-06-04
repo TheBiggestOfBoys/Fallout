@@ -21,21 +21,27 @@ namespace Pip_Boy
         /// All items in the inventory
         /// </summary>
         public List<Item> inventory = [
-            new("10mm Pistol", "A common weapon in the wasteland", 5.5, 55, Item.ItemTypes.WEAPON),
-            new("Sniper Rifle", "A high damage, low fire rate marksman rifle", 12.75, 250, Item.ItemTypes.WEAPON),
-            new("Vault 13 Jumpsuit", "The standard jumpsuit for all Vault 13 residents", 5, 25, Item.ItemTypes.APPAREL),
-            new("10mm Ammo", "A common ammo for many weapons", 0, 1, Item.ItemTypes.AMMO),
-            new("Stimpack", "A healing device", 1, 30, Item.ItemTypes.AID),
-            new("Journal Entry", "Exposition thingy", 1, 15, Item.ItemTypes.MISC)];
+            new Weapon("10mm Pistol", 5.5, 55, [], Weapon.WeaponType.Gun, 3, 10, 100),
+            new Weapon("Sniper Rifle", 12.75, 250, [], Weapon.WeaponType.Gun, 5, 50, 25),
+            new TorsoPiece("Vault 13 Jumpsuit",  5, 25, [], 3, false),
+            new Ammo("10mm Ammo",  1, [], Ammo.AmmoType.Bullet, Ammo.AmmoModification.Standard),
+            new Aid("Stimpack",  1, 30, []),
+            new Misc("Journal Entry", 1, 15)
+        ];
 
         /// <summary>
         /// A list of all unfinished quests, it can be added to, and quests will be removed and added to the `finishedQuests`, once finished.
         /// </summary>
-        public List<Quest> quests = [new("Finish the game", [new("Do stuff", 16, 16), new("Do things", 32, 32)])];
+        public List<Quest> quests = [new("Finish the game", [new("Do stuff", new(16, 16)), new("Do things", new(32, 32))])];
         /// <summary>
         /// A list of all finished quests, which will grow.
         /// </summary>
         public List<Quest> finishedQuests = [];
+
+        /// <summary>
+        /// Data items collected
+        /// </summary>
+        public List<Data> miscData = [];
 
         /// <summary>
         /// An array of all factions.  Descriptions are taken from the Fallout Wiki (phrasing breaks immersion).  I might change these later.
@@ -74,7 +80,7 @@ namespace Pip_Boy
         /// <summary>
         /// The color of the PIP-Boy's text
         /// </summary>
-        public ConsoleColor color = ConsoleColor.Green;
+        public ConsoleColor color = ConsoleColor.DarkYellow;
 
         public void Boot()
         {
@@ -100,20 +106,35 @@ namespace Pip_Boy
             PlaySound(sounds[8]);
         }
 
+        public void EquipItem(Equippable item)
+        {
+            item.Equip(player);
+            player.ApplyEffects();
+        }
+
+        public void UnequipItem(Equippable item)
+        {
+            item.Unequip(player);
+            player.ResetEffects();
+            player.ApplyEffects();
+        }
+
         #region Page Info
         /// <summary>
         /// The current main page
         /// </summary>
         public Pages currentPage = Pages.STATS;
+
         /// <summary>
         /// The current STAT sub-page
         /// </summary>
         public StatsPages statPage = StatsPages.Status;
+
         /// <summary>
         /// The current ITEM sub-page
         /// </summary>
-        /// 
         public ItemsPages itemPage = ItemsPages.Weapons;
+
         /// <summary>
         /// The current DATA sub-page
         /// </summary>
@@ -212,8 +233,10 @@ namespace Pip_Boy
                 Pages.ITEMS => typeof(ItemsPages),
                 Pages.DATA => typeof(DataPages)
             };
-            foreach (object? subPage in Enum.GetValues(enumType))
+            foreach (object subPage in Enum.GetValues(enumType))
+            {
                 footer.Add(subPage.ToString());
+            }
 
             return [.. footer];
         }
@@ -228,9 +251,13 @@ namespace Pip_Boy
             {
                 Console.Write('\t');
                 if (item == statPage.ToString() || item == itemPage.ToString() || item == dataPage.ToString())
+                {
                     Highlight(item, false);
+                }
                 else
+                {
                     Console.Write(item);
+                }
                 Console.Write('\t');
             }
             Console.WriteLine();
@@ -260,7 +287,9 @@ namespace Pip_Boy
             StringBuilder stringBuilder = new();
 
             foreach (Faction faction in factions)
+            {
                 stringBuilder.AppendLine(faction.ToString());
+            }
 
             return stringBuilder.ToString() + '\n' + factions[factionIndex].Description;
         }
@@ -272,19 +301,23 @@ namespace Pip_Boy
         public string ShowInventory()
         {
             StringBuilder stringBuilder = new();
-            Item.ItemTypes sortType = itemPage switch
+
+            Type sortType = itemPage switch
             {
-                ItemsPages.Weapons => Item.ItemTypes.WEAPON,
-                ItemsPages.Apparel => Item.ItemTypes.APPAREL,
-                ItemsPages.Aid => Item.ItemTypes.AID,
-                ItemsPages.Ammo => Item.ItemTypes.AMMO,
-                ItemsPages.Misc => Item.ItemTypes.MISC
+                ItemsPages.Weapons => typeof(Weapon),
+                ItemsPages.Apparel => typeof(Apparrel),
+                ItemsPages.Aid => typeof(Aid),
+                ItemsPages.Ammo => typeof(Ammo),
+                ItemsPages.Misc => typeof(Misc),
             };
 
             foreach (Item item in inventory)
-                if (item.Type == sortType)
-                    stringBuilder.AppendLine($"\t{item.Name}: {item.Description}\n\t\tValue: {item.Value}\n\t\tWeight: {item.Weight}");
-
+            {
+                if (item.GetType() == sortType)
+                {
+                    stringBuilder.AppendLine(item.ToString());
+                }
+            }
             return stringBuilder.ToString();
         }
 
@@ -294,9 +327,9 @@ namespace Pip_Boy
         /// <returns>The corresponding string</returns>
         public string ShowData() => dataPage switch
         {
-            DataPages.Map => map.ToString() + '\n' + "Key: " + map.GenerateLegend(),
+            DataPages.Map => map.ToString() + "\nKey: " + Map.GenerateLegend(),
             DataPages.Quests => ShowQuests(),
-            DataPages.Misc => "MISC NOTES GOES HERE!!!",
+            DataPages.Misc => ShowDataNotes(),
             DataPages.Radio => radio.ToString()
         };
 
@@ -308,8 +341,23 @@ namespace Pip_Boy
         {
             StringBuilder stringBuilder = new();
             foreach (Quest quest in quests)
+            {
                 stringBuilder.AppendLine(quest.ToString());
+            }
+            return stringBuilder.ToString();
+        }
 
+        /// <summary>
+        /// Shows all Data Notes
+        /// </summary>
+        /// <returns>A table of all data notes and recordings</returns>
+        public string ShowDataNotes()
+        {
+            StringBuilder stringBuilder = new();
+            foreach (Data data in miscData)
+            {
+                stringBuilder.AppendLine(data.ToString());
+            }
             return stringBuilder.ToString();
         }
         #endregion
@@ -337,9 +385,13 @@ namespace Pip_Boy
             Console.BackgroundColor = color;
             Console.ForegroundColor = ConsoleColor.Black;
             if (newLine)
+            {
                 Console.WriteLine(message);
+            }
             else
+            {
                 Console.Write(message);
+            }
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = color;
         }

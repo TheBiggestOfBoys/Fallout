@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Pip_Boy.Item" Collapsed="true">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAEAAAAAAQAACAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Item.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pip_Boy.Ammo" Collapsed="true">
+    <Position X="3.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAEAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Ammo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pip_Boy.HeadPiece" Collapsed="true">
+    <Position X="4" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAA=</HashCode>
+      <FileName>HeadPiece.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pip_Boy.TorsoPiece" Collapsed="true">
+    <Position X="6.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>TorsoPiece.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pip_Boy.Weapon" Collapsed="true">
+    <Position X="7.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAABAAAAAAAAAAAABAAAAAAAAAI=</HashCode>
+      <FileName>Weapon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pip_Boy.Equippable" Collapsed="true">
+    <Position X="5.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAEAAQAAAAAAAAAAAAgAAAAAYAAAAA=</HashCode>
+      <FileName>Equippable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pip_Boy.Aid" Collapsed="true">
+    <Position X="9" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Aid.cs</FileName>
+      <NewMemberFileName>Apparrel.cs</NewMemberFileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pip_Boy.Misc" Collapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Misc.cs</FileName>
+      <NewMemberFileName>Apparrel.cs</NewMemberFileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pip_Boy.Apparrel" Collapsed="true">
+    <Position X="5.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Apparrel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

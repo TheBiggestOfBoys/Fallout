@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using System.Text;
 
 namespace Pip_Boy
@@ -8,8 +9,7 @@ namespace Pip_Boy
         private static readonly Random random = new();
         public readonly char[][] Grid = GenerateMap(width, height, density);
 
-        public byte PlayerX = 0;
-        public byte PlayerY = 0;
+        Vector2 playerPosition = Vector2.Zero;
 
         /// <summary>
         /// Locations of interest on the map
@@ -25,7 +25,7 @@ namespace Pip_Boy
         /// Generates the Legend with the corresponding marker/key pairs
         /// </summary>
         /// <returns>The Map's Legend</returns>
-        public string GenerateLegend()
+        public static string GenerateLegend()
         {
             StringBuilder stringBuilder = new();
             if (markers.Length == keys.Length)
@@ -69,22 +69,32 @@ namespace Pip_Boy
         /// <param name="right">If the player moves right/left</param>
         public void MovePlayer(bool? up, bool? right)
         {
-            Grid[PlayerY][PlayerX] = ' ';
+            Grid[(int)playerPosition.Y][(int)playerPosition.X] = ' ';
 
-            if (up == true && PlayerY > 0)
-                PlayerY--;
-            if (up == false && PlayerY < Grid.Length)
-                PlayerY++;
+            if (up == true && playerPosition.Y > 0)
+            {
+                playerPosition.Y--;
+            }
+            else if (up == false && playerPosition.Y < Grid.Length)
+            {
+                playerPosition.Y++;
+            }
 
-            if (right == true && PlayerX < Grid[0].Length)
-                PlayerX++;
-            if (right == false && PlayerX > 0)
-                PlayerX--;
+            if (right == true && playerPosition.X < Grid[0].Length)
+            {
+                playerPosition.X++;
+            }
+            else if (right == false && playerPosition.X > 0)
+            {
+                playerPosition.X--;
+            }
 
             // Player will be represented by '>' on the map
             // X & Y are intentionally flipped
-            Grid[PlayerY][PlayerX] = '>';
+            Grid[(int)playerPosition.Y][(int)playerPosition.X] = '>';
         }
+
+        public readonly char[] this[int row] => Grid[row];
 
         /// <summary>
         /// Shows the map
