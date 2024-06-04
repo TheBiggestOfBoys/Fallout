@@ -2,7 +2,7 @@
 
 namespace Pip_Boy
 {
-    internal class Weapon(string name, string description, double weight, ushort value, Effect[] effects, Weapon.WeaponType weaponType, byte strengthRequirement, byte damage, ushort rateOfFire) : Equippable(name, description, weight, value, effects)
+    internal class Weapon(string name, double weight, ushort value, Effect[] effects, Weapon.WeaponType weaponType, byte strengthRequirement, byte damage, ushort rateOfFire) : Equippable(name, weight, value, effects)
     {
         private readonly byte originalDamage = damage;
         public byte Damage { get; private set; } = damage;

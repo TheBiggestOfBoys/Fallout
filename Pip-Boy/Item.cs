@@ -1,16 +1,15 @@
 ﻿namespace Pip_Boy
 {
-    internal abstract class Item(string name, string description, double weight, ushort value)
+    internal abstract class Item(string name, double weight, ushort value)
     {
         public readonly string Name = name;
-        public readonly string Description = description;
 
         public readonly double Weight = weight;
         public ushort Value = value;
 
         public override string ToString()
         {
-            string defaultHeading = $"\t{Name}: {Description}";
+            string defaultHeading = $"\t{Name}:";
             defaultHeading += "\n\t\tValue: ";
             if (Value == 0)
             {

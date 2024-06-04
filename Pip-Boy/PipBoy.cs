@@ -21,12 +21,12 @@ namespace Pip_Boy
         /// All items in the inventory
         /// </summary>
         public List<Item> inventory = [
-            new Weapon("10mm Pistol", "A common weapon in the wasteland", 5.5, 55, [], Weapon.WeaponType.Gun, 3, 10, 100),
-            new Weapon("Sniper Rifle", "A high damage, low fire rate marksman rifle", 12.75, 250, [], Weapon.WeaponType.Gun, 5, 50, 25),
-            new TorsoPiece("Vault 13 Jumpsuit", "The standard jumpsuit for all Vault 13 residents", 5, 25, [], 3, false),
-            new Ammo("10mm Ammo", "A common ammo for many weapons", 0, 1, [], Ammo.AmmoType.Bullet, Ammo.AmmoModification.Standard),
-            new Aid("Stimpack", "A healing device", 1, 30, []),
-            new Misc("Journal Entry", "Exposition thingy", 1, 15)
+            new Weapon("10mm Pistol", 5.5, 55, [], Weapon.WeaponType.Gun, 3, 10, 100),
+            new Weapon("Sniper Rifle", 12.75, 250, [], Weapon.WeaponType.Gun, 5, 50, 25),
+            new TorsoPiece("Vault 13 Jumpsuit",  5, 25, [], 3, false),
+            new Ammo("10mm Ammo",  1, [], Ammo.AmmoType.Bullet, Ammo.AmmoModification.Standard),
+            new Aid("Stimpack",  1, 30, []),
+            new Misc("Journal Entry", 1, 15)
         ];
 
         /// <summary>
@@ -37,6 +37,11 @@ namespace Pip_Boy
         /// A list of all finished quests, which will grow.
         /// </summary>
         public List<Quest> finishedQuests = [];
+
+        /// <summary>
+        /// Data items collected
+        /// </summary>
+        public List<Data> miscData = [];
 
         /// <summary>
         /// An array of all factions.  Descriptions are taken from the Fallout Wiki (phrasing breaks immersion).  I might change these later.
@@ -128,9 +133,7 @@ namespace Pip_Boy
         /// <summary>
         /// The current ITEM sub-page
         /// </summary>
-        /// 
-        public readonly Type[] itemPage = [typeof(Weapon), typeof(Apparrel), typeof(Aid), typeof(Ammo), typeof(Misc)];
-        public static byte itemPageIndex = 0;
+        public ItemsPages itemPage = ItemsPages.Weapons;
 
         /// <summary>
         /// The current DATA sub-page
@@ -169,11 +172,11 @@ namespace Pip_Boy
                     statPage--;
                     break;
 
-                case Pages.ITEMS when right && itemPageIndex < 5:
-                    itemPageIndex++;
+                case Pages.ITEMS when right && itemPage < ItemsPages.Misc:
+                    itemPage++;
                     break;
-                case Pages.ITEMS when !right && itemPageIndex > 0:
-                    itemPageIndex--;
+                case Pages.ITEMS when !right && itemPage > ItemsPages.Weapons:
+                    itemPage--;
                     break;
 
                 case Pages.DATA when right && dataPage < DataPages.Radio:
@@ -298,18 +301,19 @@ namespace Pip_Boy
         public string ShowInventory()
         {
             StringBuilder stringBuilder = new();
-            Type sortType = itemPage[itemPageIndex];
+
+            Type sortType = itemPage switch
+            {
+                ItemsPages.Weapons => typeof(Weapon),
+                ItemsPages.Apparel => typeof(Apparrel),
+                ItemsPages.Aid => typeof(Aid),
+                ItemsPages.Ammo => typeof(Ammo),
+                ItemsPages.Misc => typeof(Misc),
+            };
 
             foreach (Item item in inventory)
             {
-                if (item.GetType() == typeof(Apparrel))
-                {
-                    if ((item.GetType() == typeof(TorsoPiece)) || (item.GetType() == typeof(HeadPiece)))
-                    {
-                        stringBuilder.AppendLine(item.ToString());
-                    }
-                }
-                else if (item.GetType() == sortType)
+                if (item.GetType() == sortType)
                 {
                     stringBuilder.AppendLine(item.ToString());
                 }
@@ -323,9 +327,9 @@ namespace Pip_Boy
         /// <returns>The corresponding string</returns>
         public string ShowData() => dataPage switch
         {
-            DataPages.Map => map.ToString() + '\n' + "Key: " + Map.GenerateLegend(),
+            DataPages.Map => map.ToString() + "\nKey: " + Map.GenerateLegend(),
             DataPages.Quests => ShowQuests(),
-            DataPages.Misc => "MISC NOTES GOES HERE!!!",
+            DataPages.Misc => ShowDataNotes(),
             DataPages.Radio => radio.ToString()
         };
 
@@ -339,6 +343,20 @@ namespace Pip_Boy
             foreach (Quest quest in quests)
             {
                 stringBuilder.AppendLine(quest.ToString());
+            }
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Shows all Data Notes
+        /// </summary>
+        /// <returns>A table of all data notes and recordings</returns>
+        public string ShowDataNotes()
+        {
+            StringBuilder stringBuilder = new();
+            foreach (Data data in miscData)
+            {
+                stringBuilder.AppendLine(data.ToString());
             }
             return stringBuilder.ToString();
         }

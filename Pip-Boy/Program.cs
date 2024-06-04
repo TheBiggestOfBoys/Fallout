@@ -8,8 +8,8 @@ namespace Pip_Boy
 
         static void Main()
         {
-            bool boot = true;
-            bool createPlayer = true;
+            bool boot = false;
+            bool createPlayer = false;
 
             Console.ForegroundColor = pipBoy.color;
             Console.Title = "PIP-Boy 3000 MKIV";

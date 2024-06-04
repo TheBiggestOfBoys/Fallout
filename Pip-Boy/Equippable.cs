@@ -2,7 +2,7 @@
 
 namespace Pip_Boy
 {
-    internal abstract class Equippable(string name, string description, double weight, ushort value, Effect[] effects) : Item(name, description, weight, value)
+    internal abstract class Equippable(string name, double weight, ushort value, Effect[] effects) : Item(name, weight, value)
     {
         private readonly ushort originalValue = value;
         public decimal Condition { get; private set; } = 1;
@@ -12,7 +12,8 @@ namespace Pip_Boy
         public void Equip(Player player)
         {
             IsEquipped = true;
-            player.Effects.AddRange(effects);   
+            player.Effects.AddRange(effects);
+            player.ApplyEffects();
         }
 
         public void Unequip(Player player)

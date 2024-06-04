@@ -1,6 +1,6 @@
 ﻿namespace Pip_Boy
 {
-    internal class HeadPiece(string name, string description, double weight, ushort value, Effect[] effects, byte DT) : Apparrel(name, description, weight, value, effects, DT)
+    internal class HeadPiece(string name, double weight, ushort value, Effect[] effects, byte DT) : Apparrel(name, weight, value, effects, DT)
     {
         public readonly PieceType pieceType = DetermineType(weight);
 

@@ -7,7 +7,7 @@ namespace Pip_Boy
     internal class Player
     {
         #region Arrays
-        public Attribute[] SPECIAL = [
+        public static Attribute[] SPECIAL = [
             new("Strength", 5),
             new("Perception", 5),
             new("Endurance", 5),
@@ -16,8 +16,9 @@ namespace Pip_Boy
             new("Agility", 5),
             new("Luck", 5)
         ];
+        private readonly Attribute[] baseSPECIAL = SPECIAL;
 
-        public Attribute[] Skills = [
+        public static Attribute[] Skills = [
             new("Barter", 10),
             new("Energy Weapons", 10),
             new("Explosives", 10),
@@ -32,16 +33,34 @@ namespace Pip_Boy
             new("Survival", 10),
             new("Unarmed", 10)
         ];
+        private readonly Attribute[] baseSkills = Skills;
 
         public List<Perk> Perks = [new("No Perks", "You have no perks, you get one every 2 levels", 0)];
 
         public List<Effect> Effects = [];
         #endregion
 
+        #region Player Info
         public readonly string Name;
         public byte Level { get; private set; } = 1;
-        public ushort maxHealth = 100;
-        public int currentHealth = 100;
+        public static ushort MaxHealth { get; private set; } = 100;
+        private readonly ushort baseMaxHealth = MaxHealth;
+        public int CurrentHealth { get; private set; } = 100;
+
+        public static byte MaxActionPoints { get; private set; } = 25;
+        private readonly byte baseMaxActionPoints = MaxActionPoints;
+        public byte ActionPoints { get; private set; } = 25;
+
+        public static byte DamageRessistance { get; private set; } = 0;
+        private readonly byte baseDamageRessistance = DamageRessistance;
+        #endregion
+
+        #region EquippedItems
+        public HeadPiece? headPiece;
+        public TorsoPiece? torsoPiece;
+        public Weapon? weapon;
+        public Ammo? ammo;
+        #endregion
 
         #region Constructors
         /// <summary>
@@ -51,9 +70,11 @@ namespace Pip_Boy
         /// <param name="attributeValues">The special values</param>
         public Player(string name, byte[] attributeValues)
         {
-            this.Name = name;
+            Name = name;
             for (byte index = 0; index < 7; index++)
+            {
                 SPECIAL[index].Value = attributeValues[index];
+            }
         }
 
         /// <summary>
@@ -107,13 +128,60 @@ namespace Pip_Boy
             }
         }
 
+        public void Equip(Equippable item)
+        {
+            if (item is HeadPiece headPieceItem)
+            {
+                headPiece = headPieceItem;
+            }
+            else if (item is TorsoPiece torsoPieceItem)
+            {
+                torsoPiece = torsoPieceItem;
+            }
+            else if (item is Weapon weaponItem)
+            {
+                weapon = weaponItem;
+            }
+            else if (item is Ammo ammoItem)
+            {
+                ammo = ammoItem;
+            }
+            item.Equip(this);
+        }
+
+        public void Unequip(Equippable item)
+        {
+            if (item is HeadPiece)
+            {
+                headPiece.Unequip(this);
+                headPiece = null;
+            }
+            else if (item is TorsoPiece)
+            {
+                torsoPiece.Unequip(this);
+                torsoPiece = null;
+            }
+            else if (item is Weapon)
+            {
+                weapon.Unequip(this);
+                weapon = null;
+            }
+            else if (item is Ammo)
+            {
+                ammo.Unequip(this);
+                ammo = null;
+            }
+            item.Equip(this);
+        }
+
         public void ApplyEffects()
         {
+            ResetEffects();
             foreach (Effect effect in Effects)
             {
                 for (byte i = 0; i < SPECIAL.Length; i++)
                 {
-                    if (effect.Effector == SPECIAL[i].Name)
+                    if (effect.ToTitleCase() == SPECIAL[i].Name)
                     {
                         if (SPECIAL[i].Value + effect.Value >= 1)
                         {
@@ -124,7 +192,7 @@ namespace Pip_Boy
                 }
                 for (byte i = 0; i < Skills.Length; i++)
                 {
-                    if (effect.Effector == Skills[i].Name)
+                    if (effect.ToTitleCase() == Skills[i].Name)
                     {
                         if (Skills[i].Value + effect.Value >= 1)
                         {
@@ -138,7 +206,12 @@ namespace Pip_Boy
 
         public void ResetEffects()
         {
-
+            SPECIAL = baseSPECIAL;
+            Skills = baseSkills;
+            MaxActionPoints = baseMaxActionPoints;
+            MaxHealth = baseMaxHealth;
+            DamageRessistance = baseDamageRessistance;
+            Effects.Clear();
         }
 
         #region Show Player Info
@@ -151,7 +224,8 @@ namespace Pip_Boy
             StringBuilder stringBuilder = new();
             stringBuilder.AppendLine("Name:\t" + Name);
             stringBuilder.AppendLine("Level:\t" + Level);
-            stringBuilder.AppendLine("Health:\t" + currentHealth + '/' + maxHealth);
+            stringBuilder.AppendLine("Health:\t" + CurrentHealth + '/' + MaxHealth);
+            stringBuilder.AppendLine("Action Points:\t" + ActionPoints + '/' + MaxActionPoints);
 
             return stringBuilder.ToString();
         }
@@ -165,7 +239,9 @@ namespace Pip_Boy
             StringBuilder stringBuilder = new();
             stringBuilder.AppendLine("S.P.E.C.I.A.L.:");
             foreach (Attribute attribute in SPECIAL)
+            {
                 stringBuilder.AppendLine(attribute.ToString());
+            }
 
             return stringBuilder.ToString();
         }
@@ -179,7 +255,9 @@ namespace Pip_Boy
             StringBuilder stringBuilder = new();
             stringBuilder.AppendLine("Skills:");
             foreach (Attribute skill in Skills)
+            {
                 stringBuilder.AppendLine('\t' + skill.ToString());
+            }
 
             return stringBuilder.ToString();
         }

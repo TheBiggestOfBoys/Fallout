@@ -2,7 +2,7 @@
 
 namespace Pip_Boy
 {
-    internal class Ammo(string name, string descrption, double weight, ushort value, Effect[] effects, AmmoType ammoType, AmmoModification ammoModification) : Equippable(name, descrption, weight, value, effects)
+    internal class Ammo(string name, ushort value, Effect[] effects, AmmoType ammoType, AmmoModification ammoModification) : Equippable(name, 0, value, effects)
     {
         public readonly AmmoType TypeOfAmmo = ammoType;
         public readonly AmmoModification Modification = ammoModification;
