@@ -29,8 +29,12 @@ namespace Pip_Boy
         {
             StringBuilder stringBuilder = new();
             if (markers.Length == keys.Length)
+            {
                 for (byte x = 0; x < markers.Length; x++)
+                {
                     stringBuilder.Append($"{markers[x]} = {keys[x]}, ");
+                }
+            }
 
             return stringBuilder.ToString();
         }
@@ -52,12 +56,16 @@ namespace Pip_Boy
                 tempMap[i] = new char[height];
                 // set every cell to an empty space
                 for (byte j = 0; j < height; j++)
+                {
                     tempMap[i][j] = ' ';
+                }
             }
 
             // Now randomly assign markers in the array
             for (int i = 0; i < density; i++)
+            {
                 tempMap[random.Next(width)][random.Next(height)] = markers[random.Next(markers.Length)];
+            }
 
             return tempMap;
         }

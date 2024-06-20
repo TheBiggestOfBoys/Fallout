@@ -2,20 +2,21 @@
 
 namespace Pip_Boy
 {
-    internal readonly struct Effect(Effect.EffectTypes effector, sbyte value)
+    internal readonly partial struct Effect(Effect.EffectTypes effector, sbyte value)
     {
         public readonly EffectTypes Effector = effector;
         public readonly sbyte Value = value;
 
+        [GeneratedRegex("(?<=[a-z])(?=[A-Z])")]
+        private static partial Regex MyRegex();
+
         public string ToTitleCase()
         {
             // Use a regular expression to split the string at capital letters
-            string pattern = @"(?<=[a-z])(?=[A-Z])";
-            string[] words = Regex.Split(Effector.ToString(), pattern);
+            string[] words = MyRegex().Split(Effector.ToString());
 
             // Join the words with spaces
-            string result = string.Join(" ", words);
-            return result;
+            return string.Join(' ', words);
         }
 
         internal enum EffectTypes
@@ -50,5 +51,6 @@ namespace Pip_Boy
             DamageResistance,
             #endregion
         }
+
     }
 }

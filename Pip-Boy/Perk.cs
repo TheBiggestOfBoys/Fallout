@@ -6,9 +6,6 @@
         public readonly string Description = description;
         public byte Level = level;
 
-        public override readonly string ToString()
-        {
-            return $"{Name} -- Level:{Level}\n \t{Description}";
-        }
+        public override readonly string ToString() => $"{Name} -- Level:{Level}\n\t{Description}";
     }
 }

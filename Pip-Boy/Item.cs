@@ -1,35 +1,35 @@
-﻿namespace Pip_Boy
+﻿using System.Text;
+
+namespace Pip_Boy
 {
     internal abstract class Item(string name, double weight, ushort value)
     {
         public readonly string Name = name;
-
         public readonly double Weight = weight;
         public ushort Value = value;
 
         public override string ToString()
         {
-            string defaultHeading = $"\t{Name}:";
-            defaultHeading += "\n\t\tValue: ";
+            StringBuilder defaultHeading = new($"\t{Name}:\n\t\tValue: ");
             if (Value == 0)
             {
-                defaultHeading += "--";
+                defaultHeading.Append("--");
             }
             else
             {
-                defaultHeading += Value;
+                defaultHeading.Append(Value);
             }
 
-            defaultHeading += "\n\t\tWeight: ";
-            if (Value == 0)
+            defaultHeading.Append("\n\t\tWeight: ");
+            if (Weight == 0)
             {
-                defaultHeading += "--";
+                defaultHeading.Append("--");
             }
             else
             {
-                defaultHeading += Weight;
+                defaultHeading.Append(Weight);
             }
-            return defaultHeading;
+            return defaultHeading.ToString();
         }
     }
 }

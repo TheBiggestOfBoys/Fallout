@@ -7,20 +7,17 @@
         public sbyte ReputationValue = 0;
         public Reputation reputation = Reputation.Neutral;
 
-        public enum Reputation
+        public enum Reputation : sbyte
         {
-            Villified,
-            MercifulThug,
-            Mixed,
-            Neutral,
-            Accepted,
-            Liked,
-            Idolized
+            Villified = -128,
+            MercifulThug = -84,
+            Mixed = -42,
+            Neutral = 0,
+            Accepted = 41,
+            Liked = 80,
+            Idolized = 127
         }
 
-        public override readonly string ToString()
-        {
-            return $"{Name}:\t{reputation}";
-        }
+        public override readonly string ToString() => $"{Name}:\t{reputation}";
     }
 }

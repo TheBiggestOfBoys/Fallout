@@ -27,9 +27,6 @@ namespace Pip_Boy
             Incendiary,
         }
 
-        public override string ToString()
-        {
-            return base.ToString() + $"\n\t\tAmmo Type: {TypeOfAmmo}\n\t\tAmmo Modification: {Modification}";
-        }
+        public override string ToString() => base.ToString() + $"\n\t\tAmmo Type: {TypeOfAmmo}\n\t\tAmmo Modification: {Modification}";
     }
 }
