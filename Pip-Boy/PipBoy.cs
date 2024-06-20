@@ -17,22 +17,33 @@ namespace Pip_Boy
         #endregion
 
         #region Lists
+        #region Inventory
         /// <summary>
-        /// All items in the inventory
+        /// All weapons in the inventory
         /// </summary>
-        public List<Item> inventory = [
-            new Weapon("10mm Pistol", 5.5, 55, [], Weapon.WeaponType.Gun, 3, 10, 100),
-            new Weapon("Sniper Rifle", 12.75, 250, [], Weapon.WeaponType.Gun, 5, 50, 25),
-            new TorsoPiece("Vault 13 Jumpsuit",  5, 25, [], 3, false),
-            new Ammo("10mm Ammo",  1, [], Ammo.AmmoType.Bullet, Ammo.AmmoModification.Standard),
-            new Aid("Stimpack",  1, 30, []),
-            new Misc("Journal Entry", 1, 15)
-        ];
+        public List<Weapon> Weapons { get; private set; } = [new("10mm Pistol", 5.5, 55, [], Weapon.WeaponType.Gun, 3, 10, 100)];
+        /// <summary>
+        /// All apparels in the inventory
+        /// </summary>
+        public List<Apparrel> Apparels { get; private set; } = [new TorsoPiece("Vault 13 Jumpsuit", 5, 25, [], 3, false)];
+        /// <summary>
+        /// All aid items in the inventory
+        /// </summary>
+        public List<Aid> Aids { get; private set; } = [new("Stimpack", 1, 30, [])];
+        /// <summary>
+        /// All misc items in the inventory
+        /// </summary>
+        public List<Misc> Miscs { get; private set; } = [new("Journal Entry", 1, 15)];
+        /// <summary>
+        /// All ammo items in the inventory
+        /// </summary>
+        public List<Ammo> Ammos { get; private set; } = [new("10mm Ammo", 1, [], Ammo.AmmoType.Bullet, Ammo.AmmoModification.Standard)];
+        #endregion
 
         /// <summary>
         /// A list of all unfinished quests, it can be added to, and quests will be removed and added to the `finishedQuests`, once finished.
         /// </summary>
-        public List<Quest> quests = [new("Finish the game", [new("Do stuff", new(16, 16)), new("Do things", new(32, 32))])];
+        public List<Quest> quests = [new("Finish the game", [new("Do stuff", new(16, 16), false), new("Do things", new(32, 32), false)])];
         /// <summary>
         /// A list of all finished quests, which will grow.
         /// </summary>
@@ -55,7 +66,8 @@ namespace Pip_Boy
             new("Followers of the Apocalypse", "The Followers of the Apocalypse, or simply the Followers, are a humanitarian organization originating in New California. Followers focus on providing education and medical services to those in need, as well as furthering research in non-military areas. Once allies of the New California Republic, they have since parted ways due to disagreements over NCR foreign policy."),
             new("Powder Gangers", "The Powder Gangers (also referred to as Powder Gangsters by Johnson Nash) are a gang of escaped prisoners operating in the Mojave Wasteland in 2281."),
             new("The Strip", "The New Vegas Strip is a part of New Vegas in the Mojave Wasteland in 2281."),
-            new("Freeside", "Freeside is a district of New Vegas in Fallout: New Vegas.")];
+            new("Freeside", "Freeside is a district of New Vegas in Fallout: New Vegas.")
+        ];
         /// <summary>
         /// The current index of the slected faction in the `General` sub page of the `STAT` page
         /// </summary>
@@ -150,9 +162,13 @@ namespace Pip_Boy
         {
             PlaySound(sounds[^1]);
             if (right && currentPage < Pages.DATA)
+            {
                 currentPage++;
+            }
             if (!right && currentPage > Pages.STATS)
+            {
                 currentPage--;
+            }
         }
 
         /// <summary>
@@ -217,7 +233,8 @@ namespace Pip_Boy
         {
             Pages.STATS => ShowStats(),
             Pages.ITEMS => ShowInventory(),
-            Pages.DATA => ShowData()
+            Pages.DATA => ShowData(),
+            _ => throw new NotImplementedException()
         };
 
         /// <summary>
@@ -231,7 +248,8 @@ namespace Pip_Boy
             {
                 Pages.STATS => typeof(StatsPages),
                 Pages.ITEMS => typeof(ItemsPages),
-                Pages.DATA => typeof(DataPages)
+                Pages.DATA => typeof(DataPages),
+                _ => throw new NotImplementedException()
             };
             foreach (object subPage in Enum.GetValues(enumType))
             {
@@ -272,10 +290,11 @@ namespace Pip_Boy
         public string ShowStats() => statPage switch
         {
             StatsPages.Status => player.ShowStatus(),
-            StatsPages.SPECIAL => player.ShowSPECIAL(),
+            StatsPages.SPECIAL => Player.ShowSPECIAL(),
             StatsPages.Skills => player.ShowSkills(),
             StatsPages.Perks => player.ShowPeks(),
-            StatsPages.General => ShowFactions()
+            StatsPages.General => ShowFactions(),
+            _ => throw new NotImplementedException()
         };
 
         /// <summary>
@@ -301,24 +320,41 @@ namespace Pip_Boy
         public string ShowInventory()
         {
             StringBuilder stringBuilder = new();
-
-            Type sortType = itemPage switch
+            switch (itemPage)
             {
-                ItemsPages.Weapons => typeof(Weapon),
-                ItemsPages.Apparel => typeof(Apparrel),
-                ItemsPages.Aid => typeof(Aid),
-                ItemsPages.Ammo => typeof(Ammo),
-                ItemsPages.Misc => typeof(Misc),
-            };
-
-            foreach (Item item in inventory)
-            {
-                if (item.GetType() == sortType)
-                {
-                    stringBuilder.AppendLine(item.ToString());
-                }
+                case ItemsPages.Weapons:
+                    foreach (Weapon weapon in Weapons)
+                    {
+                        stringBuilder.AppendLine(weapon.ToString());
+                    }
+                    return stringBuilder.ToString();
+                case ItemsPages.Apparel:
+                    foreach (Apparrel apparrel in Apparels)
+                    {
+                        stringBuilder.AppendLine(apparrel.ToString());
+                    }
+                    return stringBuilder.ToString();
+                case ItemsPages.Aid:
+                    foreach (Aid aid in Aids)
+                    {
+                        stringBuilder.AppendLine(aid.ToString());
+                    }
+                    return stringBuilder.ToString();
+                case ItemsPages.Ammo:
+                    foreach (Ammo ammo in Ammos)
+                    {
+                        stringBuilder.AppendLine(ammo.ToString());
+                    }
+                    return stringBuilder.ToString();
+                case ItemsPages.Misc:
+                    foreach (Misc misc in Miscs)
+                    {
+                        stringBuilder.AppendLine(misc.ToString());
+                    }
+                    return stringBuilder.ToString();
+                default:
+                    return string.Empty;
             }
-            return stringBuilder.ToString();
         }
 
         /// <summary>
@@ -330,7 +366,8 @@ namespace Pip_Boy
             DataPages.Map => map.ToString() + "\nKey: " + Map.GenerateLegend(),
             DataPages.Quests => ShowQuests(),
             DataPages.Misc => ShowDataNotes(),
-            DataPages.Radio => radio.ToString()
+            DataPages.Radio => radio.ToString(),
+            _ => throw new NotImplementedException()
         };
 
         /// <summary>

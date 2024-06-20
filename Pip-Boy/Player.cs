@@ -234,7 +234,7 @@ namespace Pip_Boy
         /// Shows the player's SPECIAL attributes
         /// </summary>
         /// <returns>A table of all SPECIAL attributes and their values</returns>
-        public string ShowSPECIAL()
+        public static string ShowSPECIAL()
         {
             StringBuilder stringBuilder = new();
             stringBuilder.AppendLine("S.P.E.C.I.A.L.:");

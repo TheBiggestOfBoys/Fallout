@@ -1,35 +1,22 @@
 ﻿namespace Pip_Boy
 {
-    internal class TorsoPiece(string name, double weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : Apparrel(name, weight, value, effects, DT)
+    internal class TorsoPiece(string name, double weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : Apparrel(name, weight, value, effects, DT, powerArmor)
     {
         public readonly ArmorType TypeOfArmor = DetermineType(weight);
-        public bool RequiresPowerArmorTraining = powerArmor;
 
-        public static ArmorType DetermineType(double Weight)
+        public static ArmorType DetermineType(double Weight) => Weight switch
         {
-            if (Weight <= 10)
-            {
-                return ArmorType.Clothing;
-            }
-            else if (Weight <= 25)
-            {
-                return ArmorType.Light;
-            }
-            else if (Weight <= 30)
-            {
-                return ArmorType.Medium;
-            }
-            else
-            {
-                return ArmorType.Heavy;
-            }
-        }
+            <= (byte)ArmorType.Clothing => ArmorType.Clothing,
+            <= (byte)ArmorType.Light => ArmorType.Light,
+            <= (byte)ArmorType.Medium => ArmorType.Medium,
+            _ => ArmorType.Heavy,
+        };
 
-        internal enum ArmorType
+        internal enum ArmorType : byte
         {
-            Clothing,
-            Light,
-            Medium,
+            Clothing = 10,
+            Light = 25,
+            Medium = 30,
             Heavy
         }
     }
