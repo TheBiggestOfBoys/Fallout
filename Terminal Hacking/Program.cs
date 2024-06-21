@@ -48,6 +48,14 @@ namespace Terminal_Minigame
         {
             Console.ForegroundColor = ConsoleColor.Green;
 
+            string[] dataEntryFilePaths = Directory.GetFiles("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\Terminal Hacking\\Data Entries\\", "*.txt");
+            Data[] dataEntries = new Data[dataEntryFilePaths.Length];
+
+            for (int i = 0; i < dataEntryFilePaths.Length; i++)
+            {
+                dataEntries[i] = new(dataEntryFilePaths[i]);
+            }
+
             Console.WriteLine("Select Difficulty:");
             Console.WriteLine("\t1: Very Easy");
             Console.WriteLine("\t2: Easy");
