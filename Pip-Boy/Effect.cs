@@ -2,7 +2,7 @@
 
 namespace Pip_Boy
 {
-    internal readonly partial struct Effect(Effect.EffectTypes effector, sbyte value)
+    public readonly partial struct Effect(Effect.EffectTypes effector, sbyte value)
     {
         public readonly EffectTypes Effector = effector;
         public readonly sbyte Value = value;
@@ -19,7 +19,7 @@ namespace Pip_Boy
             return string.Join(' ', words);
         }
 
-        internal enum EffectTypes
+        public enum EffectTypes
         {
             #region SPECIAL
             Strength,

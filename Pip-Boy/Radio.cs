@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Pip_Boy
 {
-    internal class Radio
+    public class Radio
     {
         public static readonly SoundPlayer soundPlayer = new();
         public List<Song> songs = [];

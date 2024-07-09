@@ -1,24 +1,50 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace Pip_Boy
 {
-    internal class Weapon(string name, double weight, ushort value, Effect[] effects, Weapon.WeaponType weaponType, byte strengthRequirement, byte damage, ushort rateOfFire) : Equippable(name, weight, value, effects)
+    public class Weapon : Equippable
     {
-        private readonly byte originalDamage = damage;
-        public byte Damage { get; private set; } = damage;
-        public ushort RateOfFire { get; private set; } = rateOfFire;
-        public byte DPS { get; private set; } = (byte)((rateOfFire / 60) * damage);
+        private readonly byte originalDamage;
+        public byte Damage { get; private set; }
+        public ushort RateOfFire { get; private set; }
+        public byte DPS { get; private set; }
 
-        public readonly byte StrengthRequirement = strengthRequirement;
-        public readonly WeaponType TypeOfWeapon = weaponType;
+        public readonly byte StrengthRequirement;
+        public readonly WeaponType TypeOfWeapon;
         public static readonly List<string> Modifications = [];
+
+        #region Constructors
+        public Weapon(string name, double weight, ushort value, Effect[] effects, WeaponType weaponType, byte strengthRequirement, byte damage, ushort rateOfFire) : base(name, weight, value, effects)
+        {
+            originalDamage = damage;
+            Damage = originalDamage;
+            RateOfFire = rateOfFire;
+            DPS = (byte)(rateOfFire / 60 * damage);
+            StrengthRequirement = strengthRequirement;
+            TypeOfWeapon = weaponType;
+        }
+
+        public Weapon() : base() { }
+        #endregion
+
+        public static Weapon FromFile(string filePath)
+        {
+            XmlSerializer x = new(typeof(Weapon));
+            TextReader reader = new StreamReader(filePath);
+            Weapon? tempItem = (Weapon?)x.Deserialize(reader) ?? throw new NullReferenceException("XMl file object is null!");
+            reader.Close();
+            return tempItem;
+        }
 
         public void UpdateDamage()
         {
             Damage = (byte)(originalDamage * Condition);
         }
 
-        internal enum WeaponType
+        public enum WeaponType
         {
             Melee,
             Unarmed,
@@ -38,7 +64,7 @@ namespace Pip_Boy
                 string tempString = base.ToString();
                 foreach (string modificaiton in Modifications)
                 {
-                    tempString += $"\n\t\t{modificaiton}";
+                    tempString += $"{Environment.NewLine}\t\t{modificaiton}";
                 }
                 return tempString;
             }

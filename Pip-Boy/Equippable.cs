@@ -1,18 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Pip_Boy
 {
-    internal abstract class Equippable(string name, double weight, ushort value, Effect[] effects) : Item(name, weight, value)
+    public abstract class Equippable : Item
     {
-        private readonly ushort originalValue = value;
+        private readonly ushort originalValue;
         public decimal Condition { get; private set; } = 1;
         public bool IsEquipped { get; private set; } = false;
-        public readonly List<Effect> Effects = [.. effects];
+        public readonly List<Effect> Effects;
+
+        #region Constructors
+        public Equippable(string name, double weight, ushort value, Effect[] effects) : base(name, weight, value)
+        {
+            originalValue = value;
+            Effects = [.. effects];
+        }
+
+        public Equippable() : base()
+        {
+            originalValue = 0;
+            Effects = [];
+        }
+        #endregion
 
         public void Equip(Player player)
         {
             IsEquipped = true;
-            player.Effects.AddRange(effects);
+            player.Effects.AddRange(Effects);
             player.ApplyEffects();
         }
 
@@ -36,9 +51,9 @@ namespace Pip_Boy
             string effectsString = string.Empty;
             foreach (Effect effect in Effects)
             {
-                effectsString += $"\n\t\t{effect}";
+                effectsString += $"{Environment.NewLine}\t\t{effect}";
             }
-            return isEquippedChar + base.ToString() + effectsString + $"\n\t\tCND: {Condition:0.00}";
+            return isEquippedChar + base.ToString() + effectsString + $"{Environment.NewLine}\t\tCND: {Condition:0.00}";
         }
     }
 }

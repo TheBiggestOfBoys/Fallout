@@ -1,10 +1,34 @@
-﻿namespace Pip_Boy
+﻿using System;
+using System.IO;
+using System.Xml.Serialization;
+
+namespace Pip_Boy
 {
-    internal class Apparrel(string name, double weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : Equippable(name, weight, value, effects)
+    public class Apparrel : Equippable
     {
-        private readonly byte originalDamageThreshold = DT;
-        public byte DamageThreshold { get; private set; } = DT;
-        public bool RequiresPowerArmorTraining = powerArmor;
+        private readonly byte originalDamageThreshold;
+        public byte DamageThreshold { get; private set; }
+        public bool RequiresPowerArmorTraining;
+
+        #region Constructors
+        public Apparrel(string name, double weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : base(name, weight, value, effects)
+        {
+            originalDamageThreshold = DT;
+            DamageThreshold = originalDamageThreshold;
+            RequiresPowerArmorTraining = powerArmor;
+        }
+
+        public Apparrel() : base() { }
+        #endregion
+
+        public static Apparrel FromFile(string filePath)
+        {
+            XmlSerializer x = new(typeof(Apparrel));
+            TextReader reader = new StreamReader(filePath);
+            Apparrel? tempItem = (Apparrel?)x.Deserialize(reader) ?? throw new NullReferenceException("XMl file object is null!");
+            reader.Close();
+            return tempItem;
+        }
 
         public void UpdateDamageThreshold()
         {

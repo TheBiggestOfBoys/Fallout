@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace Pip_Boy
 {
-    internal class PipBoy
+    public class PipBoy
     {
         #region Objects
         public Player player = new("Player", [5, 5, 5, 5, 5, 5, 5]);
@@ -17,29 +17,6 @@ namespace Pip_Boy
         #endregion
 
         #region Lists
-        #region Inventory
-        /// <summary>
-        /// All weapons in the inventory
-        /// </summary>
-        public List<Weapon> Weapons { get; private set; } = [new("10mm Pistol", 5.5, 55, [], Weapon.WeaponType.Gun, 3, 10, 100)];
-        /// <summary>
-        /// All apparels in the inventory
-        /// </summary>
-        public List<Apparrel> Apparels { get; private set; } = [new TorsoPiece("Vault 13 Jumpsuit", 5, 25, [], 3, false)];
-        /// <summary>
-        /// All aid items in the inventory
-        /// </summary>
-        public List<Aid> Aids { get; private set; } = [new("Stimpack", 1, 30, [])];
-        /// <summary>
-        /// All misc items in the inventory
-        /// </summary>
-        public List<Misc> Miscs { get; private set; } = [new("Journal Entry", 1, 15)];
-        /// <summary>
-        /// All ammo items in the inventory
-        /// </summary>
-        public List<Ammo> Ammos { get; private set; } = [new("10mm Ammo", 1, [], Ammo.AmmoType.Bullet, Ammo.AmmoModification.Standard)];
-        #endregion
-
         /// <summary>
         /// A list of all unfinished quests, it can be added to, and quests will be removed and added to the `finishedQuests`, once finished.
         /// </summary>
@@ -143,11 +120,6 @@ namespace Pip_Boy
         public StatsPages statPage = StatsPages.Status;
 
         /// <summary>
-        /// The current ITEM sub-page
-        /// </summary>
-        public ItemsPages itemPage = ItemsPages.Weapons;
-
-        /// <summary>
         /// The current DATA sub-page
         /// </summary>
         public DataPages dataPage = DataPages.Map;
@@ -188,11 +160,11 @@ namespace Pip_Boy
                     statPage--;
                     break;
 
-                case Pages.ITEMS when right && itemPage < ItemsPages.Misc:
-                    itemPage++;
+                case Pages.ITEMS when right && player.Inventory.itemPage < Inventory.ItemsPages.Misc:
+                    player.Inventory.itemPage++;
                     break;
-                case Pages.ITEMS when !right && itemPage > ItemsPages.Weapons:
-                    itemPage--;
+                case Pages.ITEMS when !right && player.Inventory.itemPage > Inventory.ItemsPages.Weapons:
+                    player.Inventory.itemPage--;
                     break;
 
                 case Pages.DATA when right && dataPage < DataPages.Radio:
@@ -232,7 +204,7 @@ namespace Pip_Boy
         public string ShowMenu() => currentPage switch
         {
             Pages.STATS => ShowStats(),
-            Pages.ITEMS => ShowInventory(),
+            Pages.ITEMS => player.Inventory.ToString(),
             Pages.DATA => ShowData(),
             _ => throw new NotImplementedException()
         };
@@ -247,7 +219,7 @@ namespace Pip_Boy
             Type enumType = currentPage switch
             {
                 Pages.STATS => typeof(StatsPages),
-                Pages.ITEMS => typeof(ItemsPages),
+                Pages.ITEMS => typeof(Inventory.ItemsPages),
                 Pages.DATA => typeof(DataPages),
                 _ => throw new NotImplementedException()
             };
@@ -268,7 +240,7 @@ namespace Pip_Boy
             foreach (string item in subMenuItems)
             {
                 Console.Write('\t');
-                if (item == statPage.ToString() || item == itemPage.ToString() || item == dataPage.ToString())
+                if (item == statPage.ToString() || item == player.Inventory.itemPage.ToString() || item == dataPage.ToString())
                 {
                     Highlight(item, false);
                 }
@@ -291,7 +263,7 @@ namespace Pip_Boy
         {
             StatsPages.Status => player.ShowStatus(),
             StatsPages.SPECIAL => Player.ShowSPECIAL(),
-            StatsPages.Skills => player.ShowSkills(),
+            StatsPages.Skills => Player.ShowSkills(),
             StatsPages.Perks => player.ShowPeks(),
             StatsPages.General => ShowFactions(),
             _ => throw new NotImplementedException()
@@ -311,50 +283,6 @@ namespace Pip_Boy
             }
 
             return stringBuilder.ToString() + '\n' + factions[factionIndex].Description;
-        }
-
-        /// <summary>
-        /// Shows the items with the current submenu type
-        /// </summary>
-        /// <returns>A table of every `Type` item's name, description, value and weight</returns>
-        public string ShowInventory()
-        {
-            StringBuilder stringBuilder = new();
-            switch (itemPage)
-            {
-                case ItemsPages.Weapons:
-                    foreach (Weapon weapon in Weapons)
-                    {
-                        stringBuilder.AppendLine(weapon.ToString());
-                    }
-                    return stringBuilder.ToString();
-                case ItemsPages.Apparel:
-                    foreach (Apparrel apparrel in Apparels)
-                    {
-                        stringBuilder.AppendLine(apparrel.ToString());
-                    }
-                    return stringBuilder.ToString();
-                case ItemsPages.Aid:
-                    foreach (Aid aid in Aids)
-                    {
-                        stringBuilder.AppendLine(aid.ToString());
-                    }
-                    return stringBuilder.ToString();
-                case ItemsPages.Ammo:
-                    foreach (Ammo ammo in Ammos)
-                    {
-                        stringBuilder.AppendLine(ammo.ToString());
-                    }
-                    return stringBuilder.ToString();
-                case ItemsPages.Misc:
-                    foreach (Misc misc in Miscs)
-                    {
-                        stringBuilder.AppendLine(misc.ToString());
-                    }
-                    return stringBuilder.ToString();
-                default:
-                    return string.Empty;
-            }
         }
 
         /// <summary>
@@ -477,18 +405,6 @@ namespace Pip_Boy
             Skills,
             Perks,
             General
-        }
-
-        /// <summary>
-        /// ITEM sub-menu pages
-        /// </summary>
-        public enum ItemsPages
-        {
-            Weapons,
-            Apparel,
-            Aid,
-            Ammo,
-            Misc
         }
 
         /// <summary>

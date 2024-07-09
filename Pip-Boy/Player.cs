@@ -4,9 +4,11 @@ using System.Text;
 
 namespace Pip_Boy
 {
-    internal class Player
+    public class Player
     {
         #region Arrays
+        public Inventory Inventory = new("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\Pip-Boy\\PIP-Boy\\Inventory\\");
+
         public static Attribute[] SPECIAL = [
             new("Strength", 5),
             new("Perception", 5),
@@ -151,27 +153,26 @@ namespace Pip_Boy
 
         public void Unequip(Equippable item)
         {
-            if (item is HeadPiece)
+            if (item is not null)
             {
-                headPiece.Unequip(this);
-                headPiece = null;
+                item.Unequip(this);
+                if (item is HeadPiece)
+                {
+                    headPiece = null;
+                }
+                else if (item is TorsoPiece)
+                {
+                    torsoPiece = null;
+                }
+                else if (item is Weapon)
+                {
+                    weapon = null;
+                }
+                else if (item is Ammo)
+                {
+                    ammo = null;
+                }
             }
-            else if (item is TorsoPiece)
-            {
-                torsoPiece.Unequip(this);
-                torsoPiece = null;
-            }
-            else if (item is Weapon)
-            {
-                weapon.Unequip(this);
-                weapon = null;
-            }
-            else if (item is Ammo)
-            {
-                ammo.Unequip(this);
-                ammo = null;
-            }
-            item.Equip(this);
         }
 
         public void ApplyEffects()
@@ -250,7 +251,7 @@ namespace Pip_Boy
         /// Shows the player's skill levels
         /// </summary>
         /// <returns>A table with every skill and its associated value</returns>
-        public string ShowSkills()
+        public static string ShowSkills()
         {
             StringBuilder stringBuilder = new();
             stringBuilder.AppendLine("Skills:");

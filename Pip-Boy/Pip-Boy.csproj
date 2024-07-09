@@ -24,4 +24,13 @@
     <PackageReference Include="System.Windows.Extensions" Version="8.0.0" />
   </ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="PIP-Boy\Inventory\Apparrel\" />
+	  <Folder Include="PIP-Boy\Inventory\Aid\" />
+	  <Folder Include="PIP-Boy\Inventory\Misc\" />
+	  <Folder Include="PIP-Boy\Inventory\Ammo\" />
+	  <Folder Include="PIP-Boy\Inventory\Weapons\" />
+	  <Folder Include="PIP-Boy\Data\" />
+	</ItemGroup>
+
 </Project>

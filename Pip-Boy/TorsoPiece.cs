@@ -1,10 +1,13 @@
 ﻿namespace Pip_Boy
 {
-    internal class TorsoPiece(string name, double weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : Apparrel(name, weight, value, effects, DT, powerArmor)
+    public class TorsoPiece : Apparrel
     {
-        public readonly ArmorType TypeOfArmor = DetermineType(weight);
+        #region Constructors
+        public TorsoPiece(string name, double weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : base(name, weight, value, effects, DT, powerArmor) { }
+        public TorsoPiece() : base() { }
+        #endregion
 
-        public static ArmorType DetermineType(double Weight) => Weight switch
+        public ArmorType TypeOfArmor => Weight switch
         {
             <= (byte)ArmorType.Clothing => ArmorType.Clothing,
             <= (byte)ArmorType.Light => ArmorType.Light,
@@ -12,7 +15,7 @@
             _ => ArmorType.Heavy,
         };
 
-        internal enum ArmorType : byte
+        public enum ArmorType : byte
         {
             Clothing = 10,
             Light = 25,

@@ -1,10 +1,14 @@
 ﻿namespace Pip_Boy
 {
-    internal class HeadPiece(string name, double weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : Apparrel(name, weight, value, effects, DT, powerArmor)
+    public class HeadPiece : Apparrel
     {
-        public readonly PieceType pieceType = DetermineType(weight);
+        #region Constructors
+        public HeadPiece(string name, double weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : base(name, weight, value, effects, DT, powerArmor) { }
 
-        public static PieceType DetermineType(double Weight) => Weight switch
+        public HeadPiece() : base() { }
+        #endregion
+
+        public PieceType pieceType => Weight switch
         {
             <= (byte)PieceType.Glasses => PieceType.Glasses,
             <= (byte)PieceType.Hat => PieceType.Hat,
@@ -12,7 +16,7 @@
             _ => PieceType.Other,
         };
 
-        internal enum PieceType : byte
+        public enum PieceType : byte
         {
             Glasses = 1,
             Hat = 2,

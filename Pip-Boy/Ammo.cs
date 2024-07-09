@@ -1,13 +1,34 @@
-﻿using static Pip_Boy.Ammo;
+﻿using System;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace Pip_Boy
 {
-    internal class Ammo(string name, ushort value, Effect[] effects, AmmoType ammoType, AmmoModification ammoModification) : Equippable(name, 0, value, effects)
+    public class Ammo : Equippable
     {
-        public readonly AmmoType TypeOfAmmo = ammoType;
-        public readonly AmmoModification Modification = ammoModification;
+        public readonly AmmoType TypeOfAmmo;
+        public readonly AmmoModification Modification;
 
-        internal enum AmmoType
+        #region Constructors
+        public Ammo(string name, ushort value, Effect[] effects, AmmoType ammoType, AmmoModification ammoModification) : base(name, 0, value, effects)
+        {
+            TypeOfAmmo = ammoType;
+            Modification = ammoModification;
+        }
+
+        public Ammo() : base() { }
+        #endregion
+
+        public static Ammo FromFile(string filePath)
+        {
+            XmlSerializer x = new(typeof(Ammo));
+            TextReader reader = new StreamReader(filePath);
+            Ammo? tempItem = (Ammo?)x.Deserialize(reader) ?? throw new NullReferenceException("XMl file object is null!");
+            reader.Close();
+            return tempItem;
+        }
+
+        public enum AmmoType
         {
             Bullet,
             Bomb,
@@ -15,7 +36,7 @@ namespace Pip_Boy
             Other
         }
 
-        internal enum AmmoModification
+        public enum AmmoModification
         {
             Standard,
             HollowPoint,
@@ -27,6 +48,6 @@ namespace Pip_Boy
             Incendiary,
         }
 
-        public override string ToString() => base.ToString() + $"\n\t\tAmmo Type: {TypeOfAmmo}\n\t\tAmmo Modification: {Modification}";
+        public override string ToString() => base.ToString() + $"{Environment.NewLine}\t\tAmmo Type: {TypeOfAmmo}{Environment.NewLine}\t\tAmmo Modification: {Modification}";
     }
 }

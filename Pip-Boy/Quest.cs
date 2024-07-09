@@ -4,12 +4,12 @@ using System.Text;
 
 namespace Pip_Boy
 {
-    internal struct Quest(string name, List<Quest.Step> steps)
+    public struct Quest(string name, List<Quest.Step> steps)
     {
         public readonly string Name = name;
         public List<Step> Steps = steps;
 
-        internal struct Step(string instructions, Vector2 position, bool optional)
+        public struct Step(string instructions, Vector2 position, bool optional)
         {
             public readonly string Instructions = instructions;
             public bool Completed = false;

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Pip_Boy
 {
-    internal struct Map(byte height, byte width, byte density)
+    public struct Map(byte height, byte width, byte density)
     {
         private static readonly Random random = new();
         public readonly char[][] Grid = GenerateMap(width, height, density);

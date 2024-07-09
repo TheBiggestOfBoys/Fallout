@@ -1,6 +1,6 @@
 ﻿namespace Pip_Boy
 {
-    internal struct Faction(string name, string description)
+    public struct Faction(string name, string description)
     {
         public readonly string Name = name;
         public readonly string Description = description;

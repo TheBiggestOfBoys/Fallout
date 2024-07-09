@@ -2,7 +2,7 @@
 
 namespace Pip_Boy
 {
-    internal class Program
+    public class Program
     {
         public static readonly PipBoy pipBoy = new();
 
@@ -14,12 +14,18 @@ namespace Pip_Boy
             Console.ForegroundColor = pipBoy.color;
             Console.Title = "PIP-Boy 3000 MKIV";
             if (boot)
+            {
                 pipBoy.Boot();
+            }
 
             if (createPlayer)
+            {
                 pipBoy.player = new();
+            }
             else
+            {
                 pipBoy.player = new("Jake Scott", [5, 6, 7, 8, 9, 3, 4]);
+            }
 
             pipBoy.map.MovePlayer(null, null);
 
@@ -98,7 +104,11 @@ namespace Pip_Boy
                     case ConsoleKey.NumPad6 when pipBoy.currentPage == PipBoy.Pages.DATA && pipBoy.dataPage == PipBoy.DataPages.Map:
                         pipBoy.map.MovePlayer(null, true);
                         break;
-                        #endregion
+                    #endregion
+
+                    case ConsoleKey.X:
+                        pipBoy.player.Inventory.Save();
+                        break;
                 }
             }
             #endregion
