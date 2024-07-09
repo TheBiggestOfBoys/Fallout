@@ -6,8 +6,8 @@ namespace Pip_Boy
     public abstract class Equippable : Item
     {
         private readonly ushort originalValue;
-        public decimal Condition { get; private set; } = 1;
-        public bool IsEquipped { get; private set; } = false;
+        public decimal Condition = 1;
+        public bool IsEquipped = false;
         public readonly List<Effect> Effects;
 
         #region Constructors

@@ -7,7 +7,7 @@ namespace Pip_Boy
     public class Apparrel : Equippable
     {
         private readonly byte originalDamageThreshold;
-        public byte DamageThreshold { get; private set; }
+        public byte DamageThreshold;
         public bool RequiresPowerArmorTraining;
 
         #region Constructors

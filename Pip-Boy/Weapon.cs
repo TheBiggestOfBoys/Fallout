@@ -8,9 +8,9 @@ namespace Pip_Boy
     public class Weapon : Equippable
     {
         private readonly byte originalDamage;
-        public byte Damage { get; private set; }
-        public ushort RateOfFire { get; private set; }
-        public byte DPS { get; private set; }
+        public byte Damage;
+        public ushort RateOfFire;
+        public byte DPS;
 
         public readonly byte StrengthRequirement;
         public readonly WeaponType TypeOfWeapon;

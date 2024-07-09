@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Ammo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Name>10mm Ammo</Name>
+  <Weight>0</Weight>
+  <Value>1</Value>
+  <Condition>1</Condition>
+  <IsEquipped>false</IsEquipped>
+  <Effects />
+</Ammo>
