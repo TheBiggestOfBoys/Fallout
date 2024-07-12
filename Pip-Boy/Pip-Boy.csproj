@@ -11,19 +11,13 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<Content Include="PIP-Boy\Sounds\**\*.wav">
+		<Content Include="Sounds\**\*.wav">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<Link>Sounds\%(RecursiveDir)%(Filename)%(Extension)</Link>
 		</Content>
-		<Content Include="PIP-Boy\Songs\*.wav">
+		<Content Include="Songs\*.wav">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Remove="Sounds\**" />
-	  <EmbeddedResource Remove="Sounds\**" />
-	  <None Remove="Sounds\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -37,9 +31,6 @@
 	  <Folder Include="PIP-Boy\Inventory\Ammo\" />
 	  <Folder Include="PIP-Boy\Inventory\Weapons\" />
 	  <Folder Include="PIP-Boy\Data\" />
-	  <Folder Include="PIP-Boy\Factions\" />
-	  <Folder Include="PIP-Boy\Quests\Active Quests\" />
-	  <Folder Include="PIP-Boy\Quests\Completed Quests\" />
 	</ItemGroup>
 
 </Project>

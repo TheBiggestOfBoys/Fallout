@@ -5,13 +5,13 @@ using System.Media;
 using System.Text;
 using System.Threading;
 
-namespace Pip_Boy.Objects
+namespace Pip_Boy
 {
-    public class PipBoy(string workingDirectory, ConsoleColor color)
+    public class PipBoy
     {
         #region Objects
-        public Player player = new("Player", [5, 5, 5, 5, 5, 5, 5], workingDirectory);
-        public Radio radio = new(workingDirectory + "Songs\\");
+        public Player player = new("Player", [5, 5, 5, 5, 5, 5, 5]);
+        public Radio radio = new("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\Pip-Boy\\Songs\\");
         public Map map = new(25, 50, 20);
         public SoundPlayer soundEffects = new();
         #endregion
@@ -54,27 +54,22 @@ namespace Pip_Boy.Objects
         /// <summary>
         /// Sound
         /// </summary>
-        public string[] sounds = Directory.GetFiles(workingDirectory + "Sounds\\", "*.wav");
+        public string[] sounds = Directory.GetFiles("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\Pip-Boy\\Sounds\\", "*.wav");
         /// <summary>
         /// Sounds for static between songs and menu navigation
         /// </summary>
-        public string[] staticSounds = Directory.GetFiles(workingDirectory + "Sounds\\static\\", "*wav");
+        public string[] staticSounds = Directory.GetFiles("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\Pip-Boy\\Sounds\\static\\", "*wav");
         /// <summary>
         /// Geiger click sounds, for when in the RAD menu
         /// </summary>
-        public string[] radiationSounds = Directory.GetFiles(workingDirectory + "Sounds\\radiation\\", "*wav");
+        public string[] radiationSounds = Directory.GetFiles("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\Pip-Boy\\Sounds\\radiation\\", "*wav");
         #endregion
         #endregion
 
         /// <summary>
         /// The color of the PIP-Boy's text
         /// </summary>
-        public ConsoleColor Color = color;
-
-        /// <summary>
-        /// The directory from which files will be loaded and saved
-        /// </summary>
-        public string activeDirectory = workingDirectory;
+        public ConsoleColor color = ConsoleColor.DarkYellow;
 
         public void Boot()
         {
@@ -98,6 +93,19 @@ namespace Pip_Boy.Objects
             Console.Clear();
 
             PlaySound(sounds[8]);
+        }
+
+        public void EquipItem(Equippable item)
+        {
+            item.Equip(player);
+            player.ApplyEffects();
+        }
+
+        public void UnequipItem(Equippable item)
+        {
+            item.Unequip(player);
+            player.ResetEffects();
+            player.ApplyEffects();
         }
 
         #region Page Info
@@ -274,7 +282,7 @@ namespace Pip_Boy.Objects
                 stringBuilder.AppendLine(faction.ToString());
             }
 
-            return stringBuilder.ToString() + Environment.NewLine + factions[factionIndex].Description;
+            return stringBuilder.ToString() + '\n' + factions[factionIndex].Description;
         }
 
         /// <summary>
@@ -283,7 +291,7 @@ namespace Pip_Boy.Objects
         /// <returns>The corresponding string</returns>
         public string ShowData() => dataPage switch
         {
-            DataPages.Map => map.ToString() + Environment.NewLine + "Key: " + Map.GenerateLegend(),
+            DataPages.Map => map.ToString() + "\nKey: " + Map.GenerateLegend(),
             DataPages.Quests => ShowQuests(),
             DataPages.Misc => ShowDataNotes(),
             DataPages.Radio => radio.ToString(),
@@ -330,7 +338,7 @@ namespace Pip_Boy.Objects
             Console.Error.WriteLine(message);
             Console.Beep(500, 500);
             Console.Beep(500, 500);
-            Console.ForegroundColor = Color;
+            Console.ForegroundColor = color;
         }
 
         /// <summary>
@@ -339,7 +347,7 @@ namespace Pip_Boy.Objects
         /// <param name="message">The message to highlight</param>
         public void Highlight(string message, bool newLine)
         {
-            Console.BackgroundColor = Color;
+            Console.BackgroundColor = color;
             Console.ForegroundColor = ConsoleColor.Black;
             if (newLine)
             {
@@ -350,7 +358,7 @@ namespace Pip_Boy.Objects
                 Console.Write(message);
             }
             Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = Color;
+            Console.ForegroundColor = color;
         }
 
         /// <summary>

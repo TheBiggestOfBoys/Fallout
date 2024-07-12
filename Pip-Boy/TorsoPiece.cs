@@ -1,4 +1,4 @@
-﻿namespace Pip_Boy.Items
+﻿namespace Pip_Boy
 {
     public class TorsoPiece : Apparrel
     {

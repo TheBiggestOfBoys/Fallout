@@ -2,12 +2,12 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace Pip_Boy.Items
+namespace Pip_Boy
 {
     public class Apparrel : Equippable
     {
         private readonly byte originalDamageThreshold;
-        public byte DamageThreshold;
+        public byte DamageThreshold { get; private set; }
         public bool RequiresPowerArmorTraining;
 
         #region Constructors

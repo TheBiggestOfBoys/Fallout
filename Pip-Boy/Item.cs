@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace Pip_Boy.Items
+namespace Pip_Boy
 {
     [Serializable]
     public abstract class Item

@@ -1,36 +1,12 @@
-﻿using Pip_Boy.Items;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Pip_Boy.Objects
+namespace Pip_Boy
 {
     public class Inventory
     {
-        #region Lists
-        /// <summary>
-        /// All weapons in the inventory
-        /// </summary>
-        public List<Weapon> Weapons { get; private set; } = [];
-        /// <summary>
-        /// All apparels in the inventory
-        /// </summary>
-        public List<Apparrel> Apparels { get; private set; } = [];
-        /// <summary>
-        /// All aid items in the inventory
-        /// </summary>
-        public List<Aid> Aids { get; private set; } = [];
-        /// <summary>
-        /// All misc items in the inventory
-        /// </summary>
-        public List<Misc> Miscs { get; private set; } = [];
-        /// <summary>
-        /// All ammo items in the inventory
-        /// </summary>
-        public List<Ammo> Ammos { get; private set; } = [];
-        #endregion
-
         /// <summary>
         /// The current ITEM sub-page
         /// </summary>
@@ -94,11 +70,54 @@ namespace Pip_Boy.Objects
             CurrentCarryWeight = CalculateWeight();
         }
 
+        #region Lists
         /// <summary>
-        /// Sums up the weight of all items in the inventory
+        /// All weapons in the inventory
         /// </summary>
-        /// <returns>The total weight</returns>
-        private double CalculateWeight() => Weapons.Sum(x => x.Weight) + Apparels.Sum(x => x.Weight) + Aids.Sum(x => x.Weight) + Miscs.Sum(x => x.Weight) + Ammos.Sum(x => x.Weight);
+        public List<Weapon> Weapons { get; private set; } = [new("10mm Pistol", 5.5, 55, [], Weapon.WeaponType.Gun, 3, 10, 100)];
+        /// <summary>
+        /// All apparels in the inventory
+        /// </summary>
+        public List<Apparrel> Apparels { get; private set; } = [new TorsoPiece("Vault 13 Jumpsuit", 5, 25, [], 3, false)];
+        /// <summary>
+        /// All aid items in the inventory
+        /// </summary>
+        public List<Aid> Aids { get; private set; } = [new("Stimpack", 1, 30, [])];
+        /// <summary>
+        /// All misc items in the inventory
+        /// </summary>
+        public List<Misc> Miscs { get; private set; } = [new("Journal Entry", 1, 15)];
+        /// <summary>
+        /// All ammo items in the inventory
+        /// </summary>
+        public List<Ammo> Ammos { get; private set; } = [new("10mm Ammo", 1, [], Ammo.AmmoType.Bullet, Ammo.AmmoModification.Standard)];
+        #endregion
+
+        private double CalculateWeight()
+        {
+            double tempWeight = 0;
+            foreach (Weapon weapon in Weapons)
+            {
+                tempWeight += weapon.Weight;
+            }
+            foreach (Apparrel apparrel in Apparels)
+            {
+                tempWeight += apparrel.Weight;
+            }
+            foreach (Aid aid in Aids)
+            {
+                tempWeight += aid.Weight;
+            }
+            foreach (Misc misc in Miscs)
+            {
+                tempWeight += misc.Weight;
+            }
+            foreach (Ammo ammo in Ammos)
+            {
+                tempWeight += ammo.Weight;
+            }
+            return tempWeight;
+        }
 
         public void Save()
         {
@@ -108,86 +127,21 @@ namespace Pip_Boy.Objects
             }
             foreach (Apparrel apparrel in Apparels)
             {
-                apparrel.ToFile(ApparrelFolderPath);
+                apparrel.ToFile(WeaponFolderPath);
             }
             foreach (Aid aid in Aids)
             {
-                aid.ToFile(AidFolderPath);
+                aid.ToFile(WeaponFolderPath);
             }
             foreach (Misc misc in Miscs)
             {
-                misc.ToFile(MiscFolderPath);
+                misc.ToFile(WeaponFolderPath);
             }
             foreach (Ammo ammo in Ammos)
             {
-                ammo.ToFile(AmmoFolderPath);
+                ammo.ToFile(WeaponFolderPath);
             }
         }
-
-        #region Inventory Management
-        public void Clear()
-        {
-            Weapons.Clear();
-            Apparels.Clear();
-            Aids.Clear();
-            Miscs.Clear();
-            Ammos.Clear();
-        }
-
-        /// <summary>
-        /// Adds a generic item to its correct list
-        /// </summary>
-        /// <param name="item">The item to add</param>
-        public void Add(Item item)
-        {
-            switch (item)
-            {
-                case Weapon weapon:
-                    Weapons.Add(weapon);
-                    break;
-                case Apparrel apparrel:
-                    Apparels.Add(apparrel);
-                    break;
-                case Aid aid:
-                    Aids.Add(aid);
-                    break;
-                case Misc misc:
-                    Miscs.Add(misc);
-                    break;
-                case Ammo ammo:
-                    Ammos.Add(ammo);
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Removes a item from its list
-        /// </summary>
-        /// <param name="item">The item to drop</param>
-        public void Drop(Item item)
-        {
-            if (item is Weapon weapon)
-            {
-                Weapons.Remove(weapon);
-            }
-            else if (item is Apparrel apparrel)
-            {
-                Apparels.Remove(apparrel);
-            }
-            else if (item is Aid aid)
-            {
-                Aids.Remove(aid);
-            }
-            else if (item is Misc misc)
-            {
-                Miscs.Remove(misc);
-            }
-            else if (item is Ammo ammo)
-            {
-                Ammos.Remove(ammo);
-            }
-        }
-        #endregion
 
         /// <summary>
         /// Shows the items with the current submenu type
@@ -195,8 +149,7 @@ namespace Pip_Boy.Objects
         /// <returns>A table of every `Type` item's name, description, value and weight</returns>
         public override string ToString()
         {
-            StringBuilder stringBuilder = new($"{CurrentCarryWeight}/{MaxCarryWeight} -- Over Encumbered?: {IsOverEncumbered}");
-            stringBuilder.AppendLine(new string('-', 15));
+            StringBuilder stringBuilder = new();
             switch (itemPage)
             {
                 case ItemsPages.Weapons:
