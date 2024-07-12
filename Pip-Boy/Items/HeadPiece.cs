@@ -1,4 +1,4 @@
-﻿namespace Pip_Boy
+﻿namespace Pip_Boy.Items
 {
     public class HeadPiece : Apparrel
     {

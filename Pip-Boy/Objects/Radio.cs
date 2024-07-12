@@ -4,7 +4,7 @@ using System.IO;
 using System.Media;
 using System.Text;
 
-namespace Pip_Boy
+namespace Pip_Boy.Objects
 {
     public class Radio
     {
@@ -84,13 +84,11 @@ namespace Pip_Boy
         /// <returns>A table with all the song names</returns>
         public override string ToString()
         {
-            StringBuilder stringBuilder = new();
-            stringBuilder.AppendLine("Songs:\t" + songs.Count);
+            StringBuilder stringBuilder = new("Songs:\t" + songs.Count);
             foreach (Song song in songs)
             {
                 stringBuilder.AppendLine('\t' + song.Name);
             }
-
             return stringBuilder.ToString();
         }
     }

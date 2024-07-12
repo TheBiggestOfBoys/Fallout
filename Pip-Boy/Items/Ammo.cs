@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace Pip_Boy
+namespace Pip_Boy.Items
 {
     public class Ammo : Equippable
     {

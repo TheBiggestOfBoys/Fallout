@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace Pip_Boy
+namespace Pip_Boy.Items
 {
     public class Weapon : Equippable
     {
         private readonly byte originalDamage;
-        public byte Damage { get; private set; }
-        public ushort RateOfFire { get; private set; }
-        public byte DPS { get; private set; }
+        public byte Damage;
+        public ushort RateOfFire;
+        public byte DPS;
 
         public readonly byte StrengthRequirement;
         public readonly WeaponType TypeOfWeapon;
