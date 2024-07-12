@@ -98,7 +98,7 @@ namespace Pip_Boy.Objects
         /// Sums up the weight of all items in the inventory
         /// </summary>
         /// <returns>The total weight</returns>
-        private double CalculateWeight() => Weapons.Sum(x => x.Weight)+ Apparels.Sum(x => x.Weight)+ Aids.Sum(x => x.Weight) + Miscs.Sum(x => x.Weight) + Ammos.Sum(x => x.Weight);
+        private double CalculateWeight() => Weapons.Sum(x => x.Weight) + Apparels.Sum(x => x.Weight) + Aids.Sum(x => x.Weight) + Miscs.Sum(x => x.Weight) + Ammos.Sum(x => x.Weight);
 
         public void Save()
         {
@@ -140,25 +140,23 @@ namespace Pip_Boy.Objects
         /// <param name="item">The item to add</param>
         public void Add(Item item)
         {
-            if (item is Weapon weapon)
+            switch (item)
             {
-                Weapons.Add(weapon);
-            }
-            else if (item is Apparrel apparrel)
-            {
-                Apparels.Add(apparrel);
-            }
-            else if (item is Aid aid)
-            {
-                Aids.Add(aid);
-            }
-            else if (item is Misc misc)
-            {
-                Miscs.Add(misc);
-            }
-            else if (item is Ammo ammo)
-            {
-                Ammos.Add(ammo);
+                case Weapon weapon:
+                    Weapons.Add(weapon);
+                    break;
+                case Apparrel apparrel:
+                    Apparels.Add(apparrel);
+                    break;
+                case Aid aid:
+                    Aids.Add(aid);
+                    break;
+                case Misc misc:
+                    Miscs.Add(misc);
+                    break;
+                case Ammo ammo:
+                    Ammos.Add(ammo);
+                    break;
             }
         }
 
@@ -197,7 +195,8 @@ namespace Pip_Boy.Objects
         /// <returns>A table of every `Type` item's name, description, value and weight</returns>
         public override string ToString()
         {
-            StringBuilder stringBuilder = new();
+            StringBuilder stringBuilder = new($"{CurrentCarryWeight}/{MaxCarryWeight} -- Over Encumbered?: {IsOverEncumbered}");
+            stringBuilder.AppendLine(new string('-', 15));
             switch (itemPage)
             {
                 case ItemsPages.Weapons:

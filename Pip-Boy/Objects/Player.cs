@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Pip_Boy.Items;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
-using Pip_Boy.Items;
 
 namespace Pip_Boy.Objects
 {

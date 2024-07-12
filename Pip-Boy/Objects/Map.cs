@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Text;
 
@@ -12,14 +14,16 @@ namespace Pip_Boy.Objects
         Vector2 playerPosition = Vector2.Zero;
 
         /// <summary>
-        /// Locations of interest on the map
+        /// Locations of interest on the map and the keys telling what the markers represent
         /// </summary>
-        private static readonly char[] markers = ['!', '?', '#', '@', '+'];
-
-        /// <summary>
-        /// The key telling what the markers represent
-        /// </summary>
-        public static readonly string[] keys = ["Quest", "Undiscovered", "Settlement", "Base", "Doctor"];
+        private static readonly Dictionary<char, string> Legend = new()
+        {
+            {'!', "Quest" },
+            {'?', "Undiscovered" },
+            {'#', "Settlement" },
+            {'@', "Base" },
+            {'+', "Doctor" }
+        };
 
         /// <summary>
         /// Generates the Legend with the corresponding marker/key pairs
@@ -28,14 +32,10 @@ namespace Pip_Boy.Objects
         public static string GenerateLegend()
         {
             StringBuilder stringBuilder = new();
-            if (markers.Length == keys.Length)
+            foreach (char key in Legend.Keys)
             {
-                for (byte x = 0; x < markers.Length; x++)
-                {
-                    stringBuilder.Append($"{markers[x]} = {keys[x]}, ");
-                }
+                stringBuilder.Append($"{key} = {Legend[key]}, ");
             }
-
             return stringBuilder.ToString();
         }
 
@@ -64,9 +64,10 @@ namespace Pip_Boy.Objects
             // Now randomly assign markers in the array
             for (int i = 0; i < density; i++)
             {
-                tempMap[random.Next(width)][random.Next(height)] = markers[random.Next(markers.Length)];
+                int selection = random.Next(Legend.Count);
+                char selectedChar = Legend.Keys.ToArray()[selection];
+                tempMap[random.Next(width)][random.Next(height)] = selectedChar;
             }
-
             return tempMap;
         }
 
@@ -79,22 +80,24 @@ namespace Pip_Boy.Objects
         {
             Grid[(int)playerPosition.Y][(int)playerPosition.X] = ' ';
 
-            if (up == true && playerPosition.Y > 0)
+            switch (up)
             {
-                playerPosition.Y--;
-            }
-            else if (up == false && playerPosition.Y < Grid.Length)
-            {
-                playerPosition.Y++;
+                case true when playerPosition.Y > 0:
+                    playerPosition.Y--;
+                    break;
+                case false when playerPosition.Y < Grid.Length:
+                    playerPosition.Y++;
+                    break;
             }
 
-            if (right == true && playerPosition.X < Grid[0].Length)
+            switch (right)
             {
-                playerPosition.X++;
-            }
-            else if (right == false && playerPosition.X > 0)
-            {
-                playerPosition.X--;
+                case true when playerPosition.X < Grid[0].Length:
+                    playerPosition.X++;
+                    break;
+                case false when playerPosition.X > 0:
+                    playerPosition.X--;
+                    break;
             }
 
             // Player will be represented by '>' on the map
@@ -102,6 +105,11 @@ namespace Pip_Boy.Objects
             Grid[(int)playerPosition.Y][(int)playerPosition.X] = '>';
         }
 
+        /// <summary>
+        /// Allows indexing of the map's 2D array
+        /// </summary>
+        /// <param name="row">The row number</param>
+        /// <returns>The char array</returns>
         public readonly char[] this[int row] => Grid[row];
 
         /// <summary>

@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Pip_Boy.Objects;
+using System;
 
 namespace Pip_Boy
 {
     public class Program
     {
-        public static readonly PipBoy pipBoy = new("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\Pip-Boy\\PIP-Boy\\", ConsoleColor.DarkYellow);
 
         static void Main()
         {
+            PipBoy pipBoy = new("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\Pip-Boy\\PIP-Boy\\", ConsoleColor.DarkYellow);
             bool boot = false;
             bool createPlayer = false;
 

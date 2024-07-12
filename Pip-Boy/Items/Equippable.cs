@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Pip_Boy.Objects;
+using System;
 using System.Collections.Generic;
-using Pip_Boy.Objects;
 
 namespace Pip_Boy.Items
 {
