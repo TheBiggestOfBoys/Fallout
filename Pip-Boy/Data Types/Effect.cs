@@ -2,7 +2,7 @@
 
 namespace Pip_Boy
 {
-    public readonly partial struct Effect(Effect.EffectTypes effector, sbyte value)
+    public partial class Effect(Effect.EffectTypes effector, sbyte value)
     {
         public readonly EffectTypes Effector = effector;
         public readonly sbyte Value = value;
@@ -51,6 +51,5 @@ namespace Pip_Boy
             DamageResistance,
             #endregion
         }
-
     }
 }

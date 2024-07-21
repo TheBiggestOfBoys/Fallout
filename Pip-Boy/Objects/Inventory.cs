@@ -196,6 +196,7 @@ namespace Pip_Boy.Objects
         public override string ToString()
         {
             StringBuilder stringBuilder = new($"{CurrentCarryWeight}/{MaxCarryWeight} -- Over Encumbered?: {IsOverEncumbered}");
+            stringBuilder.AppendLine();
             stringBuilder.AppendLine(new string('-', 15));
             switch (itemPage)
             {

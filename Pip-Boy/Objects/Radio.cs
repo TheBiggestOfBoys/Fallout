@@ -41,8 +41,8 @@ namespace Pip_Boy.Objects
         public void AddSong(PipBoy pipBoy)
         {
             Console.Write("Enter path to '.wav' file: ");
-            string path = Console.ReadLine();
-            if (path.EndsWith(".wav"))
+            string? path = Console.ReadLine();
+            if (path != null && path.EndsWith(".wav"))
             {
                 songs.Add(new(path));
             }

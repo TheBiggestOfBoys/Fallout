@@ -5,7 +5,6 @@ namespace Pip_Boy
 {
     public class Program
     {
-
         static void Main()
         {
             PipBoy pipBoy = new("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\Pip-Boy\\PIP-Boy\\", ConsoleColor.DarkYellow);

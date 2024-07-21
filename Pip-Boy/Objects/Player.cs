@@ -12,7 +12,7 @@ namespace Pip_Boy.Objects
     {
         #region Arrays
         [NonSerialized]
-        public Inventory Inventory = new(activeDirectory + "Inventory\\");
+        public Inventory Inventory;
 
         public static Dictionary<string, byte> SPECIAL = new()
         {
@@ -30,17 +30,17 @@ namespace Pip_Boy.Objects
         public static Dictionary<string, byte> Skills = new(){
             {"Barter", 10},
             {"Energy Weapons", 10},
-            { "Explosives", 10},
-            { "Gun", 10},
-            { "Lockpick", 10},
-            { "Medicine", 10},
-            { "Melee Weapons", 10},
-            { "Repair", 10},
-            { "Science", 10},
-            { "Sneak", 10},
-            { "Speech", 10},
-            { "Survival", 10},
-            { "Unarmed", 10}
+            {"Explosives", 10},
+            {"Gun", 10},
+            {"Lockpick", 10},
+            {"Medicine", 10},
+            {"Melee Weapons", 10},
+            {"Repair", 10},
+            {"Science", 10},
+            {"Sneak", 10},
+            {"Speech", 10},
+            {"Survival", 10},
+            {"Unarmed", 10}
         };
         [NonSerialized]
         private readonly Dictionary<string, byte> baseSkills = Skills;
@@ -55,7 +55,7 @@ namespace Pip_Boy.Objects
         /// <summary>
         /// The directory from which files will be loaded and saved
         /// </summary>
-        public static string activeDirectory;
+        public string activeDirectory;
         public readonly string Name;
         public byte Level { get; private set; } = 1;
         public static ushort MaxHealth { get; private set; } = 100;
@@ -89,6 +89,7 @@ namespace Pip_Boy.Objects
         public Player(string name, byte[] attributeValues, string directory)
         {
             activeDirectory = directory;
+            Inventory = new(activeDirectory + "Inventory\\");
             Name = name;
             byte index = 0;
             foreach (string key in SPECIAL.Keys)
@@ -104,12 +105,15 @@ namespace Pip_Boy.Objects
         public Player(string directory)
         {
             activeDirectory = directory;
-            while (Name == null)
+            Inventory = new(activeDirectory + "Inventory\\");
+            string? tempName = null;
+            while (tempName == null)
             {
                 Console.Write("Enter Player Name: ");
-                Name = Console.ReadLine();
+                tempName = Console.ReadLine();
                 Console.Clear();
             }
+            Name = tempName.ToString();
 
             // You have 21 points to disperse across all the SPPECIAL attributes, and each one starts at 1, so 28 total
             byte totalPoints = 28;

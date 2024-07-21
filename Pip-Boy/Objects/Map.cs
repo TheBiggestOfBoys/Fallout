@@ -6,9 +6,8 @@ using System.Text;
 
 namespace Pip_Boy.Objects
 {
-    public struct Map(byte height, byte width, byte density)
+    public class Map(byte height, byte width, byte density)
     {
-        private static readonly Random random = new();
         public readonly char[][] Grid = GenerateMap(width, height, density);
 
         Vector2 playerPosition = Vector2.Zero;
@@ -62,6 +61,7 @@ namespace Pip_Boy.Objects
             }
 
             // Now randomly assign markers in the array
+            Random random = new();
             for (int i = 0; i < density; i++)
             {
                 int selection = random.Next(Legend.Count);
@@ -110,13 +110,13 @@ namespace Pip_Boy.Objects
         /// </summary>
         /// <param name="row">The row number</param>
         /// <returns>The char array</returns>
-        public readonly char[] this[int row] => Grid[row];
+        public char[] this[int row] => Grid[row];
 
         /// <summary>
         /// Shows the map
         /// </summary>
         /// <returns>The 2D array as a string</returns>
-        public override readonly string ToString()
+        public override string ToString()
         {
             StringBuilder stringBuilder = new();
             foreach (char[] row in Grid)
