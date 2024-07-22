@@ -14,12 +14,14 @@ namespace Pip_Boy
         /// <summary>
         /// Locations of interest on the map
         /// </summary>
-        private static readonly char[] markers = ['!', '?', '#', '@', '+'];
-
-        /// <summary>
-        /// The key telling what the markers represent
-        /// </summary>
-        public static readonly string[] keys = ["Quest", "Undiscovered", "Settlement", "Base", "Doctor"];
+        private static readonly Dictionary<char, string> Legend = new()
+        {
+            {'!', "Quest"},
+            {'?', "Undiscovered"},
+            {'#', "Settlement"},
+            {'@', "Base"},
+            {'+', "Doctor"}
+        };
 
         /// <summary>
         /// Generates the Legend with the corresponding marker/key pairs
@@ -102,14 +104,11 @@ namespace Pip_Boy
             Grid[(int)playerPosition.Y][(int)playerPosition.X] = '>';
         }
 
-<<<<<<< HEAD:Pip-Boy/Map.cs
-=======
         /// <summary>
         /// Allows indexing of the map's 2D array
         /// </summary>
         /// <param name="row">The row number</param>
         /// <returns>The char array</returns>
->>>>>>> parent of 0a5484b (replaced structs with classes, and fixed pathing errors):Pip-Boy/Objects/Map.cs
         public readonly char[] this[int row] => Grid[row];
 
         /// <summary>

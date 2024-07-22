@@ -28,6 +28,7 @@ namespace Pip_Boy
             return tempItem;
         }
 
+        #region Enums
         public enum AmmoType
         {
             Bullet,
@@ -45,9 +46,32 @@ namespace Pip_Boy
             Special,
             Surplus,
             Explosive,
-            Incendiary,
+            Incendiary
         }
+        #endregion
 
-        public override string ToString() => base.ToString() + $"{Environment.NewLine}\t\tAmmo Type: {TypeOfAmmo}{Environment.NewLine}\t\tAmmo Modification: {Modification}";
+        public override string GetIcon() => TypeOfAmmo switch
+        {
+            AmmoType.Bullet => "🧷",
+            AmmoType.Bomb => "🧨",
+            AmmoType.EnergyCell => "🔋",
+            AmmoType.Other => "?",
+            _ => "?"
+        };
+
+        public string GetModification() => Modification switch
+        {
+            AmmoModification.Standard => "",
+            AmmoModification.HollowPoint => "⭕",
+            AmmoModification.ArmorPiercing => "🛡️",
+            AmmoModification.HandLoad => "🤚",
+            AmmoModification.Special => "*",
+            AmmoModification.Surplus => "+",
+            AmmoModification.Explosive => "💥",
+            AmmoModification.Incendiary => "🔥",
+            _ => "",
+        };
+
+        public override string ToString() => base.ToString() + $"{Environment.NewLine}\t\tAmmo Type: {TypeOfAmmo}{Environment.NewLine}\t\tAmmo Modification: {Modification}{GetModification()}";
     }
 }

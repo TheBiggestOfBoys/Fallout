@@ -1,13 +1,16 @@
-﻿using System;
+﻿using Pip_Boy.Entities;
+using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace Pip_Boy
 {
     public abstract class Equippable : Item
     {
         private readonly ushort originalValue;
-        public decimal Condition { get; private set; } = 1;
-        public bool IsEquipped { get; private set; } = false;
+        public float Condition = 1f;
+        public bool IsEquipped = false;
+        [XmlArray]
         public readonly List<Effect> Effects;
 
         #region Constructors
@@ -24,17 +27,17 @@ namespace Pip_Boy
         }
         #endregion
 
-        public void Equip(Player player)
+        public void Equip(Entity entity)
         {
             IsEquipped = true;
-            player.Effects.AddRange(Effects);
-            player.ApplyEffects();
+            entity.Effects.AddRange(Effects);
+            entity.ApplyEffects();
         }
 
-        public void Unequip(Player player)
+        public void Unequip(Entity entity)
         {
             IsEquipped = false;
-            foreach (Effect effect in player.Effects)
+            foreach (Effect effect in entity.Effects)
             {
                 Effects.Remove(effect);
             }

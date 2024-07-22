@@ -6,6 +6,8 @@ namespace Pip_Boy
 {
     public class Aid : Equippable
     {
+        public readonly AidType TypeOfAid;
+
         #region Constructors
         public Aid(string name, double weight, ushort value, Effect[] effects) : base(name, weight, value, effects) { }
 
@@ -19,6 +21,27 @@ namespace Pip_Boy
             Aid? tempItem = (Aid?)x.Deserialize(reader) ?? throw new NullReferenceException("XMl file object is null!");
             reader.Close();
             return tempItem;
+        }
+
+        public override string GetIcon() => TypeOfAid switch
+        {
+            AidType.Food => "🍎",
+            AidType.Drink => "🥤",
+            AidType.Syringe => "💉",
+            AidType.Pill => "💊",
+            AidType.Inhale => "🌬💨",
+            AidType.Smoke => "🚬",
+            _ => "?",
+        };
+
+        public enum AidType
+        {
+            Food,
+            Drink,
+            Syringe,
+            Pill,
+            Inhale,
+            Smoke,
         }
     }
 }

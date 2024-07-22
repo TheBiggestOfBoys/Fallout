@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Pip_Boy.Entities;
+using Pip_Boy.Items;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -26,7 +28,20 @@ namespace Pip_Boy
         public double CurrentCarryWeight { get; private set; }
         public bool IsOverEncumbered { get; private set; }
 
-        public Inventory(string folderPath)
+        #region Constructors
+        public Inventory()
+        {
+            InventoryFolderPath = string.Empty;
+            WeaponFolderPath = string.Empty;
+            ApparrelFolderPath = string.Empty;
+            AidFolderPath = string.Empty;
+            MiscFolderPath = string.Empty;
+            AmmoFolderPath = string.Empty;
+
+            MaxCarryWeight = 0;
+        }
+
+        public Inventory(string folderPath, Player player)
         {
             // Set the folder paths
             if (!folderPath.EndsWith('\\'))
@@ -69,6 +84,7 @@ namespace Pip_Boy
             }
             CurrentCarryWeight = CalculateWeight();
         }
+        #endregion
 
         #region Lists
         /// <summary>
@@ -149,12 +165,8 @@ namespace Pip_Boy
         /// <returns>A table of every `Type` item's name, description, value and weight</returns>
         public override string ToString()
         {
-<<<<<<< HEAD:Pip-Boy/Inventory.cs
-            StringBuilder stringBuilder = new();
-=======
             StringBuilder stringBuilder = new($"{CurrentCarryWeight}/{MaxCarryWeight} -- Over Encumbered?: {IsOverEncumbered}");
             stringBuilder.AppendLine(new string('-', 15));
->>>>>>> parent of 0a5484b (replaced structs with classes, and fixed pathing errors):Pip-Boy/Objects/Inventory.cs
             switch (itemPage)
             {
                 case ItemsPages.Weapons:

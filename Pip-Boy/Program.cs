@@ -1,21 +1,22 @@
-﻿using System;
+﻿using Pip_Boy.Objects;
+using System;
+using System.IO;
+using System.Text;
 
 namespace Pip_Boy
 {
     public class Program
     {
-<<<<<<< HEAD
-        public static readonly PipBoy pipBoy = new();
-=======
->>>>>>> parent of 0a5484b (replaced structs with classes, and fixed pathing errors)
 
         static void Main()
         {
+            PipBoy pipBoy = new(Directory.GetCurrentDirectory() + "\\PIP-Boy\\", ConsoleColor.DarkYellow);
             bool boot = false;
             bool createPlayer = false;
 
             Console.ForegroundColor = pipBoy.color;
             Console.Title = "PIP-Boy 3000 MKIV";
+            Console.OutputEncoding = Encoding.UTF8;
             if (boot)
             {
                 pipBoy.Boot();
@@ -68,10 +69,10 @@ namespace Pip_Boy
                         break;
 
                     case ConsoleKey.UpArrow when pipBoy.currentPage == PipBoy.Pages.STATS && pipBoy.statPage == PipBoy.StatsPages.General:
-                        pipBoy.ChangeSelectedFation(false);
+                        pipBoy.ChangeSelectedFaction(false);
                         break;
                     case ConsoleKey.DownArrow when pipBoy.currentPage == PipBoy.Pages.STATS && pipBoy.statPage == PipBoy.StatsPages.General:
-                        pipBoy.ChangeSelectedFation(true);
+                        pipBoy.ChangeSelectedFaction(true);
                         break;
                     #endregion
 
@@ -114,6 +115,7 @@ namespace Pip_Boy
                         break;
                 }
             }
+            pipBoy.player.Inventory.Save();
             #endregion
         }
     }
