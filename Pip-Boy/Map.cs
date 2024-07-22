@@ -102,6 +102,14 @@ namespace Pip_Boy
             Grid[(int)playerPosition.Y][(int)playerPosition.X] = '>';
         }
 
+<<<<<<< HEAD:Pip-Boy/Map.cs
+=======
+        /// <summary>
+        /// Allows indexing of the map's 2D array
+        /// </summary>
+        /// <param name="row">The row number</param>
+        /// <returns>The char array</returns>
+>>>>>>> parent of 0a5484b (replaced structs with classes, and fixed pathing errors):Pip-Boy/Objects/Map.cs
         public readonly char[] this[int row] => Grid[row];
 
         /// <summary>

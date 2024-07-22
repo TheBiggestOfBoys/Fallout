@@ -7,7 +7,12 @@ namespace Pip_Boy
     public class Player
     {
         #region Arrays
+<<<<<<< HEAD:Pip-Boy/Player.cs
         public Inventory Inventory = new("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\Pip-Boy\\PIP-Boy\\Inventory\\");
+=======
+        [NonSerialized]
+        public Inventory Inventory = new(activeDirectory + "Inventory\\");
+>>>>>>> parent of 0a5484b (replaced structs with classes, and fixed pathing errors):Pip-Boy/Objects/Player.cs
 
         public static Attribute[] SPECIAL = [
             new("Strength", 5),
@@ -20,6 +25,7 @@ namespace Pip_Boy
         ];
         private readonly Attribute[] baseSPECIAL = SPECIAL;
 
+<<<<<<< HEAD:Pip-Boy/Player.cs
         public static Attribute[] Skills = [
             new("Barter", 10),
             new("Energy Weapons", 10),
@@ -36,6 +42,25 @@ namespace Pip_Boy
             new("Unarmed", 10)
         ];
         private readonly Attribute[] baseSkills = Skills;
+=======
+        public static Dictionary<string, byte> Skills = new(){
+            {"Barter", 10},
+            {"Energy Weapons", 10},
+            { "Explosives", 10},
+            { "Gun", 10},
+            { "Lockpick", 10},
+            { "Medicine", 10},
+            { "Melee Weapons", 10},
+            { "Repair", 10},
+            { "Science", 10},
+            { "Sneak", 10},
+            { "Speech", 10},
+            { "Survival", 10},
+            { "Unarmed", 10}
+        };
+        [NonSerialized]
+        private readonly Dictionary<string, byte> baseSkills = Skills;
+>>>>>>> parent of 0a5484b (replaced structs with classes, and fixed pathing errors):Pip-Boy/Objects/Player.cs
 
         public List<Perk> Perks = [new("No Perks", "You have no perks, you get one every 2 levels", 0)];
 
@@ -43,6 +68,13 @@ namespace Pip_Boy
         #endregion
 
         #region Player Info
+<<<<<<< HEAD:Pip-Boy/Player.cs
+=======
+        /// <summary>
+        /// The directory from which files will be loaded and saved
+        /// </summary>
+        public static string activeDirectory;
+>>>>>>> parent of 0a5484b (replaced structs with classes, and fixed pathing errors):Pip-Boy/Objects/Player.cs
         public readonly string Name;
         public byte Level { get; private set; } = 1;
         public static ushort MaxHealth { get; private set; } = 100;
@@ -72,6 +104,10 @@ namespace Pip_Boy
         /// <param name="attributeValues">The special values</param>
         public Player(string name, byte[] attributeValues)
         {
+<<<<<<< HEAD:Pip-Boy/Player.cs
+=======
+            activeDirectory = directory;
+>>>>>>> parent of 0a5484b (replaced structs with classes, and fixed pathing errors):Pip-Boy/Objects/Player.cs
             Name = name;
             for (byte index = 0; index < 7; index++)
             {
@@ -84,6 +120,10 @@ namespace Pip_Boy
         /// </summary>
         public Player()
         {
+<<<<<<< HEAD:Pip-Boy/Player.cs
+=======
+            activeDirectory = directory;
+>>>>>>> parent of 0a5484b (replaced structs with classes, and fixed pathing errors):Pip-Boy/Objects/Player.cs
             while (Name == null)
             {
                 Console.Write("Enter Player Name: ");

@@ -4,7 +4,10 @@ namespace Pip_Boy
 {
     public class Program
     {
+<<<<<<< HEAD
         public static readonly PipBoy pipBoy = new();
+=======
+>>>>>>> parent of 0a5484b (replaced structs with classes, and fixed pathing errors)
 
         static void Main()
         {

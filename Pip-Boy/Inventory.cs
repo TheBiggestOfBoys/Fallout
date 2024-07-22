@@ -149,7 +149,12 @@ namespace Pip_Boy
         /// <returns>A table of every `Type` item's name, description, value and weight</returns>
         public override string ToString()
         {
+<<<<<<< HEAD:Pip-Boy/Inventory.cs
             StringBuilder stringBuilder = new();
+=======
+            StringBuilder stringBuilder = new($"{CurrentCarryWeight}/{MaxCarryWeight} -- Over Encumbered?: {IsOverEncumbered}");
+            stringBuilder.AppendLine(new string('-', 15));
+>>>>>>> parent of 0a5484b (replaced structs with classes, and fixed pathing errors):Pip-Boy/Objects/Inventory.cs
             switch (itemPage)
             {
                 case ItemsPages.Weapons:
