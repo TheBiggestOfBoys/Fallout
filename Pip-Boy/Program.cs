@@ -1,17 +1,17 @@
-﻿using Pip_Boy.Objects;
-using System;
+﻿using System;
 
 namespace Pip_Boy
 {
     public class Program
     {
+        public static readonly PipBoy pipBoy = new();
+
         static void Main()
         {
-            PipBoy pipBoy = new("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\Pip-Boy\\PIP-Boy\\", ConsoleColor.DarkYellow);
             bool boot = false;
             bool createPlayer = false;
 
-            Console.ForegroundColor = pipBoy.Color;
+            Console.ForegroundColor = pipBoy.color;
             Console.Title = "PIP-Boy 3000 MKIV";
             if (boot)
             {
@@ -20,11 +20,11 @@ namespace Pip_Boy
 
             if (createPlayer)
             {
-                pipBoy.player = new(pipBoy.activeDirectory);
+                pipBoy.player = new();
             }
             else
             {
-                pipBoy.player = new("Jake Scott", [5, 6, 7, 8, 9, 3, 4], pipBoy.activeDirectory);
+                pipBoy.player = new("Jake Scott", [5, 6, 7, 8, 9, 3, 4]);
             }
 
             pipBoy.map.MovePlayer(null, null);
@@ -104,11 +104,13 @@ namespace Pip_Boy
                     case ConsoleKey.NumPad6 when pipBoy.currentPage == PipBoy.Pages.DATA && pipBoy.dataPage == PipBoy.DataPages.Map:
                         pipBoy.map.MovePlayer(null, true);
                         break;
-                        #endregion
+                    #endregion
+
+                    case ConsoleKey.X:
+                        pipBoy.player.Inventory.Save();
+                        break;
                 }
             }
-            //pipBoy.player.ToFile(pipBoy.activeDirectory);
-            pipBoy.player.Inventory.Save();
             #endregion
         }
     }

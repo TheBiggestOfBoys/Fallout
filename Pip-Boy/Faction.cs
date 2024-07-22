@@ -1,6 +1,6 @@
 ﻿namespace Pip_Boy
 {
-    public class Faction(string name, string description)
+    public struct Faction(string name, string description)
     {
         public readonly string Name = name;
         public readonly string Description = description;
@@ -18,6 +18,6 @@
             Idolized = 127
         }
 
-        public override string ToString() => $"{Name}:\t{reputation}";
+        public override readonly string ToString() => $"{Name}:\t{reputation}";
     }
 }

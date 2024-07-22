@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Pip_Boy
 {
-    public class Quest(string name, List<Quest.Step> steps)
+    public struct Quest(string name, List<Quest.Step> steps)
     {
         public readonly string Name = name;
         public List<Step> Steps = steps;
@@ -19,9 +19,11 @@ namespace Pip_Boy
             public readonly Vector2 PositionX = position;
         }
 
-        public override string ToString()
+        public override readonly string ToString()
         {
-            StringBuilder stringBuilder = new(Name);
+            StringBuilder stringBuilder = new();
+            stringBuilder.AppendLine(Name);
+
             foreach (Step step in Steps)
             {
                 if (!step.Hidden)
@@ -29,6 +31,7 @@ namespace Pip_Boy
                     stringBuilder.AppendLine('\t' + step.Instructions);
                 }
             }
+
             return stringBuilder.ToString();
         }
     }

@@ -1,18 +1,17 @@
-﻿using Pip_Boy.Objects;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace Pip_Boy.Items
+namespace Pip_Boy
 {
     public abstract class Equippable : Item
     {
         private readonly ushort originalValue;
-        public float Condition = 1f;
-        public bool IsEquipped = false;
+        public decimal Condition { get; private set; } = 1;
+        public bool IsEquipped { get; private set; } = false;
         public readonly List<Effect> Effects;
 
         #region Constructors
-        public Equippable(string name, float weight, ushort value, Effect[] effects) : base(name, weight, value)
+        public Equippable(string name, double weight, ushort value, Effect[] effects) : base(name, weight, value)
         {
             originalValue = value;
             Effects = [.. effects];

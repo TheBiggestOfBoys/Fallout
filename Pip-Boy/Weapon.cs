@@ -17,7 +17,7 @@ namespace Pip_Boy
         public static readonly List<string> Modifications = [];
 
         #region Constructors
-        public Weapon(string name, float weight, ushort value, Effect[] effects, WeaponType weaponType, byte strengthRequirement, byte damage, ushort rateOfFire) : base(name, weight, value, effects)
+        public Weapon(string name, double weight, ushort value, Effect[] effects, WeaponType weaponType, byte strengthRequirement, byte damage, ushort rateOfFire) : base(name, weight, value, effects)
         {
             originalDamage = damage;
             Damage = originalDamage;

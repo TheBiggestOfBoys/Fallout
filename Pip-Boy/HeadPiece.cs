@@ -3,7 +3,7 @@
     public class HeadPiece : Apparrel
     {
         #region Constructors
-        public HeadPiece(string name, float weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : base(name, weight, value, effects, DT, powerArmor) { }
+        public HeadPiece(string name, double weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : base(name, weight, value, effects, DT, powerArmor) { }
 
         public HeadPiece() : base() { }
         #endregion

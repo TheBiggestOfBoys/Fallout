@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Xml;
+using System.IO;
 using System.Xml.Serialization;
 
 namespace Pip_Boy
@@ -22,7 +22,7 @@ namespace Pip_Boy
         public static Ammo FromFile(string filePath)
         {
             XmlSerializer x = new(typeof(Ammo));
-            XmlReader reader = XmlReader.Create(filePath);
+            TextReader reader = new StreamReader(filePath);
             Ammo? tempItem = (Ammo?)x.Deserialize(reader) ?? throw new NullReferenceException("XMl file object is null!");
             reader.Close();
             return tempItem;

@@ -2,30 +2,13 @@
 
 namespace Pip_Boy
 {
-    public partial class Effect
+    public readonly partial struct Effect(Effect.EffectTypes effector, sbyte value)
     {
-        public readonly EffectTypes Effector;
-        public readonly sbyte Value;
+        public readonly EffectTypes Effector = effector;
+        public readonly sbyte Value = value;
 
         [GeneratedRegex("(?<=[a-z])(?=[A-Z])")]
         private static partial Regex MyRegex();
-
-        #region Constructors
-        /// <summary>
-        /// Empty constructor for serialization
-        /// </summary>
-        public Effect()
-        {
-            Effector = EffectTypes.None;
-            Value = 0;
-        }
-
-        public Effect(EffectTypes effector, sbyte value)
-        {
-            Effector = effector;
-            Value = value;
-        }
-        #endregion
 
         public string ToTitleCase()
         {
@@ -38,7 +21,6 @@ namespace Pip_Boy
 
         public enum EffectTypes
         {
-            None,
             #region SPECIAL
             Strength,
             Perception,
@@ -69,5 +51,6 @@ namespace Pip_Boy
             DamageResistance,
             #endregion
         }
+
     }
 }
