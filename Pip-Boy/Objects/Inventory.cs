@@ -10,47 +10,85 @@ namespace Pip_Boy.Objects
     {
         #region Lists
         /// <summary>
-        /// All weapons in the inventory
+        /// All weapons in <c>Inventory</c>
         /// </summary>
         public List<Weapon> Weapons { get; private set; } = [];
         /// <summary>
-        /// All apparels in the inventory
+        /// All apparels in </c>Inventory</c>
         /// </summary>
         public List<Apparrel> Apparels { get; private set; } = [];
         /// <summary>
-        /// All aid items in the inventory
+        /// All aid items in <c>Inventory</c>
         /// </summary>
         public List<Aid> Aids { get; private set; } = [];
         /// <summary>
-        /// All misc items in the inventory
+        /// All misc items in <c>Inventory</c>
         /// </summary>
         public List<Misc> Miscs { get; private set; } = [];
         /// <summary>
-        /// All ammo items in the inventory
+        /// All ammo items in <c>Inventory</c>
         /// </summary>
         public List<Ammo> Ammos { get; private set; } = [];
         #endregion
 
         /// <summary>
-        /// The current ITEM sub-page
+        /// The current <c>Item</c> sub-page, which determines which sub-list to display.
         /// </summary>
         public ItemsPages itemPage = ItemsPages.Weapons;
 
         #region Folders
-        readonly string[] expectedSubDirectories = ["Weapons", "Apparel", "Aid", "Misc", "Ammo"];
+        /// <summary>
+        /// The sub-directories needed in the <c>InventoryFolderPath</c> directory
+        /// </summary>
+        readonly string[] expectedSubDirectories = ["Weapon", "Apparel", "Aid", "Misc", "Ammo"];
+
+        /// <summary>
+        /// Directory which holds all sub-directories for <c>Inventory</c> items
+        /// </summary>
         public string InventoryFolderPath { get; private set; }
+
+        /// <summary>
+        /// Directory which holds all Serialized <c>Weapon</c> objects for the <c>Weapons</c> list
+        /// </summary>
         public string WeaponFolderPath { get; private set; }
+
+        /// <summary>
+        /// Directory which holds all Serialized <c>Apparrel</c> objects for the <c>Apparrels</c> list
+        /// </summary>
         public string ApparrelFolderPath { get; private set; }
+
+        /// <summary>
+        /// Directory which holds all Serialized <c>Aid</c> objects for the <c>Aids</c> list
+        /// </summary>
         public string AidFolderPath { get; private set; }
+
+        /// <summary>
+        /// Directory which holds all Serialized <c>Misc</c> objects for the <c>Miscs</c> list
+        /// </summary>
         public string MiscFolderPath { get; private set; }
+
+        /// <summary>
+        /// Directory which holds all Serialized <c>Ammo</c> objects for the <c>Ammos</c> list
+        /// </summary>
         public string AmmoFolderPath { get; private set; }
         #endregion
 
+        /// <summary>
+        /// The maximum weight the player can carry
+        /// </summary>
         public ushort MaxCarryWeight { get; private set; }
+
+        /// <summary>
+        /// The current weight of all items in <c>Inventory</c>
+        /// </summary>
         public double CurrentCarryWeight { get; private set; }
+
+        /// <summary>
+        /// If <c>CurrentCarryWeight</c> is greather than or equal to the <c>MaxCarryWeight</c>
+        /// </summary>
         public bool IsOverEncumbered { get; private set; }
 
-        public Inventory(string folderPath)
+        public Inventory(string folderPath, Player player)
         {
             // Set the folder paths
             if (!folderPath.EndsWith('\\'))
@@ -58,14 +96,21 @@ namespace Pip_Boy.Objects
                 folderPath += '\\';
             }
             InventoryFolderPath = folderPath;
-            WeaponFolderPath = InventoryFolderPath + "Weapons" + '\\';
+            WeaponFolderPath = InventoryFolderPath + "Weapon" + '\\';
             ApparrelFolderPath = InventoryFolderPath + "Apparrel" + '\\';
             AidFolderPath = InventoryFolderPath + "Aid" + '\\';
             MiscFolderPath = InventoryFolderPath + "Misc" + '\\';
             AmmoFolderPath = InventoryFolderPath + "Ammo" + '\\';
 
-            MaxCarryWeight = 100;
+            MaxCarryWeight = (ushort)(150 + (player.SPECIAL["Strength"] * 10));
+
+            // Get the sub-directories of the <c>Inventory</c> directory
             string[] subDirectories = Directory.GetDirectories(folderPath);
+            // Strip the containing directory info
+            for (int index = 0; index < subDirectories.Length; index++)
+            {
+                subDirectories[index] = subDirectories[index].Split('\\')[^1];
+            }
 
             foreach (string expectedSubDirectory in expectedSubDirectories)
             {
@@ -78,15 +123,20 @@ namespace Pip_Boy.Objects
                         switch (expectedSubDirectory)
                         {
                             case "Weapon":
-                                Weapons.Add(Weapon.FromFile(filePath)); break;
+                                Weapons.Add(Weapon.FromFile(filePath));
+                                break;
                             case "Apparel":
-                                Apparels.Add(Apparrel.FromFile(filePath)); break;
+                                Apparels.Add(Apparrel.FromFile(filePath));
+                                break;
                             case "Aid":
-                                Aids.Add(Aid.FromFile(filePath)); break;
+                                Aids.Add(Aid.FromFile(filePath));
+                                break;
                             case "Misc":
-                                Miscs.Add(Misc.FromFile(filePath)); break;
+                                Miscs.Add(Misc.FromFile(filePath));
+                                break;
                             case "Ammo":
-                                Ammos.Add(Ammo.FromFile(filePath)); break;
+                                Ammos.Add(Ammo.FromFile(filePath));
+                                break;
                         }
                     }
                 }
@@ -100,6 +150,9 @@ namespace Pip_Boy.Objects
         /// <returns>The total weight</returns>
         private double CalculateWeight() => Weapons.Sum(x => x.Weight) + Apparels.Sum(x => x.Weight) + Aids.Sum(x => x.Weight) + Miscs.Sum(x => x.Weight) + Ammos.Sum(x => x.Weight);
 
+        /// <summary>
+        /// Writes all items in the <c>Inventory</c> sub-lists to files in the correct directories.
+        /// </summary>
         public void Save()
         {
             foreach (Weapon weapon in Weapons)
@@ -125,6 +178,9 @@ namespace Pip_Boy.Objects
         }
 
         #region Inventory Management
+        /// <summary>
+        /// Clear all <c>Inventory</c> sub-lists.
+        /// </summary>
         public void Clear()
         {
             Weapons.Clear();
@@ -137,7 +193,7 @@ namespace Pip_Boy.Objects
         /// <summary>
         /// Adds a generic item to its correct list
         /// </summary>
-        /// <param name="item">The item to add</param>
+        /// <param name="item">The <c>Item</c> to add</param>
         public void Add(Item item)
         {
             switch (item)
@@ -163,7 +219,7 @@ namespace Pip_Boy.Objects
         /// <summary>
         /// Removes a item from its list
         /// </summary>
-        /// <param name="item">The item to drop</param>
+        /// <param name="item">The <c>Item</c> to drop</param>
         public void Drop(Item item)
         {
             if (item is Weapon weapon)
@@ -236,7 +292,7 @@ namespace Pip_Boy.Objects
         }
 
         /// <summary>
-        /// ITEM sub-menu pages
+        /// <c>Item</c> sub-menu pages
         /// </summary>
         public enum ItemsPages
         {

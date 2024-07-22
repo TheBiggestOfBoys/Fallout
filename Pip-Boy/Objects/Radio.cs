@@ -8,8 +8,16 @@ namespace Pip_Boy.Objects
 {
     public class Radio
     {
+        /// <summary>
+        /// What the songs will be played from.
+        /// </summary>
         public static readonly SoundPlayer soundPlayer = new();
+
         public List<Song> songs = [];
+
+        /// <summary>
+        /// Selected position in the <c>songs</c> list.
+        /// </summary>
         public byte songIndex = 0;
 
         /// <summary>
@@ -34,6 +42,7 @@ namespace Pip_Boy.Objects
             soundPlayer.Play();
         }
 
+        #region Song Management
         /// <summary>
         /// Add a new song to the list using an inputted path
         /// </summary>
@@ -52,6 +61,10 @@ namespace Pip_Boy.Objects
             }
         }
 
+        /// <summary>
+        /// Changes the selected song, and handles array bounds.
+        /// </summary>
+        /// <param name="up">Whether the move the index up/down</param>
         public void ChangeSong(bool up)
         {
             if (up)
@@ -77,6 +90,7 @@ namespace Pip_Boy.Objects
                 }
             }
         }
+        #endregion
 
         /// <summary>
         /// Shows all songs
@@ -85,6 +99,7 @@ namespace Pip_Boy.Objects
         public override string ToString()
         {
             StringBuilder stringBuilder = new("Songs:\t" + songs.Count);
+            stringBuilder.AppendLine();
             foreach (Song song in songs)
             {
                 stringBuilder.AppendLine('\t' + song.Name);

@@ -7,12 +7,28 @@ using System.Threading;
 
 namespace Pip_Boy.Objects
 {
-    public class PipBoy(string workingDirectory, ConsoleColor color)
+    /// <summary>
+    /// The <c>PIPBoy object, which displays player info, <c>Inventory</c>, and other data.
+    /// It controls output and error handling
+    /// </summary>
+    public class PipBoy
     {
         #region Objects
-        public Player player = new("Player", [5, 5, 5, 5, 5, 5, 5], workingDirectory);
-        public Radio radio = new(workingDirectory + "Songs\\");
-        public Map map = new(25, 50, 20);
+        public Player player;
+
+        /// <summary>
+        /// Controls music.
+        /// </summary>
+        public Radio radio;
+
+        /// <summary>
+        /// Displays points of interest.
+        /// </summary>
+        public Map map;
+
+        /// <summary>
+        /// Controls <c>PIPBoy</c> sound effects.
+        /// </summary>
         public SoundPlayer soundEffects = new();
         #endregion
 
@@ -45,8 +61,9 @@ namespace Pip_Boy.Objects
             new("The Strip", "The New Vegas Strip is a part of New Vegas in the Mojave Wasteland in 2281."),
             new("Freeside", "Freeside is a district of New Vegas in Fallout: New Vegas.")
         ];
+
         /// <summary>
-        /// The current index of the slected faction in the `General` sub page of the `STAT` page
+        /// The current index of the slected <c>Faction</c> in the <c>General</c> sub page of the <c>STAT</c> page
         /// </summary>
         public byte factionIndex = 0;
 
@@ -54,27 +71,47 @@ namespace Pip_Boy.Objects
         /// <summary>
         /// Sound
         /// </summary>
-        public string[] sounds = Directory.GetFiles(workingDirectory + "Sounds\\", "*.wav");
+        public string[] sounds;
+
         /// <summary>
         /// Sounds for static between songs and menu navigation
         /// </summary>
-        public string[] staticSounds = Directory.GetFiles(workingDirectory + "Sounds\\static\\", "*wav");
+        public string[] staticSounds;
+
         /// <summary>
         /// Geiger click sounds, for when in the RAD menu
         /// </summary>
-        public string[] radiationSounds = Directory.GetFiles(workingDirectory + "Sounds\\radiation\\", "*wav");
+        public string[] radiationSounds;
         #endregion
         #endregion
-
-        /// <summary>
-        /// The color of the PIP-Boy's text
-        /// </summary>
-        public ConsoleColor Color = color;
 
         /// <summary>
         /// The directory from which files will be loaded and saved
         /// </summary>
-        public string activeDirectory = workingDirectory;
+        public readonly string activeDirectory;
+
+        /// <summary>
+        /// The color of the <c>PIPBoy</c>'s text
+        /// </summary>
+        public readonly ConsoleColor Color;
+
+        #region Constructor
+        /// <param name="workingDirectory">The directory to load items, sounds, songs, and player info from</param>
+        /// <param name="color">The display color</param>
+        public PipBoy(string workingDirectory, ConsoleColor color)
+        {
+            activeDirectory = workingDirectory;
+            Color = color;
+
+            player = new("Player", [5, 5, 5, 5, 5, 5, 5], workingDirectory);
+            radio = new(workingDirectory + "Songs\\");
+            map = new(25, 50, 20);
+
+            sounds = Directory.GetFiles(workingDirectory + "Sounds\\", "*.wav");
+            staticSounds = Directory.GetFiles(workingDirectory + "Sounds\\static\\", "*wav");
+            radiationSounds = Directory.GetFiles(workingDirectory + "Sounds\\radiation\\", "*wav");
+        }
+        #endregion
 
         public void Boot()
         {
@@ -254,8 +291,8 @@ namespace Pip_Boy.Objects
         public string ShowStats() => statPage switch
         {
             StatsPages.Status => player.ShowStatus(),
-            StatsPages.SPECIAL => Player.ShowSPECIAL(),
-            StatsPages.Skills => Player.ShowSkills(),
+            StatsPages.SPECIAL => player.ShowSPECIAL(),
+            StatsPages.Skills => player.ShowSkills(),
             StatsPages.Perks => player.ShowPeks(),
             StatsPages.General => ShowFactions(),
             _ => throw new NotImplementedException()
@@ -268,12 +305,10 @@ namespace Pip_Boy.Objects
         public string ShowFactions()
         {
             StringBuilder stringBuilder = new();
-
             foreach (Faction faction in factions)
             {
                 stringBuilder.AppendLine(faction.ToString());
             }
-
             return stringBuilder.ToString() + Environment.NewLine + factions[factionIndex].Description;
         }
 
@@ -334,9 +369,10 @@ namespace Pip_Boy.Objects
         }
 
         /// <summary>
-        /// Highlights a message in the console
+        /// Highlights a message in the <c>Console</c>.
         /// </summary>
         /// <param name="message">The message to highlight</param>
+        /// /// <param name="newLine">Whether to start a new line or not.</param>
         public void Highlight(string message, bool newLine)
         {
             Console.BackgroundColor = Color;
@@ -349,7 +385,7 @@ namespace Pip_Boy.Objects
             {
                 Console.Write(message);
             }
-            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ResetColor();
             Console.ForegroundColor = Color;
         }
 
@@ -367,6 +403,10 @@ namespace Pip_Boy.Objects
             Console.WriteLine();
         }
 
+        /// <summary>
+        /// Play a <c>PIPBoy</c> sound-effect
+        /// </summary>
+        /// <param name="path">The path to the <c>*.wav</c> file.</param>
         public void PlaySound(string path)
         {
             soundEffects.SoundLocation = path;

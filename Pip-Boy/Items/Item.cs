@@ -1,6 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
@@ -8,13 +8,17 @@ namespace Pip_Boy.Items
     [Serializable]
     public abstract class Item
     {
+        private readonly Type type;
+
         public string Name;
-        public double Weight;
+        public float Weight;
         public ushort Value;
 
         #region Constructors
-        public Item(string name, double weight, ushort value)
+        public Item(string name, float weight, ushort value)
         {
+            type = GetType();
+
             Name = name;
             Weight = weight;
             Value = value;
@@ -22,6 +26,8 @@ namespace Pip_Boy.Items
 
         public Item()
         {
+            type = GetType();
+
             Name = string.Empty;
             Weight = 0;
             Value = 0;
@@ -30,8 +36,9 @@ namespace Pip_Boy.Items
 
         public void ToFile(string folderPath)
         {
-            XmlSerializer x = new(GetType());
-            TextWriter writer = new StreamWriter(folderPath + Name + '.' + GetType().Name);
+            XmlSerializer x = new(type);
+            XmlWriter writer = XmlWriter.Create(folderPath + Name + ".xml");
+            writer.WriteProcessingInstruction("xml-stylesheet", "type=\"text/css\" href=\"../Inventory Styling.css\"");
             x.Serialize(writer, this);
             writer.Close();
         }

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
@@ -11,7 +11,7 @@ namespace Pip_Boy.Items
         public bool RequiresPowerArmorTraining;
 
         #region Constructors
-        public Apparrel(string name, double weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : base(name, weight, value, effects)
+        public Apparrel(string name, float weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : base(name, weight, value, effects)
         {
             originalDamageThreshold = DT;
             DamageThreshold = originalDamageThreshold;
@@ -24,7 +24,7 @@ namespace Pip_Boy.Items
         public static Apparrel FromFile(string filePath)
         {
             XmlSerializer x = new(typeof(Apparrel));
-            TextReader reader = new StreamReader(filePath);
+            XmlReader reader = XmlReader.Create(filePath);
             Apparrel? tempItem = (Apparrel?)x.Deserialize(reader) ?? throw new NullReferenceException("XMl file object is null!");
             reader.Close();
             return tempItem;

@@ -107,7 +107,7 @@ namespace Pip_Boy
                         #endregion
                 }
             }
-            pipBoy.player.ToFile(pipBoy.activeDirectory);
+            //pipBoy.player.ToFile(pipBoy.activeDirectory);
             pipBoy.player.Inventory.Save();
             #endregion
         }

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Pip_Boy
@@ -32,7 +32,7 @@ namespace Pip_Boy
         public void ToFile(string folderPath)
         {
             XmlSerializer x = new(GetType());
-            TextWriter writer = new StreamWriter(folderPath + Name + '.' + GetType().Name);
+            XmlWriter writer = XmlWriter.Create(folderPath + Name + ".xml");
             x.Serialize(writer, this);
             writer.Close();
         }
@@ -40,7 +40,7 @@ namespace Pip_Boy
         public static Perk FromFile(string filePath)
         {
             XmlSerializer x = new(typeof(Perk));
-            TextReader reader = new StreamReader(filePath);
+            XmlReader reader = XmlReader.Create(filePath);
             Perk? tempItem = (Perk?)x.Deserialize(reader) ?? throw new NullReferenceException("XMl file object is null!");
             reader.Close();
             return tempItem;

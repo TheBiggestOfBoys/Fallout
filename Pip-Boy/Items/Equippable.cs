@@ -7,12 +7,12 @@ namespace Pip_Boy.Items
     public abstract class Equippable : Item
     {
         private readonly ushort originalValue;
-        public decimal Condition = 1;
+        public float Condition = 1f;
         public bool IsEquipped = false;
         public readonly List<Effect> Effects;
 
         #region Constructors
-        public Equippable(string name, double weight, ushort value, Effect[] effects) : base(name, weight, value)
+        public Equippable(string name, float weight, ushort value, Effect[] effects) : base(name, weight, value)
         {
             originalValue = value;
             Effects = [.. effects];
