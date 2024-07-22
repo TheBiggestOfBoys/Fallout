@@ -1,60 +1,80 @@
-﻿using System;
+﻿using Pip_Boy.Items;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Xml;
+using System.Xml.Serialization;
 
-namespace Pip_Boy
+namespace Pip_Boy.Objects
 {
+    [Serializable]
     public class Player
     {
         #region Arrays
-        public Inventory Inventory = new("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\Pip-Boy\\PIP-Boy\\Inventory\\");
+        [NonSerialized]
+        public Inventory Inventory;
 
-        public static Attribute[] SPECIAL = [
-            new("Strength", 5),
-            new("Perception", 5),
-            new("Endurance", 5),
-            new("Charisma", 5),
-            new("Intelligence", 5),
-            new("Agility", 5),
-            new("Luck", 5)
-        ];
-        private readonly Attribute[] baseSPECIAL = SPECIAL;
+        public Dictionary<string, byte> SPECIAL = new()
+        {
+            {"Strength", 5},
+            {"Perception", 5},
+            {"Endurance", 5},
+            {"Charisma", 5},
+            {"Intelligence", 5},
+            {"Agility", 5},
+            {"Luck", 5}
+        };
 
-        public static Attribute[] Skills = [
-            new("Barter", 10),
-            new("Energy Weapons", 10),
-            new("Explosives", 10),
-            new("Gun", 10),
-            new("Lockpick", 10),
-            new("Medicine", 10),
-            new("Melee Weapons", 10),
-            new("Repair", 10),
-            new("Science", 10),
-            new("Sneak", 10),
-            new("Speech", 10),
-            new("Survival", 10),
-            new("Unarmed", 10)
-        ];
-        private readonly Attribute[] baseSkills = Skills;
+        public Dictionary<string, byte> Skills = new(){
+            {"Barter", 10},
+            {"Energy Weapons", 10},
+            {"Explosives", 10},
+            {"Gun", 10},
+            {"Lockpick", 10},
+            {"Medicine", 10},
+            {"Melee Weapons", 10},
+            {"Repair", 10},
+            {"Science", 10},
+            {"Sneak", 10},
+            {"Speech", 10},
+            {"Survival", 10},
+            {"Unarmed", 10}
+        };
 
-        public List<Perk> Perks = [new("No Perks", "You have no perks, you get one every 2 levels", 0)];
+        [NonSerialized]
+        public List<Perk> Perks = [];
 
         public List<Effect> Effects = [];
         #endregion
 
         #region Player Info
+        #region Directories
+        /// <summary>
+        /// The directory from which files will be loaded and saved
+        /// </summary>
+        public readonly string activeDirectory;
+
+        /// <summary>
+        /// The directory from which <c>Perk</c>s will be loaded and saved
+        /// </summary>
+        public readonly string perksDirectory;
+
+        /// <summary>
+        /// The directory from which <Inventory> <c>Item</c>s will be loaded and saved
+        /// </summary>
+        public readonly string inventoryDirectory;
+        #endregion
+
         public readonly string Name;
         public byte Level { get; private set; } = 1;
         public static ushort MaxHealth { get; private set; } = 100;
-        private readonly ushort baseMaxHealth = MaxHealth;
         public int CurrentHealth { get; private set; } = 100;
 
         public static byte MaxActionPoints { get; private set; } = 25;
-        private readonly byte baseMaxActionPoints = MaxActionPoints;
         public byte ActionPoints { get; private set; } = 25;
 
         public static byte DamageRessistance { get; private set; } = 0;
-        private readonly byte baseDamageRessistance = DamageRessistance;
         #endregion
 
         #region EquippedItems
@@ -66,34 +86,58 @@ namespace Pip_Boy
 
         #region Constructors
         /// <summary>
+        /// Empty constructor for serialization
+        /// </summary>
+        public Player()
+        {
+            Inventory = new(string.Empty, this);
+            activeDirectory = string.Empty;
+            perksDirectory = string.Empty;
+            inventoryDirectory = string.Empty;
+            Name = string.Empty;
+        }
+
+        /// <summary>
         /// Player Creation using code
         /// </summary>
         /// <param name="name">The player's name</param>
         /// <param name="attributeValues">The special values</param>
-        public Player(string name, byte[] attributeValues)
+        public Player(string name, byte[] attributeValues, string directory)
         {
+            activeDirectory = directory;
+            perksDirectory = activeDirectory + "Perks\\";
+            inventoryDirectory = activeDirectory + "Inventory\\";
+            Inventory = new(inventoryDirectory, this);
             Name = name;
-            for (byte index = 0; index < 7; index++)
+            byte index = 0;
+            foreach (string key in SPECIAL.Keys)
             {
-                SPECIAL[index].Value = attributeValues[index];
+                SPECIAL[key] = attributeValues[index];
+                index++;
             }
         }
 
         /// <summary>
         /// Player creation using console input
         /// </summary>
-        public Player()
+        public Player(string directory)
         {
-            while (Name == null)
+            activeDirectory = directory;
+            perksDirectory = activeDirectory + "Perks\\";
+            inventoryDirectory = activeDirectory + "Inventory\\";
+            Inventory = new(inventoryDirectory, this);
+            string? tempName = null;
+            while (tempName == null)
             {
                 Console.Write("Enter Player Name: ");
-                Name = Console.ReadLine();
+                tempName = Console.ReadLine();
                 Console.Clear();
             }
+            Name = tempName.ToString();
 
             // You have 21 points to disperse across all the SPPECIAL attributes, and each one starts at 1, so 28 total
             byte totalPoints = 28;
-            for (byte index = 0; index < SPECIAL.Length; index++)
+            foreach (string attribute in SPECIAL.Keys)
             {
                 byte value = 1;
 
@@ -101,7 +145,7 @@ namespace Pip_Boy
                 while (key != ConsoleKey.Enter)
                 {
                     Console.WriteLine($"Total Points: {totalPoints - value}");
-                    Console.WriteLine($"Enter {SPECIAL[index].Name} value (1 - 10): {value}");
+                    Console.WriteLine($"Enter {attribute} value (1 - 10): {value}");
                     key = Console.ReadKey().Key;
                     switch (key)
                     {
@@ -116,11 +160,67 @@ namespace Pip_Boy
                 }
 
                 totalPoints -= value;
-                SPECIAL[index].Value = value;
+                SPECIAL[attribute] = value;
             }
         }
         #endregion
 
+        #region File Stuff
+        public void ToFile(string folderPath)
+        {
+            XmlSerializer x = new(GetType());
+            XmlWriter writer = XmlWriter.Create(folderPath + Name + ".xml");
+            x.Serialize(writer, this);
+            writer.Close();
+            SavePlayerPerks();
+        }
+
+        public static Player FromFile(string filePath)
+        {
+            XmlSerializer x = new(typeof(Player));
+            XmlReader reader = XmlReader.Create(filePath);
+            Player? tempItem = (Player?)x.Deserialize(reader) ?? throw new NullReferenceException("XMl file object is null!");
+            reader.Close();
+            return tempItem;
+        }
+        #endregion
+
+        public void LoadPlayerFull()
+        {
+            // Add logic/function to load player from file
+            FromFile(activeDirectory);
+            LoadPlayerPerks();
+            // Add logic/function to load quests from file
+            // Add logic/function to data entries from file
+        }
+
+        #region Perk Stuff
+        /// <summary>
+        /// Serializes every <c>Perk</c> object in the <c>Perks</c> list to a file in the "Perks" folder.
+        /// </summary>
+        public void SavePlayerPerks()
+        {
+            foreach (Perk perk in Perks)
+            {
+                perk.ToFile(perksDirectory);
+            }
+        }
+
+        /// <summary>
+        /// Deserializes every <c>Perk</c> file in the "Perks" folder list to an object in the <c>Perks</c>.
+        /// </summary>
+        public void LoadPlayerPerks()
+        {
+            foreach (string filePath in Directory.GetFiles(activeDirectory + "Perks\\"))
+            {
+                Perks.Add(Perk.FromFile(filePath));
+            }
+        }
+        #endregion
+
+        /// <summary>
+        /// Handles leveling up, and picking a <c>Perk</c>
+        /// </summary>
         public void LevelUp()
         {
             Level++;
@@ -130,6 +230,7 @@ namespace Pip_Boy
             }
         }
 
+        #region Items
         public void Equip(Equippable item)
         {
             if (item is HeadPiece headPieceItem)
@@ -174,30 +275,32 @@ namespace Pip_Boy
                 }
             }
         }
+        #endregion
 
+        #region Effects
         public void ApplyEffects()
         {
             ResetEffects();
             foreach (Effect effect in Effects)
             {
-                for (byte i = 0; i < SPECIAL.Length; i++)
+                foreach (string attribute in SPECIAL.Keys)
                 {
-                    if (effect.ToTitleCase() == SPECIAL[i].Name)
+                    if (effect.ToTitleCase() == attribute)
                     {
-                        if (SPECIAL[i].Value + effect.Value >= 1)
+                        if (SPECIAL[attribute] + effect.Value >= 1)
                         {
-                            SPECIAL[i].Value = (byte)(SPECIAL[i].Value + effect.Value);
+                            SPECIAL[attribute] = (byte)(SPECIAL[attribute] + effect.Value);
                         }
                         break;
                     }
                 }
-                for (byte i = 0; i < Skills.Length; i++)
+                foreach (string attribute in Skills.Keys)
                 {
-                    if (effect.ToTitleCase() == Skills[i].Name)
+                    if (effect.ToTitleCase() == attribute)
                     {
-                        if (Skills[i].Value + effect.Value >= 1)
+                        if (Skills[attribute] + effect.Value >= 1)
                         {
-                            Skills[i].Value = (byte)(Skills[i].Value + effect.Value);
+                            Skills[attribute] = (byte)(Skills[attribute] + effect.Value);
                         }
                         break;
                     }
@@ -207,13 +310,9 @@ namespace Pip_Boy
 
         public void ResetEffects()
         {
-            SPECIAL = baseSPECIAL;
-            Skills = baseSkills;
-            MaxActionPoints = baseMaxActionPoints;
-            MaxHealth = baseMaxHealth;
-            DamageRessistance = baseDamageRessistance;
             Effects.Clear();
         }
+        #endregion
 
         #region Show Player Info
         /// <summary>
@@ -235,15 +334,13 @@ namespace Pip_Boy
         /// Shows the player's SPECIAL attributes
         /// </summary>
         /// <returns>A table of all SPECIAL attributes and their values</returns>
-        public static string ShowSPECIAL()
+        public string ShowSPECIAL()
         {
-            StringBuilder stringBuilder = new();
-            stringBuilder.AppendLine("S.P.E.C.I.A.L.:");
-            foreach (Attribute attribute in SPECIAL)
+            StringBuilder stringBuilder = new("S.P.E.C.I.A.L.:");
+            foreach (string attribute in SPECIAL.Keys)
             {
-                stringBuilder.AppendLine(attribute.ToString());
+                stringBuilder.AppendLine(attribute + ':' + '\t' + SPECIAL[attribute]);
             }
-
             return stringBuilder.ToString();
         }
 
@@ -251,15 +348,13 @@ namespace Pip_Boy
         /// Shows the player's skill levels
         /// </summary>
         /// <returns>A table with every skill and its associated value</returns>
-        public static string ShowSkills()
+        public string ShowSkills()
         {
-            StringBuilder stringBuilder = new();
-            stringBuilder.AppendLine("Skills:");
-            foreach (Attribute skill in Skills)
+            StringBuilder stringBuilder = new("Skills:");
+            foreach (string skill in Skills.Keys)
             {
-                stringBuilder.AppendLine('\t' + skill.ToString());
+                stringBuilder.AppendLine('\t' + skill + ':' + '\t' + Skills[skill]);
             }
-
             return stringBuilder.ToString();
         }
 
@@ -269,11 +364,11 @@ namespace Pip_Boy
         /// <returns>A table of every perk's name, level and description</returns>
         public string ShowPeks()
         {
-            StringBuilder stringBuilder = new();
-            stringBuilder.AppendLine("Perks:");
+            StringBuilder stringBuilder = new("Perks:");
             foreach (Perk perk in Perks)
+            {
                 stringBuilder.AppendLine('\t' + perk.ToString());
-
+            }
             return stringBuilder.ToString();
         }
         #endregion
