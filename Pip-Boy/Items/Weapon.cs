@@ -13,6 +13,7 @@ namespace Pip_Boy.Items
         public byte DPS;
 
         public readonly byte StrengthRequirement;
+        public readonly byte SkillRequirement;
         public readonly WeaponType TypeOfWeapon;
         public static readonly List<string> Modifications = [];
 
@@ -52,6 +53,16 @@ namespace Pip_Boy.Items
             Explosive,
             Energy
         }
+
+        public override string GetIcon() => TypeOfWeapon switch
+        {
+            WeaponType.Melee => "⚔️",
+            WeaponType.Unarmed => "👊",
+            WeaponType.Gun => "🔫",
+            WeaponType.Explosive => "💣",
+            WeaponType.Energy => "⚡",
+            _ => "?",
+        };
 
         public override string ToString()
         {

@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
 {
-    public class Apparrel : Equippable
+    public abstract class Apparrel : Equippable
     {
         private readonly byte originalDamageThreshold;
         public byte DamageThreshold;
@@ -34,5 +34,7 @@ namespace Pip_Boy.Items
         {
             DamageThreshold = (byte)(originalDamageThreshold * Condition);
         }
+
+        public override string GetIcon() => "🛡️";
     }
 }

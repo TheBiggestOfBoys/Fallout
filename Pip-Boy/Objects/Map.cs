@@ -17,11 +17,11 @@ namespace Pip_Boy.Objects
         /// </summary>
         private static readonly Dictionary<char, string> Legend = new()
         {
-            {'!', "Quest" },
-            {'?', "Undiscovered" },
-            {'#', "Settlement" },
-            {'@', "Base" },
-            {'+', "Doctor" }
+            {'!', "Quest"},
+            {'?', "Undiscovered"},
+            {'#', "Settlement"},
+            {'@', "Base"},
+            {'+', "Doctor"}
         };
 
         /// <summary>

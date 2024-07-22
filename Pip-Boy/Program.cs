@@ -1,5 +1,6 @@
 ﻿using Pip_Boy.Objects;
 using System;
+using System.Text;
 
 namespace Pip_Boy
 {
@@ -13,6 +14,7 @@ namespace Pip_Boy
 
             Console.ForegroundColor = pipBoy.Color;
             Console.Title = "PIP-Boy 3000 MKIV";
+            Console.OutputEncoding = Encoding.UTF8;
             if (boot)
             {
                 pipBoy.Boot();
@@ -107,7 +109,6 @@ namespace Pip_Boy
                         #endregion
                 }
             }
-            //pipBoy.player.ToFile(pipBoy.activeDirectory);
             pipBoy.player.Inventory.Save();
             #endregion
         }

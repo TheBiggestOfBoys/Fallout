@@ -25,5 +25,7 @@ namespace Pip_Boy.Items
             reader.Close();
             return tempItem;
         }
+
+        public override string GetIcon() => "📃";
     }
 }

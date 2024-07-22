@@ -23,5 +23,14 @@
             Helmet = 7,
             Other
         }
+
+        public override string GetIcon() => pieceType switch
+        {
+            PieceType.Glasses => "👓",
+            PieceType.Hat => "🧢",
+            PieceType.Helmet => "⛑️",
+            PieceType.Other => "?",
+            _ => "?"
+        };
     }
 }

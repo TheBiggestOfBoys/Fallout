@@ -22,5 +22,14 @@
             Medium = 30,
             Heavy
         }
+
+        public override string GetIcon() => TypeOfArmor switch
+        {
+            ArmorType.Clothing => "👕",
+            ArmorType.Light => "🎽",
+            ArmorType.Medium => "🧱",
+            ArmorType.Heavy => "🛡️",
+            _ => "?"
+        };
     }
 }

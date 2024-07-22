@@ -1,51 +1,18 @@
-﻿using Pip_Boy.Items;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Pip_Boy.Objects
+namespace Pip_Boy.Entities
 {
     [Serializable]
-    public class Player
+    public class Player : Human
     {
         #region Arrays
         [NonSerialized]
-        public Inventory Inventory;
-
-        public Dictionary<string, byte> SPECIAL = new()
-        {
-            {"Strength", 5},
-            {"Perception", 5},
-            {"Endurance", 5},
-            {"Charisma", 5},
-            {"Intelligence", 5},
-            {"Agility", 5},
-            {"Luck", 5}
-        };
-
-        public Dictionary<string, byte> Skills = new(){
-            {"Barter", 10},
-            {"Energy Weapons", 10},
-            {"Explosives", 10},
-            {"Gun", 10},
-            {"Lockpick", 10},
-            {"Medicine", 10},
-            {"Melee Weapons", 10},
-            {"Repair", 10},
-            {"Science", 10},
-            {"Sneak", 10},
-            {"Speech", 10},
-            {"Survival", 10},
-            {"Unarmed", 10}
-        };
-
-        [NonSerialized]
         public List<Perk> Perks = [];
-
-        public List<Effect> Effects = [];
         #endregion
 
         #region Player Info
@@ -66,22 +33,8 @@ namespace Pip_Boy.Objects
         public readonly string inventoryDirectory;
         #endregion
 
-        public readonly string Name;
-        public byte Level { get; private set; } = 1;
-        public static ushort MaxHealth { get; private set; } = 100;
-        public int CurrentHealth { get; private set; } = 100;
-
         public static byte MaxActionPoints { get; private set; } = 25;
         public byte ActionPoints { get; private set; } = 25;
-
-        public static byte DamageRessistance { get; private set; } = 0;
-        #endregion
-
-        #region EquippedItems
-        public HeadPiece? headPiece;
-        public TorsoPiece? torsoPiece;
-        public Weapon? weapon;
-        public Ammo? ammo;
         #endregion
 
         #region Constructors
@@ -90,7 +43,7 @@ namespace Pip_Boy.Objects
         /// </summary>
         public Player()
         {
-            Inventory = new(string.Empty, this);
+            Inventory = new();
             activeDirectory = string.Empty;
             perksDirectory = string.Empty;
             inventoryDirectory = string.Empty;
@@ -229,90 +182,6 @@ namespace Pip_Boy.Objects
                 Perks.Add(new());
             }
         }
-
-        #region Items
-        public void Equip(Equippable item)
-        {
-            if (item is HeadPiece headPieceItem)
-            {
-                headPiece = headPieceItem;
-            }
-            else if (item is TorsoPiece torsoPieceItem)
-            {
-                torsoPiece = torsoPieceItem;
-            }
-            else if (item is Weapon weaponItem)
-            {
-                weapon = weaponItem;
-            }
-            else if (item is Ammo ammoItem)
-            {
-                ammo = ammoItem;
-            }
-            item.Equip(this);
-        }
-
-        public void Unequip(Equippable item)
-        {
-            if (item is not null)
-            {
-                item.Unequip(this);
-                if (item is HeadPiece)
-                {
-                    headPiece = null;
-                }
-                else if (item is TorsoPiece)
-                {
-                    torsoPiece = null;
-                }
-                else if (item is Weapon)
-                {
-                    weapon = null;
-                }
-                else if (item is Ammo)
-                {
-                    ammo = null;
-                }
-            }
-        }
-        #endregion
-
-        #region Effects
-        public void ApplyEffects()
-        {
-            ResetEffects();
-            foreach (Effect effect in Effects)
-            {
-                foreach (string attribute in SPECIAL.Keys)
-                {
-                    if (effect.ToTitleCase() == attribute)
-                    {
-                        if (SPECIAL[attribute] + effect.Value >= 1)
-                        {
-                            SPECIAL[attribute] = (byte)(SPECIAL[attribute] + effect.Value);
-                        }
-                        break;
-                    }
-                }
-                foreach (string attribute in Skills.Keys)
-                {
-                    if (effect.ToTitleCase() == attribute)
-                    {
-                        if (Skills[attribute] + effect.Value >= 1)
-                        {
-                            Skills[attribute] = (byte)(Skills[attribute] + effect.Value);
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-
-        public void ResetEffects()
-        {
-            Effects.Clear();
-        }
-        #endregion
 
         #region Show Player Info
         /// <summary>

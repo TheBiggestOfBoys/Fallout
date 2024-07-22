@@ -1,4 +1,5 @@
-﻿using Pip_Boy.Items;
+﻿using Pip_Boy.Entities;
+using Pip_Boy.Items;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -88,6 +89,19 @@ namespace Pip_Boy.Objects
         /// </summary>
         public bool IsOverEncumbered { get; private set; }
 
+        #region Constructors
+        public Inventory()
+        {
+            InventoryFolderPath = string.Empty;
+            WeaponFolderPath = string.Empty;
+            ApparrelFolderPath = string.Empty;
+            AidFolderPath = string.Empty;
+            MiscFolderPath = string.Empty;
+            AmmoFolderPath = string.Empty;
+
+            MaxCarryWeight = 0;
+        }
+
         public Inventory(string folderPath, Player player)
         {
             // Set the folder paths
@@ -143,6 +157,7 @@ namespace Pip_Boy.Objects
             }
             CurrentCarryWeight = CalculateWeight();
         }
+        #endregion
 
         /// <summary>
         /// Sums up the weight of all items in the inventory

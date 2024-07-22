@@ -1,4 +1,4 @@
-﻿using Pip_Boy.Objects;
+﻿using Pip_Boy.Entities;
 using System;
 using System.Collections.Generic;
 
@@ -25,17 +25,17 @@ namespace Pip_Boy.Items
         }
         #endregion
 
-        public void Equip(Player player)
+        public void Equip(Entity entity)
         {
             IsEquipped = true;
-            player.Effects.AddRange(Effects);
-            player.ApplyEffects();
+            entity.Effects.AddRange(Effects);
+            entity.ApplyEffects();
         }
 
-        public void Unequip(Player player)
+        public void Unequip(Entity entity)
         {
             IsEquipped = false;
-            foreach (Effect effect in player.Effects)
+            foreach (Effect effect in entity.Effects)
             {
                 Effects.Remove(effect);
             }

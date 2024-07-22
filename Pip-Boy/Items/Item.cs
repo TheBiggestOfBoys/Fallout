@@ -37,15 +37,18 @@ namespace Pip_Boy.Items
         public void ToFile(string folderPath)
         {
             XmlSerializer x = new(type);
-            XmlWriter writer = XmlWriter.Create(folderPath + Name + ".xml");
+            XmlWriterSettings xmlWriterSettings = new() { NewLineOnAttributes = true, Indent = true, CloseOutput = true };
+            XmlWriter writer = XmlWriter.Create(folderPath + Name + ".xml", xmlWriterSettings);
             writer.WriteProcessingInstruction("xml-stylesheet", "type=\"text/css\" href=\"../Inventory Styling.css\"");
             x.Serialize(writer, this);
             writer.Close();
         }
 
+        public virtual string GetIcon() => "📦";
+
         public override string ToString()
         {
-            StringBuilder defaultHeading = new('\t' + Name + ':');
+            StringBuilder defaultHeading = new('\t' + Name + ':' + GetIcon());
             defaultHeading.AppendLine();
             defaultHeading.Append("\t\tValue: ");
             defaultHeading.Append(Value == 0 ? "--" : Value.ToString());
