@@ -1,6 +1,7 @@
 ﻿using Pip_Boy.Entities;
 using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
 {
@@ -9,6 +10,7 @@ namespace Pip_Boy.Items
         private readonly ushort originalValue;
         public float Condition = 1f;
         public bool IsEquipped = false;
+        [XmlArray]
         public readonly List<Effect> Effects;
 
         #region Constructors

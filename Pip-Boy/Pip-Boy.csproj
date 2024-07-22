@@ -1,40 +1,49 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
-    <RootNamespace>Pip_Boy</RootNamespace>
-    <ImplicitUsings>disable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <StartupObject>Pip_Boy.Program</StartupObject>
-    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0-windows8.0</TargetFramework>
+		<RootNamespace>Pip_Boy</RootNamespace>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<StartupObject>Pip_Boy.Program</StartupObject>
+		<SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+	  <NoWarn>1701;1702</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+	  <NoWarn>1701;1702</NoWarn>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<Content Include="PIP-Boy\Sounds\**\*.wav">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<Link>Sounds\%(RecursiveDir)%(Filename)%(Extension)</Link>
-		</Content>
-		<Content Include="PIP-Boy\Songs\*.wav">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Sounds\**" />
-	  <EmbeddedResource Remove="Sounds\**" />
-	  <None Remove="Sounds\**" />
+		<PackageReference Include="System.Windows.Extensions" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-    <PackageReference Include="System.Windows.Extensions" Version="8.0.0" />
-  </ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="PIP-Boy\Data\" />
-	  <Folder Include="PIP-Boy\Factions\" />
-	  <Folder Include="PIP-Boy\Quests\Active Quests\" />
-	  <Folder Include="PIP-Boy\Quests\Completed Quests\" />
+		<Folder Include="PIP-Boy\Data\" />
+		<Folder Include="PIP-Boy\Factions\" />
+		<Folder Include="PIP-Boy\Quests\Active Quests\" />
+		<Folder Include="PIP-Boy\Quests\Completed Quests\" />
 	</ItemGroup>
+
+	<Target Name="CopyPipBoyFolder" AfterTargets="Build">
+		<ItemGroup>
+			<PipBoyFiles Include="PIP-Boy\**\*.*" />
+		</ItemGroup>
+		<Copy SourceFiles="@(PipBoyFiles)" DestinationFolder="$(OutputPath)PIP-Boy\%(RecursiveDir)" />
+	</Target>
 
 </Project>

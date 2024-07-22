@@ -1,5 +1,6 @@
 ﻿using Pip_Boy.Objects;
 using System;
+using System.IO;
 using System.Text;
 
 namespace Pip_Boy
@@ -8,7 +9,7 @@ namespace Pip_Boy
     {
         static void Main()
         {
-            PipBoy pipBoy = new("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\Pip-Boy\\PIP-Boy\\", ConsoleColor.DarkYellow);
+            PipBoy pipBoy = new(Directory.GetCurrentDirectory() + "\\PIP-Boy\\", ConsoleColor.DarkYellow);
             bool boot = false;
             bool createPlayer = false;
 
@@ -67,10 +68,10 @@ namespace Pip_Boy
                         break;
 
                     case ConsoleKey.UpArrow when pipBoy.currentPage == PipBoy.Pages.STATS && pipBoy.statPage == PipBoy.StatsPages.General:
-                        pipBoy.ChangeSelectedFation(false);
+                        pipBoy.ChangeSelectedFaction(false);
                         break;
                     case ConsoleKey.DownArrow when pipBoy.currentPage == PipBoy.Pages.STATS && pipBoy.statPage == PipBoy.StatsPages.General:
-                        pipBoy.ChangeSelectedFation(true);
+                        pipBoy.ChangeSelectedFaction(true);
                         break;
                     #endregion
 

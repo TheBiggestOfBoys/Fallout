@@ -15,6 +15,7 @@ namespace Pip_Boy.Items
         public readonly byte StrengthRequirement;
         public readonly byte SkillRequirement;
         public readonly WeaponType TypeOfWeapon;
+        [XmlArray]
         public static readonly List<string> Modifications = [];
 
         #region Constructors

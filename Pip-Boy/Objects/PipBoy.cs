@@ -9,23 +9,28 @@ using System.Threading;
 namespace Pip_Boy.Objects
 {
     /// <summary>
-    /// The <c>PIPBoy object, which displays player info, <c>Inventory</c>, and other data.
+    /// The <c>PIPBoy</c> object, which displays player info, <c>Inventory</c>, and other data.
     /// It controls output and error handling
     /// </summary>
-    public class PipBoy
+    /// <param name="workingDirectory">The directory to load items, sounds, songs, and player info from</param>
+    /// <param name="color">The display color</param>
+    public class PipBoy(string workingDirectory, ConsoleColor color)
     {
         #region Objects
-        public Player player;
+        /// <summary>
+        /// The <c>Player</c> object tied to the PIP-Boy.
+        /// </summary>
+        public Player player = new("Player", [5, 5, 5, 5, 5, 5, 5], workingDirectory);
 
         /// <summary>
         /// Controls music.
         /// </summary>
-        public Radio radio;
+        public Radio radio = new(workingDirectory + "Songs\\");
 
         /// <summary>
         /// Displays points of interest.
         /// </summary>
-        public Map map;
+        public Map map = new(25, 50, 20);
 
         /// <summary>
         /// Controls <c>PIPBoy</c> sound effects.
@@ -53,18 +58,18 @@ namespace Pip_Boy.Objects
         /// </summary>
         public Faction[] factions = [
             new("New California Republic", "The New California Republic (NCR) is a post-War federal republic founded in New California in 2189. It is comprised of five contiguous states located in southern California, with additional territorial holdings in northern California, Oregon and Nevada."),
-            new("Caesar's Legion", "Caesar's Legion (Latin: Legio Caesaris), also referred to simply as The Legion, is an imperialistic slaver society and totalitarian dictatorship founded in 2247 by Edward 'Caesar' Sallow and Joshua Graham, built on the conquest and enslavement of tribal societies in the American southwest. To enforce unity in the absence of any civilian institutions, the Legion loosely models itself after the military of the Roman Empire, repurposing its language and aesthetics for the post-apocalypse."),
+            new("Caesar's Legion", "Also referred to simply as The Legion, is an imperialistic slaver society and totalitarian dictatorship founded in 2247 by Edward 'Caesar' Sallow and Joshua Graham, built on the conquest and enslavement of tribal societies in the American southwest. To enforce unity in the absence of any civilian institutions, the Legion loosely models itself after the military of the Roman Empire, repurposing its language and aesthetics for the post-apocalypse."),
             new("Brotherhood of Steel", "The Brotherhood of Steel (commonly abbreviated to BoS) is a post-War technology-focused paramilitary order with chapters operating across the territory of the former United States. Founded by rogue U.S. Army officer Captain Roger Maxson shortly after the Great War, the Brotherhood's core purpose is to preserve advanced technology and regulate its usage. Despite often being relatively isolationist, the Brotherhood has proved to be one of the most important organizations in the history of the wasteland, though their exact levels of power and influence have varied over time and by chapter."),
             new("Boomers", "The Boomers are a tribe formed out of a group of vault dwellers who originally inhabited Vault 34. The overstocked, unprotected armory led to the emergence of a particularly gun-centric culture among the dwellers. The Boomers were a group particularly obsessed with weapons and the right to keep and bear them freely. When the population of the Vault ballooned in the early 23rd century, the Vault's overseer attempted to salvage the situation by introducing population control measures and sealing the armory. The efforts backfired, as rioting began, quickly turning into full-out rebellion. The future Boomers attacked the armory, taking most of the heavy weapons and equipment, then fought their way out of the vault. The reactor was damaged in the attack, dooming the vault."),
             new("Great Khans", "The Khans were a raider tribe descended from one of the three raider clans that originated from Vault 15. They have a long and turbulent history and have been nearly wiped out on three occasions. After the original Khans faced near-extinction following the Vault Dweller's actions, they were succeeded by the New Khans and then the Great Khans."),
             new("Followers of the Apocalypse", "The Followers of the Apocalypse, or simply the Followers, are a humanitarian organization originating in New California. Followers focus on providing education and medical services to those in need, as well as furthering research in non-military areas. Once allies of the New California Republic, they have since parted ways due to disagreements over NCR foreign policy."),
             new("Powder Gangers", "The Powder Gangers (also referred to as Powder Gangsters by Johnson Nash) are a gang of escaped prisoners operating in the Mojave Wasteland in 2281."),
             new("The Strip", "The New Vegas Strip is a part of New Vegas in the Mojave Wasteland in 2281."),
-            new("Freeside", "Freeside is a district of New Vegas in Fallout: New Vegas.")
+            new("Free Side", "Free Side is a district of New Vegas in Fallout: New Vegas.")
         ];
 
         /// <summary>
-        /// The current index of the slected <c>Faction</c> in the <c>General</c> sub page of the <c>STAT</c> page
+        /// The current index of the selected <c>Faction</c> in the <c>General</c> sub page of the <c>STAT</c> page
         /// </summary>
         public byte factionIndex = 0;
 
@@ -72,48 +77,33 @@ namespace Pip_Boy.Objects
         /// <summary>
         /// Sound
         /// </summary>
-        public string[] sounds;
+        public string[] sounds = Directory.GetFiles(workingDirectory + "Sounds\\", "*.wav");
 
         /// <summary>
         /// Sounds for static between songs and menu navigation
         /// </summary>
-        public string[] staticSounds;
+        public string[] staticSounds = Directory.GetFiles(workingDirectory + "Sounds\\static\\", "*wav");
 
         /// <summary>
         /// Geiger click sounds, for when in the RAD menu
         /// </summary>
-        public string[] radiationSounds;
+        public string[] radiationSounds = Directory.GetFiles(workingDirectory + "Sounds\\radiation\\", "*wav");
         #endregion
         #endregion
 
         /// <summary>
         /// The directory from which files will be loaded and saved
         /// </summary>
-        public readonly string activeDirectory;
+        public readonly string activeDirectory = workingDirectory;
 
         /// <summary>
         /// The color of the <c>PIPBoy</c>'s text
         /// </summary>
-        public readonly ConsoleColor Color;
+        public readonly ConsoleColor Color = color;
 
-        #region Constructor
-        /// <param name="workingDirectory">The directory to load items, sounds, songs, and player info from</param>
-        /// <param name="color">The display color</param>
-        public PipBoy(string workingDirectory, ConsoleColor color)
-        {
-            activeDirectory = workingDirectory;
-            Color = color;
-
-            player = new("Player", [5, 5, 5, 5, 5, 5, 5], workingDirectory);
-            radio = new(workingDirectory + "Songs\\");
-            map = new(25, 50, 20);
-
-            sounds = Directory.GetFiles(workingDirectory + "Sounds\\", "*.wav");
-            staticSounds = Directory.GetFiles(workingDirectory + "Sounds\\static\\", "*wav");
-            radiationSounds = Directory.GetFiles(workingDirectory + "Sounds\\radiation\\", "*wav");
-        }
-        #endregion
-
+        /// <summary>
+        /// Displays Fake OS Boot screen info
+        /// </summary>
         public void Boot()
         {
             PlaySound(sounds[2]);
@@ -210,7 +200,7 @@ namespace Pip_Boy.Objects
         /// Changes the selected faction, in order to show their description
         /// </summary>
         /// <param name="up">Move up the list</param>
-        public void ChangeSelectedFation(bool up)
+        public void ChangeSelectedFaction(bool up)
         {
             if (!up && factionIndex > 0)
             {
@@ -253,7 +243,7 @@ namespace Pip_Boy.Objects
                 Pages.DATA => typeof(DataPages),
                 _ => throw new NotImplementedException()
             };
-            foreach (object subPage in Enum.GetValues(enumType))
+            foreach (Enum subPage in Enum.GetValues(enumType))
             {
                 footer.Add(subPage.ToString());
             }
@@ -418,36 +408,72 @@ namespace Pip_Boy.Objects
 
         #region Enums
         /// <summary>
-        /// Main Menu pages
+        /// Main Menu pages which display different things
         /// </summary>
         public enum Pages
         {
+            /// <summary>
+            /// The <c>Player</c>'s stats.
+            /// </summary>
             STATS,
+            /// <summary>
+            /// The <c>Inventory</c>.
+            /// </summary>
             ITEMS,
+            /// <summary>
+            /// The <c>Data</c> sub-page.
+            /// </summary>
             DATA
         }
 
         #region SubPages
         /// <summary>
-        /// STAT sub-menu pages
+        /// STAT sub-menu pages which displays different things
         /// </summary>
         public enum StatsPages
         {
+            /// <summary>
+            /// The <c>Player</c>'s actives <c>Effect</c>s
+            /// </summary>
             Status,
+            /// <summary>
+            /// The <c>Player</c>'s SPECIAL Stats
+            /// </summary>
             SPECIAL,
+            /// <summary>
+            /// The <c>Player</c>'s <c>Skill</c>s
+            /// </summary>
             Skills,
+            /// <summary>
+            /// The <c>Player</c>'s <c>Perk</c>s
+            /// </summary>
             Perks,
+            /// <summary>
+            /// The <c>Player</c>'s Reputations with other <c>Faction</c>s
+            /// </summary>
             General
         }
 
         /// <summary>
-        /// DATA sub-menu pages
+        /// DATA sub-menu pages which display different things
         /// </summary>
         public enum DataPages
         {
+            /// <summary>
+            /// The <c>Map</c> object with it's markers and legends.
+            /// </summary>
             Map,
+            /// <summary>
+            /// The <c>List</c> of active <c>Quest</c>s.
+            /// </summary>
             Quests,
+            /// <summary>
+            /// The <c>Data</c> entries in the form of <c>*.txt</c> and <c>*.wav</c> files.
+            /// </summary>
             Misc,
+            /// <summary>
+            /// The <c>Radio</c> object and it's <c>List</c> of <c>Songs</c>.
+            /// </summary>
             Radio
         }
         #endregion
