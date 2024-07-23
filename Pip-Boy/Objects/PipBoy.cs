@@ -284,7 +284,7 @@ namespace Pip_Boy.Objects
             StatsPages.Status => player.ShowStatus(),
             StatsPages.SPECIAL => player.ShowSPECIAL(),
             StatsPages.Skills => player.ShowSkills(),
-            StatsPages.Perks => player.ShowPeks(),
+            StatsPages.Perks => player.ShowPerks(),
             StatsPages.General => ShowFactions(),
             _ => throw new NotImplementedException()
         };

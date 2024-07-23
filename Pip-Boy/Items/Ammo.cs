@@ -4,7 +4,10 @@ using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
 {
-    public class Ammo : Equippable
+    /// <summary>
+    /// What the non <see cref="Weapon.WeaponType.Melee"/> and <see cref="Weapon.WeaponType.Unarmed"/> <see cref="Weapon"/>s need.
+    /// </summary>
+    public class Ammo : Equipable
     {
         public readonly AmmoType TypeOfAmmo;
         public readonly AmmoModification Modification;
@@ -16,6 +19,9 @@ namespace Pip_Boy.Items
             Modification = ammoModification;
         }
 
+        /// <summary>
+        /// Empty constructor for serialization.
+        /// </summary>
         public Ammo() : base() { }
         #endregion
 
@@ -29,6 +35,9 @@ namespace Pip_Boy.Items
         }
 
         #region Enums
+        /// <summary>
+        /// The type of ammo, which determines which <see cref="Weapon"/>s can use it.
+        /// </summary>
         public enum AmmoType
         {
             Bullet,
@@ -37,6 +46,9 @@ namespace Pip_Boy.Items
             Other
         }
 
+        /// <summary>
+        /// The modifications on the <see cref="Ammo"/> object, which change damage and <see cref="Effect"/>s.
+        /// </summary>
         public enum AmmoModification
         {
             Standard,
@@ -59,6 +71,7 @@ namespace Pip_Boy.Items
             _ => "?"
         };
 
+        /// <returns>An emoji icon for the <see cref="Modification"/></returns>
         public string GetModification() => Modification switch
         {
             AmmoModification.Standard => "",
@@ -72,6 +85,7 @@ namespace Pip_Boy.Items
             _ => "",
         };
 
+        /// <returns>The <see cref="Item.ToString()"/>, with the <see cref="TypeOfAmmo"/> and <see cref="Modification"/></returns>
         public override string ToString() => base.ToString() + $"{Environment.NewLine}\t\tAmmo Type: {TypeOfAmmo}{Environment.NewLine}\t\tAmmo Modification: {Modification}{GetModification()}";
     }
 }

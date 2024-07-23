@@ -7,10 +7,16 @@ using System.Xml.Serialization;
 
 namespace Pip_Boy.Entities
 {
+    /// <summary>
+    /// This contains all player behavior.
+    /// </summary>
     [Serializable]
     public class Player : Human
     {
         #region Arrays
+        /// <summary>
+        /// <see cref="List{T}"/> of all active <see cref="Perk"/> on the <see cref="Player"/>.
+        /// </summary>
         [NonSerialized]
         public List<Perk> Perks = [];
         #endregion
@@ -28,12 +34,19 @@ namespace Pip_Boy.Entities
         public readonly string perksDirectory;
 
         /// <summary>
-        /// The directory from which <Inventory> <c>Item</c>s will be loaded and saved
+        /// The directory from which <see cref="Objects.Inventory"/> <c>Item</c>s will be loaded and saved.
         /// </summary>
         public readonly string inventoryDirectory;
         #endregion
 
+        /// <summary>
+        /// The maximum number of Action Points (AP) the <see cref="Player"/> has.
+        /// </summary>
         public static byte MaxActionPoints { get; private set; } = 25;
+
+        /// <summary>
+        /// The current amount of Action Points (AP) the <see cref="Player"/> has.
+        /// </summary>
         public byte ActionPoints { get; private set; } = 25;
         #endregion
 
@@ -55,6 +68,7 @@ namespace Pip_Boy.Entities
         /// </summary>
         /// <param name="name">The player's name</param>
         /// <param name="attributeValues">The special values</param>
+        /// <param name="directory">The directory to load files from</param>
         public Player(string name, byte[] attributeValues, string directory)
         {
             activeDirectory = directory;
@@ -119,6 +133,10 @@ namespace Pip_Boy.Entities
         #endregion
 
         #region File Stuff
+        /// <summary>
+        /// Serializes the <see cref="Player"/> to an <c>*.xml</c> file.
+        /// </summary>
+        /// <param name="folderPath">The folder to write the file to.</param>
         public void ToFile(string folderPath)
         {
             XmlSerializer x = new(GetType());
@@ -128,6 +146,10 @@ namespace Pip_Boy.Entities
             SavePlayerPerks();
         }
 
+        /// <summary>
+        /// Deserializes an <c>*.xml</c> file to an <see cref="Player"/> object.
+        /// </summary>
+        /// <param name="filePath">The path to the <c>*.xml</c> file.</param>
         public static Player FromFile(string filePath)
         {
             XmlSerializer x = new(typeof(Player));
@@ -138,6 +160,9 @@ namespace Pip_Boy.Entities
         }
         #endregion
 
+        /// <summary>
+        /// Loads the <see cref="Player"/> and <see cref="Perks"/> from files.
+        /// </summary>
         public void LoadPlayerFull()
         {
             // Add logic/function to load player from file
@@ -231,7 +256,7 @@ namespace Pip_Boy.Entities
         /// Shows all the player's perks
         /// </summary>
         /// <returns>A table of every perk's name, level and description</returns>
-        public string ShowPeks()
+        public string ShowPerks()
         {
             StringBuilder stringBuilder = new("Perks:");
             foreach (Perk perk in Perks)

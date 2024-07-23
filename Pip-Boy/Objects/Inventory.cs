@@ -7,27 +7,30 @@ using System.Text;
 
 namespace Pip_Boy.Objects
 {
+    /// <summary>
+    /// Controls behavior of the sub-lists, and the items contained within.
+    /// </summary>
     public class Inventory
     {
         #region Lists
         /// <summary>
-        /// All weapons in <c>Inventory</c>
+        /// All weapons in the <c>Inventory</c>
         /// </summary>
         public List<Weapon> Weapons { get; private set; } = [];
         /// <summary>
-        /// All apparels in </c>Inventory</c>
+        /// All apparels in the <see cref="Inventory"/>
         /// </summary>
-        public List<Apparrel> Apparels { get; private set; } = [];
+        public List<Apparel> Apparels { get; private set; } = [];
         /// <summary>
-        /// All aid items in <c>Inventory</c>
+        /// All aid items in the <see cref="Inventory"/>
         /// </summary>
         public List<Aid> Aids { get; private set; } = [];
         /// <summary>
-        /// All misc items in <c>Inventory</c>
+        /// All misc items in the <see cref="Inventory"/>
         /// </summary>
         public List<Misc> Miscs { get; private set; } = [];
         /// <summary>
-        /// All ammo items in <c>Inventory</c>
+        /// All ammo items in the <see cref="Inventory"/>
         /// </summary>
         public List<Ammo> Ammos { get; private set; } = [];
         #endregion
@@ -54,9 +57,9 @@ namespace Pip_Boy.Objects
         public string WeaponFolderPath { get; private set; }
 
         /// <summary>
-        /// Directory which holds all Serialized <c>Apparrel</c> objects for the <c>Apparrels</c> list
+        /// Directory which holds all Serialized <c>Apparel</c> objects for the <c>Apparels</c> list
         /// </summary>
-        public string ApparrelFolderPath { get; private set; }
+        public string ApparelFolderPath { get; private set; }
 
         /// <summary>
         /// Directory which holds all Serialized <c>Aid</c> objects for the <c>Aids</c> list
@@ -64,7 +67,7 @@ namespace Pip_Boy.Objects
         public string AidFolderPath { get; private set; }
 
         /// <summary>
-        /// Directory which holds all Serialized <c>Misc</c> objects for the <c>Miscs</c> list
+        /// Directory which holds all Serialized <c>Misc</c> objects for the <c><see cref="Miscs"/></c> list
         /// </summary>
         public string MiscFolderPath { get; private set; }
 
@@ -85,16 +88,19 @@ namespace Pip_Boy.Objects
         public double CurrentCarryWeight { get; private set; }
 
         /// <summary>
-        /// If <c>CurrentCarryWeight</c> is greather than or equal to the <c>MaxCarryWeight</c>
+        /// If <c>CurrentCarryWeight</c> is greater than or equal to the <c>MaxCarryWeight</c>
         /// </summary>
         public bool IsOverEncumbered { get; private set; }
 
         #region Constructors
+        /// <summary>
+        /// Empty constructor for serialization.
+        /// </summary>
         public Inventory()
         {
             InventoryFolderPath = string.Empty;
             WeaponFolderPath = string.Empty;
-            ApparrelFolderPath = string.Empty;
+            ApparelFolderPath = string.Empty;
             AidFolderPath = string.Empty;
             MiscFolderPath = string.Empty;
             AmmoFolderPath = string.Empty;
@@ -111,7 +117,7 @@ namespace Pip_Boy.Objects
             }
             InventoryFolderPath = folderPath;
             WeaponFolderPath = InventoryFolderPath + "Weapon" + '\\';
-            ApparrelFolderPath = InventoryFolderPath + "Apparrel" + '\\';
+            ApparelFolderPath = InventoryFolderPath + "Apparel" + '\\';
             AidFolderPath = InventoryFolderPath + "Aid" + '\\';
             MiscFolderPath = InventoryFolderPath + "Misc" + '\\';
             AmmoFolderPath = InventoryFolderPath + "Ammo" + '\\';
@@ -140,7 +146,7 @@ namespace Pip_Boy.Objects
                                 Weapons.Add(Weapon.FromFile(filePath));
                                 break;
                             case "Apparel":
-                                Apparels.Add(Apparrel.FromFile(filePath));
+                                Apparels.Add(Apparel.FromFile(filePath));
                                 break;
                             case "Aid":
                                 Aids.Add(Aid.FromFile(filePath));
@@ -174,9 +180,9 @@ namespace Pip_Boy.Objects
             {
                 weapon.ToFile(WeaponFolderPath);
             }
-            foreach (Apparrel apparrel in Apparels)
+            foreach (Apparel apparel in Apparels)
             {
-                apparrel.ToFile(ApparrelFolderPath);
+                apparel.ToFile(ApparelFolderPath);
             }
             foreach (Aid aid in Aids)
             {
@@ -216,8 +222,8 @@ namespace Pip_Boy.Objects
                 case Weapon weapon:
                     Weapons.Add(weapon);
                     break;
-                case Apparrel apparrel:
-                    Apparels.Add(apparrel);
+                case Apparel apparel:
+                    Apparels.Add(apparel);
                     break;
                 case Aid aid:
                     Aids.Add(aid);
@@ -241,9 +247,9 @@ namespace Pip_Boy.Objects
             {
                 Weapons.Remove(weapon);
             }
-            else if (item is Apparrel apparrel)
+            else if (item is Apparel apparel)
             {
-                Apparels.Remove(apparrel);
+                Apparels.Remove(apparel);
             }
             else if (item is Aid aid)
             {
@@ -260,10 +266,7 @@ namespace Pip_Boy.Objects
         }
         #endregion
 
-        /// <summary>
-        /// Shows the items with the current submenu type
-        /// </summary>
-        /// <returns>A table of every `Type` item's name, description, value and weight</returns>
+        /// <returns>A table of every <see cref="itemPage"/> <see cref="Item"/>'s <see cref="Item.ToString()"/></returns>
         public override string ToString()
         {
             StringBuilder stringBuilder = new($"{CurrentCarryWeight}/{MaxCarryWeight} -- Over Encumbered?: {IsOverEncumbered}");
@@ -278,9 +281,9 @@ namespace Pip_Boy.Objects
                     }
                     return stringBuilder.ToString();
                 case ItemsPages.Apparel:
-                    foreach (Apparrel apparrel in Apparels)
+                    foreach (Apparel apparel in Apparels)
                     {
-                        stringBuilder.AppendLine(apparrel.ToString());
+                        stringBuilder.AppendLine(apparel.ToString());
                     }
                     return stringBuilder.ToString();
                 case ItemsPages.Aid:
@@ -307,7 +310,7 @@ namespace Pip_Boy.Objects
         }
 
         /// <summary>
-        /// <c>Item</c> sub-menu pages
+        /// <see cref="Item"/> sub-menu pages
         /// </summary>
         public enum ItemsPages
         {

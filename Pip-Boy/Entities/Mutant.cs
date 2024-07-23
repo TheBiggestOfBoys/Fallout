@@ -4,7 +4,7 @@
     {
         public Mutant()
         {
-            RadiationRessistance = 1f;
+            RadiationResistance = 1f;
         }
     }
 }

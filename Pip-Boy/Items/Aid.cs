@@ -4,16 +4,26 @@ using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
 {
-    public class Aid : Equippable
+    /// <summary>
+    /// Aid item which has corresponding effect
+    /// </summary>
+    public class Aid : Equipable
     {
         public readonly AidType TypeOfAid;
 
         #region Constructors
         public Aid(string name, float weight, ushort value, Effect[] effects) : base(name, weight, value, effects) { }
 
+        /// <summary>
+        /// Empty constructor for serialization.
+        /// </summary>
         public Aid() : base() { }
         #endregion
 
+        /// <summary>
+        /// Deserializes an <c>*.xml</c> file to an <see cref="Aid"/> object.
+        /// </summary>
+        /// <param name="filePath">The path to the <c>*.xml</c> file.</param>
         public static Aid FromFile(string filePath)
         {
             XmlSerializer x = new(typeof(Aid));
@@ -29,11 +39,14 @@ namespace Pip_Boy.Items
             AidType.Drink => "🥤",
             AidType.Syringe => "💉",
             AidType.Pill => "💊",
-            AidType.Inhale => "🌬💨",
+            AidType.Inhale => "🌬",
             AidType.Smoke => "🚬",
-            _ => "?",
+            _ => "?"
         };
 
+        /// <summary>
+        /// The type of aid the <see cref="Aid"/> object is.
+        /// </summary>
         public enum AidType
         {
             Food,
@@ -41,7 +54,7 @@ namespace Pip_Boy.Items
             Syringe,
             Pill,
             Inhale,
-            Smoke,
+            Smoke
         }
     }
 }
