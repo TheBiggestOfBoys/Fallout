@@ -7,7 +7,7 @@
             headPiece = null;
             torsoPiece = null;
             weapon = null;
-            RadiationRessistance = 1f;
+            RadiationResistance = 1f;
         }
     }
 }

@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Pip_Boy
 {
+    /// <summary>
+    /// Where the main code for the app runs
+    /// </summary>
     public class Program
     {
         static void Main()

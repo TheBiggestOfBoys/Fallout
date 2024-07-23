@@ -6,8 +6,17 @@ using System.Text;
 
 namespace Pip_Boy.Objects
 {
+    /// <summary>
+    /// Contains locations of places of interest.
+    /// </summary>
+    /// <param name="height">The height of the map</param>
+    /// <param name="width">The width of the map</param>
+    /// <param name="density">How many points of interest there should be</param>
     public class Map(byte height, byte width, byte density)
     {
+        /// <summary>
+        /// The 2D char array, which is the visual representation of the <see cref="Map"/>.
+        /// </summary>
         public readonly char[][] Grid = GenerateMap(width, height, density);
 
         Vector2 playerPosition = Vector2.Zero;

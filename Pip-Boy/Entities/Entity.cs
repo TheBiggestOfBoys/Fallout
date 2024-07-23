@@ -5,13 +5,22 @@ using System.Collections.Generic;
 
 namespace Pip_Boy.Entities
 {
+    /// <summary>
+    /// Generic type which other <see cref="Entity"/> sub-classes will inherit from
+    /// </summary>
     [Serializable]
     public abstract class Entity
     {
         #region Arrays
+        /// <summary>
+        /// This holds all objects belonging to the <see cref="Entity"/>.
+        /// </summary>
         [NonSerialized]
         public Inventory Inventory;
 
+        /// <summary>
+        /// The SPECIAL attributes, which effects player stats.
+        /// </summary>
         public Dictionary<string, byte> SPECIAL = new()
         {
             {"Strength", 5},
@@ -23,6 +32,9 @@ namespace Pip_Boy.Entities
             {"Luck", 5}
         };
 
+        /// <summary>
+        /// The Skills, which effects player stats.
+        /// </summary>
         public Dictionary<string, byte> Skills = new(){
             {"Barter", 10},
             {"Energy Weapons", 10},
@@ -39,20 +51,48 @@ namespace Pip_Boy.Entities
             {"Unarmed", 10}
         };
 
+        /// <summary>
+        /// All <see cref="Effect"/>s that are active on the <see cref="Entity"/>.
+        /// </summary>
         public List<Effect> Effects = [];
         #endregion
 
         #region Entity Info
+        /// <summary>
+        /// The name of the <see cref="Entity"/>.
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// The <see cref="Entity"/>'s level, which determines attributes.
+        /// </summary>
         public byte Level { get; set; } = 1;
+
+        /// <summary>
+        /// The maximum health the <see cref="Entity"/> can have.
+        /// </summary>
         public static ushort MaxHealth { get; private set; } = 100;
+
+        /// <summary>
+        /// THe current health the <see cref="Entity"/> has.
+        /// </summary>
         public int CurrentHealth { get; private set; } = 100;
 
-        public static byte DamageRessistance { get; private set; } = 0;
-        public static float RadiationRessistance { get; set; } = 0f;
+        /// <summary>
+        /// The resistance to physical damage.
+        /// </summary>
+        public static byte DamageResistance { get; private set; } = 0;
+
+        /// <summary>
+        /// The percentage resistance to radiation.
+        /// </summary>
+        public static float RadiationResistance { get; set; } = 0f;
         #endregion
 
         #region Constructor
+        /// <summary>
+        /// Empty constructor for Serialization.
+        /// </summary>
         public Entity()
         {
             Inventory = new();
@@ -61,60 +101,84 @@ namespace Pip_Boy.Entities
         #endregion
 
         #region EquippedItems
+        /// <summary>
+        /// The equipped <see cref="HeadPiece"/>, which can be null
+        /// </summary>
         public HeadPiece? headPiece;
+
+        /// <summary>
+        /// The equipped <see cref="TorsoPiece"/>, which can be null
+        /// </summary>
         public TorsoPiece? torsoPiece;
+
+        /// <summary>
+        /// The equipped <see cref="Weapon"/>, which can be null
+        /// </summary>
         public Weapon? weapon;
+
+        /// <summary>
+        /// The equipped <see cref="Ammo"/>, for the <see cref="weapon"/> which can be null, if the <see cref="weapon"/> is <see cref="Weapon.WeaponType.Melee"/> or <see cref="Weapon.WeaponType.Unarmed"/>
+        /// </summary>
         public Ammo? ammo;
         #endregion
 
         #region Items
-        public void Equip(Equippable item)
+        /// <summary>
+        /// Equips the <see cref="Equipable"/> to the correct spot, depending on it's type
+        /// </summary>
+        /// <param name="item">The item to equip.</param>
+        public void Equip(Equipable item)
         {
-            if (item is HeadPiece headPieceItem)
+            switch (item)
             {
-                headPiece = headPieceItem;
-            }
-            else if (item is TorsoPiece torsoPieceItem)
-            {
-                torsoPiece = torsoPieceItem;
-            }
-            else if (item is Weapon weaponItem)
-            {
-                weapon = weaponItem;
-            }
-            else if (item is Ammo ammoItem)
-            {
-                ammo = ammoItem;
+                case HeadPiece headPieceItem:
+                    headPiece = headPieceItem;
+                    break;
+                case TorsoPiece torsoPieceItem:
+                    torsoPiece = torsoPieceItem;
+                    break;
+                case Weapon weaponItem:
+                    weapon = weaponItem;
+                    break;
+                case Ammo ammoItem:
+                    ammo = ammoItem;
+                    break;
             }
             item.Equip(this);
         }
 
-        public void Unequip(Equippable item)
+        /// <summary>
+        /// Unequips the <see cref="Equipable"/> from the correct spot, depending on it's type
+        /// </summary>
+        /// <param name="item">The item to unequip.</param>
+        public void Unequip(Equipable item)
         {
             if (item is not null)
             {
                 item.Unequip(this);
-                if (item is HeadPiece)
+                switch (item)
                 {
-                    headPiece = null;
-                }
-                else if (item is TorsoPiece)
-                {
-                    torsoPiece = null;
-                }
-                else if (item is Weapon)
-                {
-                    weapon = null;
-                }
-                else if (item is Ammo)
-                {
-                    ammo = null;
+                    case HeadPiece:
+                        headPiece = null;
+                        break;
+                    case TorsoPiece:
+                        torsoPiece = null;
+                        break;
+                    case Weapon:
+                        weapon = null;
+                        break;
+                    case Ammo:
+                        ammo = null;
+                        break;
                 }
             }
         }
         #endregion
 
         #region Effects
+        /// <summary>
+        /// Applies all <see cref="Effect"/>s from <see cref="Effects"/> to the <see cref="Entity"/>.
+        /// </summary>
         public void ApplyEffects()
         {
             ResetEffects();
@@ -145,6 +209,9 @@ namespace Pip_Boy.Entities
             }
         }
 
+        /// <summary>
+        /// Clears all <see cref="Effect"/>s from <see cref="Effects"/>.
+        /// </summary>
         public void ResetEffects()
         {
             Effects.Clear();

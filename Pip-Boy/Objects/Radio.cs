@@ -6,6 +6,9 @@ using System.Text;
 
 namespace Pip_Boy.Objects
 {
+    /// <summary>
+    /// Contains all songs and logic for playing them.
+    /// </summary>
     public class Radio
     {
         /// <summary>
@@ -13,6 +16,9 @@ namespace Pip_Boy.Objects
         /// </summary>
         public static readonly SoundPlayer soundPlayer = new();
 
+        /// <summary>
+        /// The list of all <see cref="Song"/>s.
+        /// </summary>
         public List<Song> songs = [];
 
         /// <summary>
@@ -23,7 +29,7 @@ namespace Pip_Boy.Objects
         /// <summary>
         /// Initialize a radio object with '.wav' files from a folder
         /// </summary>
-        /// <param name="folderPath">The path to the folder contaaing the songs</param>
+        /// <param name="folderPath">The path to the folder containing the songs</param>
         public Radio(string folderPath)
         {
             foreach (string path in Directory.GetFiles(folderPath, "*.wav"))
@@ -92,9 +98,6 @@ namespace Pip_Boy.Objects
         }
         #endregion
 
-        /// <summary>
-        /// Shows all songs
-        /// </summary>
         /// <returns>A table with all the song names</returns>
         public override string ToString()
         {

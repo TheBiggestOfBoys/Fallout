@@ -5,13 +5,27 @@ using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
 {
+    /// <summary>
+    /// Generic super-class for all other <see cref="Objects.Inventory"/> items.
+    /// </summary>
     [Serializable]
     public abstract class Item
     {
         private readonly Type type;
 
+        /// <summary>
+        /// What the <see cref="Item"/> is called.
+        /// </summary>
         public string Name;
+
+        /// <summary>
+        /// How much the <see cref="Item"/> weighs.
+        /// </summary>
         public float Weight;
+
+        /// <summary>
+        /// How much the <see cref="Item"/> costs.
+        /// </summary>
         public ushort Value;
 
         #region Constructors
@@ -24,6 +38,9 @@ namespace Pip_Boy.Items
             Value = value;
         }
 
+        /// <summary>
+        /// Empty constructor for serialization.
+        /// </summary>
         public Item()
         {
             type = GetType();
@@ -34,6 +51,10 @@ namespace Pip_Boy.Items
         }
         #endregion
 
+        /// <summary>
+        /// Serializes the <see cref="Item"/> to an <c>*.xml</c> file.
+        /// </summary>
+        /// <param name="folderPath">The folder to write the file to.</param>
         public void ToFile(string folderPath)
         {
             XmlSerializer x = new(type);
@@ -44,8 +65,10 @@ namespace Pip_Boy.Items
             writer.Close();
         }
 
+        /// <returns>The emoji which represents the <see cref="Item"/>.</returns>
         public virtual string GetIcon() => "📦";
 
+        /// <returns>The <see cref="Item"/>'s <see cref="Name"/>, <see cref="GetIcon()"/>, <see cref="Value"/> and <see cref="Weight"/>, with logic handling if <see cref="Value"/> or <see cref="Weight"/> are 0</returns>
         public override string ToString()
         {
             StringBuilder defaultHeading = new('\t' + Name + ':' + GetIcon());

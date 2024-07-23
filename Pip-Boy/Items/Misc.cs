@@ -4,6 +4,9 @@ using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
 {
+    /// <summary>
+    /// Can be junk, sellable items, or crafting components.
+    /// </summary>
     public class Misc : Item
     {
         #region Constructors

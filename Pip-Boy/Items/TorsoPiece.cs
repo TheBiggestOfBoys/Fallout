@@ -1,6 +1,9 @@
 ﻿namespace Pip_Boy.Items
 {
-    public class TorsoPiece : Apparrel
+    /// <summary>
+    /// A torso armor
+    /// </summary>
+    public class TorsoPiece : Apparel
     {
         #region Constructors
         public TorsoPiece(string name, float weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : base(name, weight, value, effects, DT, powerArmor) { }
@@ -15,6 +18,9 @@
             _ => ArmorType.Heavy,
         };
 
+        /// <summary>
+        /// The type of armor, determined by <see cref="Item.Weight"/>.
+        /// </summary>
         public enum ArmorType : byte
         {
             Clothing = 10,
