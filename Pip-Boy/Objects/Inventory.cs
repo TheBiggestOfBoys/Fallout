@@ -143,19 +143,19 @@ namespace Pip_Boy.Objects
                         switch (expectedSubDirectory)
                         {
                             case "Weapon":
-                                Weapons.Add(Weapon.FromFile(filePath));
+                                Weapons.Add(Item.FromFile<Weapon>(filePath));
                                 break;
                             case "Apparel":
-                                Apparels.Add(Apparel.FromFile(filePath));
+                                Apparels.Add(Item.FromFile<Apparel>(filePath));
                                 break;
                             case "Aid":
-                                Aids.Add(Aid.FromFile(filePath));
+                                Aids.Add(Item.FromFile<Aid>(filePath));
                                 break;
                             case "Misc":
-                                Miscs.Add(Misc.FromFile(filePath));
+                                Miscs.Add(Item.FromFile<Misc>(filePath));
                                 break;
                             case "Ammo":
-                                Ammos.Add(Ammo.FromFile(filePath));
+                                Ammos.Add(Item.FromFile<Ammo>(filePath));
                                 break;
                         }
                     }

@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Xml;
-using System.Xml.Serialization;
 
 namespace Pip_Boy.Entities
 {
@@ -129,41 +127,12 @@ namespace Pip_Boy.Entities
         }
         #endregion
 
-        #region File Stuff
-        /// <summary>
-        /// Serializes the <see cref="Player"/> to an <c>*.xml</c> file.
-        /// </summary>
-        /// <param name="folderPath">The folder to write the file to.</param>
-        public void ToFile(string folderPath)
-        {
-            XmlSerializer x = new(GetType());
-            XmlWriter writer = XmlWriter.Create(folderPath + Name + ".xml");
-            x.Serialize(writer, this);
-            writer.Close();
-            SavePlayerPerks();
-        }
-
-        /// <summary>
-        /// Deserializes an <c>*.xml</c> file to an <see cref="Player"/> object.
-        /// </summary>
-        /// <param name="filePath">The path to the <c>*.xml</c> file.</param>
-        public static Player FromFile(string filePath)
-        {
-            XmlSerializer x = new(typeof(Player));
-            XmlReader reader = XmlReader.Create(filePath);
-            Player? tempItem = (Player?)x.Deserialize(reader) ?? throw new NullReferenceException("XMl file object is null!");
-            reader.Close();
-            return tempItem;
-        }
-        #endregion
-
         /// <summary>
         /// Loads the <see cref="Player"/> and <see cref="Perks"/> from files.
         /// </summary>
         public void LoadPlayerFull()
         {
             // Add logic/function to load player from file
-            FromFile(activeDirectory);
             LoadPlayerPerks();
             // Add logic/function to load quests from file
             // Add logic/function to data entries from file

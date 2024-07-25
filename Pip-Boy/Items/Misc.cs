@@ -1,8 +1,4 @@
-﻿using System;
-using System.Xml;
-using System.Xml.Serialization;
-
-namespace Pip_Boy.Items
+﻿namespace Pip_Boy.Items
 {
     /// <summary>
     /// Can be junk, sellable items, or crafting components.
@@ -30,15 +26,6 @@ namespace Pip_Boy.Items
         /// <inheritdoc/>
         public Misc() : base() { }
         #endregion
-
-        public static Misc FromFile(string filePath)
-        {
-            XmlSerializer x = new(typeof(Misc));
-            XmlReader reader = XmlReader.Create(filePath);
-            Misc? tempItem = (Misc?)x.Deserialize(reader) ?? throw new NullReferenceException("XMl file object is null!");
-            reader.Close();
-            return tempItem;
-        }
 
         /// <summary>
         /// The possible types for the <see cref="Misc"/> object.

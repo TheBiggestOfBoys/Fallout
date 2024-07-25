@@ -57,9 +57,25 @@ namespace Pip_Boy.Items
         #endregion
 
         /// <summary>
+        /// Deserializes the <see cref="Item"/> object from an <c>*.xml</c> file.
+        /// </summary>
+        /// <typeparam name="T">The <see cref="Item"/> sub-class type to serialize to</typeparam>
+        /// <param name="filePath">The path to the <c>*.xml</c> file.</param>
+        /// <returns>The deserialized <see cref="Item"/> object.</returns>
+        /// <exception cref="NullReferenceException">If the <c>*.xml</c> file returns a null object.</exception>
+        public static T FromFile<T>(string filePath)
+        {
+            XmlSerializer x = new(typeof(T));
+            XmlReader reader = XmlReader.Create(filePath);
+            T? tempItem = (T?)x.Deserialize(reader) ?? throw new NullReferenceException("XMl file object is null!");
+            reader.Close();
+            return tempItem;
+        }
+
+        /// <summary>
         /// Serializes the <see cref="Item"/> to an <c>*.xml</c> file.
         /// </summary>
-        /// <param name="folderPath">The folder to write the file to.</param>
+        /// <param name="folderPath">The folder to write the <c>*.xml</c> file to.</param>
         public void ToFile(string folderPath)
         {
             XmlSerializer x = new(type);

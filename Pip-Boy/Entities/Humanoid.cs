@@ -2,7 +2,7 @@
 {
     public abstract class Humanoid : Entity
     {
-        ushort Caps;
+        public ushort Caps;
 
         /// <inheritdoc/>
         public Humanoid() : base() { }

@@ -1,7 +1,5 @@
 ﻿using Pip_Boy.Data_Types;
 using System;
-using System.Xml;
-using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
 {
@@ -31,15 +29,6 @@ namespace Pip_Boy.Items
         /// <inheritdoc/>
         public Ammo() : base() { }
         #endregion
-
-        public static Ammo FromFile(string filePath)
-        {
-            XmlSerializer x = new(typeof(Ammo));
-            XmlReader reader = XmlReader.Create(filePath);
-            Ammo? tempItem = (Ammo?)x.Deserialize(reader) ?? throw new NullReferenceException("XMl file object is null!");
-            reader.Close();
-            return tempItem;
-        }
 
         #region Enums
         /// <summary>

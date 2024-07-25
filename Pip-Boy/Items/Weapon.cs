@@ -1,7 +1,6 @@
 ﻿using Pip_Boy.Data_Types;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
@@ -70,15 +69,6 @@ namespace Pip_Boy.Items
         /// <inheritdoc/>
         public Weapon() : base() { }
         #endregion
-
-        public static Weapon FromFile(string filePath)
-        {
-            XmlSerializer x = new(typeof(Weapon));
-            TextReader reader = new StreamReader(filePath);
-            Weapon? tempItem = (Weapon?)x.Deserialize(reader) ?? throw new NullReferenceException("XMl file object is null!");
-            reader.Close();
-            return tempItem;
-        }
 
         /// <summary>
         /// The type of weapon, which determines what <see cref="Ammo"/> can be used.
