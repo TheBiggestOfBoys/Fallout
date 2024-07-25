@@ -148,6 +148,91 @@ namespace Pip_Boy.Objects
 
         #region Menu Navigation
         /// <summary>
+        /// The main loop that controls the PIP-Boy with keyboard input
+        /// </summary>
+        public void MainLoop()
+        {
+            ConsoleKey key = ConsoleKey.Escape;
+            while (key != ConsoleKey.Q)
+            {
+                Console.Clear();
+
+                Highlight(currentPage.ToString(), true);
+                Console.WriteLine();
+
+                Console.WriteLine(ShowMenu());
+                Console.WriteLine();
+
+                ShowSubMenu(GetSubMenu());
+
+                key = Console.ReadKey().Key;
+
+                switch (key)
+                {
+                    #region Menu
+                    case ConsoleKey.A:
+                        ChangeMenu(false);
+                        break;
+                    case ConsoleKey.D:
+                        ChangeMenu(true);
+                        break;
+                    #endregion
+
+                    #region Sub-Menu
+                    case ConsoleKey.LeftArrow:
+                        ChangeSubMenu(false);
+                        break;
+                    case ConsoleKey.RightArrow:
+                        ChangeSubMenu(true);
+                        break;
+
+                    case ConsoleKey.UpArrow when currentPage == Pages.STATS && statPage == StatsPages.General:
+                        ChangeSelectedFaction(false);
+                        break;
+                    case ConsoleKey.DownArrow when currentPage == Pages.STATS && statPage == StatsPages.General:
+                        ChangeSelectedFaction(true);
+                        break;
+                    #endregion
+
+                    #region Radio
+                    case ConsoleKey.Enter when currentPage == Pages.DATA && dataPage == DataPages.Radio:
+                        radio.Play();
+                        break;
+
+                    case ConsoleKey.Add when currentPage == Pages.DATA && dataPage == DataPages.Radio:
+                        radio.AddSong(this);
+                        break;
+
+                    case ConsoleKey.UpArrow when radio.songIndex > 0:
+                        radio.ChangeSong(false);
+                        radio.Play();
+                        break;
+                    case ConsoleKey.DownArrow when radio.songIndex < radio.songs.Count:
+                        radio.ChangeSong(true);
+                        radio.Play();
+                        break;
+                    #endregion
+
+                    #region Map
+                    case ConsoleKey.NumPad8 when currentPage == Pages.DATA && dataPage == DataPages.Map:
+                        map.MovePlayer(true, null);
+                        break;
+                    case ConsoleKey.NumPad2 when currentPage == Pages.DATA && dataPage == DataPages.Map:
+                        map.MovePlayer(false, null);
+                        break;
+                    case ConsoleKey.NumPad4 when currentPage == Pages.DATA && dataPage == DataPages.Map:
+                        map.MovePlayer(null, false);
+                        break;
+                    case ConsoleKey.NumPad6 when currentPage == Pages.DATA && dataPage == DataPages.Map:
+                        map.MovePlayer(null, true);
+                        break;
+                        #endregion
+                }
+            }
+            player.Inventory.Save();
+        }
+
+        /// <summary>
         /// Changes the current menu page
         /// </summary>
         /// <param name="right">Move right?</param>
