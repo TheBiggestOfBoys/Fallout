@@ -1,11 +1,13 @@
 ﻿using Pip_Boy.Data_Types;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
 {
     /// <summary>
     /// Aid item which has corresponding effect
     /// </summary>
-    public class Aid : Equipable
+    public class Aid : Equipable, ISerializable, IXmlSerializable
     {
         public readonly AidType TypeOfAid;
 

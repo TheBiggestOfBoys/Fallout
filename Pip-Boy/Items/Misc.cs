@@ -1,9 +1,12 @@
-﻿namespace Pip_Boy.Items
+﻿using System.Runtime.Serialization;
+using System.Xml.Serialization;
+
+namespace Pip_Boy.Items
 {
     /// <summary>
     /// Can be junk, sellable items, or crafting components.
     /// </summary>
-    public class Misc : Item
+    public class Misc : Item, ISerializable, IXmlSerializable
     {
         public MiscType miscType;
 

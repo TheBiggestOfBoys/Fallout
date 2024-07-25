@@ -1,11 +1,13 @@
 ﻿using Pip_Boy.Data_Types;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
 {
     /// <summary>
     /// A Head armor
     /// </summary>
-    public class HeadPiece : Apparel
+    public class HeadPiece : Apparel, ISerializable, IXmlSerializable
     {
         #region Constructors
         public HeadPiece(string name, float weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : base(name, weight, value, effects, DT, powerArmor)

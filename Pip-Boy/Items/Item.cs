@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
+using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
@@ -9,7 +11,7 @@ namespace Pip_Boy.Items
     /// Generic super-class for all other <see cref="Objects.Inventory"/> items.
     /// </summary>
     [Serializable]
-    public abstract class Item
+    public abstract class Item : ISerializable, IXmlSerializable
     {
         private readonly Type type;
 
@@ -54,7 +56,17 @@ namespace Pip_Boy.Items
             Weight = 0;
             Value = 0;
         }
+
+        /// <summary>
+        /// Custom deserialization constructor
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
+        protected Item(SerializationInfo info, StreamingContext context) { }
         #endregion
+
+        #region File Stuff
+        public virtual void GetObjectData(SerializationInfo info, StreamingContext context) { }
 
         /// <summary>
         /// Serializes the <see cref="Item"/> to an <c>*.xml</c> file.
@@ -87,6 +99,7 @@ namespace Pip_Boy.Items
             reader.Close();
             return tempItem;
         }
+        #endregion
 
         /// <returns>The <see cref="Item"/>'s <see cref="Name"/>, <see cref="Icon"/>, <see cref="Value"/> and <see cref="Weight"/>, with logic handling if <see cref="Value"/> or <see cref="Weight"/> are 0</returns>
         public override string ToString()
@@ -99,6 +112,24 @@ namespace Pip_Boy.Items
             defaultHeading.Append("\t\tWeight: ");
             defaultHeading.Append(Weight == 0 ? "--" : Weight.ToString());
             return defaultHeading.ToString();
+        }
+
+        public XmlSchema? GetSchema() => null;
+
+        public virtual void ReadXml(XmlReader reader)
+        {
+            Name = reader.ReadElementString("Name");
+            Weight = float.Parse(reader.ReadElementString("Weight"));
+            Value = ushort.Parse(reader.ReadElementString("Value"));
+            Icon = reader.ReadElementString("Icon");
+        }
+
+        public virtual void WriteXml(XmlWriter writer)
+        {
+            writer.WriteElementString("Name", Name);
+            writer.WriteElementString("Weight", Weight.ToString());
+            writer.WriteElementString("Value", Value.ToString());
+            writer.WriteElementString("Icon", Icon);
         }
     }
 }

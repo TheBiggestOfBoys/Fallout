@@ -1,11 +1,13 @@
 ﻿using Pip_Boy.Data_Types;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
 {
     /// <summary>
     /// A wearable item, which can reduce damage taken.
     /// </summary>
-    public abstract class Apparel : Equipable
+    public abstract class Apparel : Equipable, ISerializable, IXmlSerializable
     {
         private readonly byte originalDamageThreshold;
 

@@ -1,11 +1,13 @@
 ﻿using Pip_Boy.Data_Types;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
 {
     /// <summary>
     /// A torso armor
     /// </summary>
-    public class TorsoPiece : Apparel
+    public class TorsoPiece : Apparel, ISerializable, IXmlSerializable
     {
         public ArmorType TypeOfArmor => Weight switch
         {

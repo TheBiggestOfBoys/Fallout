@@ -1,12 +1,14 @@
 ﻿using Pip_Boy.Data_Types;
 using System;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
 {
     /// <summary>
     /// What the non <see cref="Weapon.WeaponType.Melee"/> and <see cref="Weapon.WeaponType.Unarmed"/> <see cref="Weapon"/>s need.
     /// </summary>
-    public class Ammo : Equipable
+    public class Ammo : Equipable, ISerializable, IXmlSerializable
     {
         public readonly AmmoType TypeOfAmmo;
         public readonly AmmoModification Modification;

@@ -1,15 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/css" href="../Inventory Styling.css"?>
-<Weapon
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<Weapon>
   <Name>10mm Pistol</Name>
   <Weight>5.5</Weight>
   <Value>55</Value>
   <Icon>🔫</Icon>
+  <originalValue>55</originalValue>
   <Condition>1</Condition>
-  <IsEquipped>false</IsEquipped>
+  <IsEquipped>False</IsEquipped>
   <Effects />
+  <originalDamage>10</originalDamage>
+  <Damage>10</Damage>
   <RateOfFire>100</RateOfFire>
   <DPS>10</DPS>
+  <StrengthRequirement>3</StrengthRequirement>
+  <SkillRequirement>30</SkillRequirement>
+  <TypeOfWeapon>Gun</TypeOfWeapon>
+  <Modifications />
 </Weapon>

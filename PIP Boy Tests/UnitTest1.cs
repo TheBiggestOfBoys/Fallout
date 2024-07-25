@@ -9,8 +9,11 @@ namespace PIP_Boy_Tests
         [TestMethod]
         public void TestMethod1()
         {
+            Assert.IsTrue(1 + 1 == 2);
+            Assert.IsFalse(1 * 1 == 2);
+
             // Item Objects
-            Weapon testWeapon = new("10mm Pistol", 5.5f, 55, [], Weapon.WeaponType.Gun, 3, 10, 100);
+            Weapon testWeapon = new("10mm Pistol", 5.5f, 55, [], Weapon.WeaponType.Gun, 3, 30, 10, 100);
             TorsoPiece testTorsoPiece = new("Vault 13 Jumpsuit", 5, 25, [], 3, false);
             HeadPiece testHeadPiece = new("Nerd Goggles", 1, 25, [], 0, false);
             Ammo testAmmo = new("10mm Ammo", 1, [], Ammo.AmmoType.Bullet, Ammo.AmmoModification.Standard);
