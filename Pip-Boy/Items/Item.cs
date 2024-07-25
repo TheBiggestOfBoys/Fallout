@@ -57,6 +57,22 @@ namespace Pip_Boy.Items
         #endregion
 
         /// <summary>
+        /// Serializes the <see cref="Item"/> to an <c>*.xml</c> file.
+        /// </summary>
+        /// <param name="folderPath">The folder to write the <c>*.xml</c> file to.</param>
+        public string ToFile(string folderPath)
+        {
+            string filePath = folderPath + Name + ".xml";
+            XmlSerializer x = new(type);
+            XmlWriterSettings xmlWriterSettings = new() { NewLineOnAttributes = true, Indent = true, CloseOutput = true };
+            XmlWriter writer = XmlWriter.Create(filePath, xmlWriterSettings);
+            writer.WriteProcessingInstruction("xml-stylesheet", "type=\"text/css\" href=\"../Inventory Styling.css\"");
+            x.Serialize(writer, this);
+            writer.Close();
+            return filePath;
+        }
+
+        /// <summary>
         /// Deserializes the <see cref="Item"/> object from an <c>*.xml</c> file.
         /// </summary>
         /// <typeparam name="T">The <see cref="Item"/> sub-class type to serialize to</typeparam>
@@ -72,27 +88,10 @@ namespace Pip_Boy.Items
             return tempItem;
         }
 
-        /// <summary>
-        /// Serializes the <see cref="Item"/> to an <c>*.xml</c> file.
-        /// </summary>
-        /// <param name="folderPath">The folder to write the <c>*.xml</c> file to.</param>
-        public void ToFile(string folderPath)
-        {
-            XmlSerializer x = new(type);
-            XmlWriterSettings xmlWriterSettings = new() { NewLineOnAttributes = true, Indent = true, CloseOutput = true };
-            XmlWriter writer = XmlWriter.Create(folderPath + Name + ".xml", xmlWriterSettings);
-            writer.WriteProcessingInstruction("xml-stylesheet", "type=\"text/css\" href=\"../Inventory Styling.css\"");
-            x.Serialize(writer, this);
-            writer.Close();
-        }
-
-        /// <returns>The emoji which represents the <see cref="Item"/>.</returns>
-        public virtual string GetIcon() => "📦";
-
-        /// <returns>The <see cref="Item"/>'s <see cref="Name"/>, <see cref="GetIcon()"/>, <see cref="Value"/> and <see cref="Weight"/>, with logic handling if <see cref="Value"/> or <see cref="Weight"/> are 0</returns>
+        /// <returns>The <see cref="Item"/>'s <see cref="Name"/>, <see cref="Icon"/>, <see cref="Value"/> and <see cref="Weight"/>, with logic handling if <see cref="Value"/> or <see cref="Weight"/> are 0</returns>
         public override string ToString()
         {
-            StringBuilder defaultHeading = new('\t' + Name + ':' + GetIcon());
+            StringBuilder defaultHeading = new('\t' + Name + ':' + Icon);
             defaultHeading.AppendLine();
             defaultHeading.Append("\t\tValue: ");
             defaultHeading.Append(Value == 0 ? "--" : Value.ToString());

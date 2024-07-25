@@ -150,15 +150,19 @@ namespace Pip_Boy.Entities
 
         #region File Stuff
         /// <summary>
-        /// Serializes the <see cref="Entity"/> object to an <c>*.xml</c> file.
+        /// Serializes the <see cref="Item"/> to an <c>*.xml</c> file.
         /// </summary>
-        /// <param name="folderPath">The folder to write the file to.</param>
-        public void ToFile(string folderPath)
+        /// <param name="folderPath">The folder to write the <c>*.xml</c> file to.</param>
+        public string ToFile(string folderPath)
         {
+            string filePath = folderPath + Name + ".xml";
             XmlSerializer x = new(GetType());
-            XmlWriter writer = XmlWriter.Create(folderPath + Name + ".xml");
+            XmlWriterSettings xmlWriterSettings = new() { NewLineOnAttributes = true, Indent = true, CloseOutput = true };
+            XmlWriter writer = XmlWriter.Create(filePath, xmlWriterSettings);
+            writer.WriteProcessingInstruction("xml-stylesheet", "type=\"text/css\" href=\"../Inventory Styling.css\"");
             x.Serialize(writer, this);
             writer.Close();
+            return filePath;
         }
 
         /// <summary>

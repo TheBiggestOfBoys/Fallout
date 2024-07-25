@@ -26,9 +26,9 @@ namespace Pip_Boy.Items
         public ushort RateOfFire;
 
         /// <summary>
-        /// Just: <code><see cref="Damage"/> / 60 * <see cref="Damage"/></code>
+        /// Average Damage per Second based on <see cref="Damage"/> per shot and <see cref="RateOfFire"/>.
         /// </summary>
-        public byte DPS { get => (byte)(RateOfFire / 60 * Damage); }
+        public byte DPS { get { return (byte)(RateOfFire / 60 * Damage); } set { } }
 
         /// <summary>
         /// The required 'Strength' level in the SPECIAL attributes to effectively use the <see cref="Weapon"/>.
