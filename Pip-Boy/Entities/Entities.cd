@@ -1,24 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="Pip_Boy.Entities.Creature" Collapsed="true">
-    <Position X="12.75" Y="2.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Entities\Creature.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="Pip_Boy.Entities.Entity" Collapsed="true">
     <Position X="11" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EAAAAAAIIAAAaAAIAAQAAAQACCAAAAAhAAgAAoAgAAA=</HashCode>
+      <HashCode>EAAAAAAIAAAAaAAICAQAAAQACCAAAAAhAAgQAsEgAAA=</HashCode>
       <FileName>Entities\Entity.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Pip_Boy.Entities.Ghoul" Collapsed="true">
-    <Position X="10.5" Y="5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Entities\Ghoul.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Pip_Boy.Entities.Human" Collapsed="true">
@@ -35,46 +21,95 @@
       <FileName>Entities\Humanoid.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Pip_Boy.Entities.Mutant" Collapsed="true">
-    <Position X="9.5" Y="3.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Entities\Mutant.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="Pip_Boy.Entities.Player" Collapsed="true">
     <Position X="12.25" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAQABIAAAKCAAAAIBICAQAEAEAAAgQEAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAABAAAAIiAAAAIBICAQAEAEAAAgQEAAAAA=</HashCode>
       <FileName>Entities\Player.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Pip_Boy.Entities.Robot" Collapsed="true">
-    <Position X="9.25" Y="2.5" Width="1.5" />
+  <Class Name="Pip_Boy.Entities.Robots.Robot" Collapsed="true">
+    <Position X="9" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Entities\Robot.cs</FileName>
+      <FileName>Entities\Robots\Robot.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Pip_Boy.Entities.SuperMutant" Collapsed="true">
-    <Position X="8.5" Y="5" Width="1.5" />
+  <Class Name="Pip_Boy.Entities.Creatures.Creature" Collapsed="true">
+    <Position X="13" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Entities\SuperMutant.cs</FileName>
+      <FileName>Entities\Creatures\Creature.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Pip_Boy.Entities.Nightkin" Collapsed="true">
-    <Position X="8.5" Y="6" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Entities\Nightkin.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Pip_Boy.Entities.Feral" Collapsed="true">
+  <Class Name="Pip_Boy.Entities.Mutants.Feral" Collapsed="true">
     <Position X="10.5" Y="6" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Entities\Feral.cs</FileName>
+      <FileName>Entities\Mutants\Feral.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pip_Boy.Entities.Mutants.Ghoul" Collapsed="true">
+    <Position X="10.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Mutants\Ghoul.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pip_Boy.Entities.Mutants.Mutant" Collapsed="true">
+    <Position X="9.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Mutants\Mutant.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pip_Boy.Entities.Mutants.Nightkin" Collapsed="true">
+    <Position X="8.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Mutants\Nightkin.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pip_Boy.Entities.Mutants.SuperMutant" Collapsed="true">
+    <Position X="8.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Mutants\SuperMutant.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pip_Boy.Entities.Creatures.BloatFly" Collapsed="true">
+    <Position X="15" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Creatures\BloatFly.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pip_Boy.Entities.Creatures.Canine" Collapsed="true">
+    <Position X="15" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Creatures\Canine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pip_Boy.Entities.Creatures.DeathClaw" Collapsed="true">
+    <Position X="15" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Creatures\DeathClaw.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pip_Boy.Entities.Creatures.Dog" Collapsed="true">
+    <Position X="17" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Creatures\Dog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pip_Boy.Entities.Creatures.NightStalker" Collapsed="true">
+    <Position X="17" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Creatures\NightStalker.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

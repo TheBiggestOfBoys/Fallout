@@ -28,6 +28,11 @@ namespace Pip_Boy.Items
         /// </summary>
         public ushort Value;
 
+        /// <summary>
+        /// An emoji representation of the <see cref="Item"/>.
+        /// </summary>
+        public string Icon;
+
         #region Constructors
         public Item(string name, float weight, ushort value)
         {

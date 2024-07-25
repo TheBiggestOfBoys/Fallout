@@ -9,14 +9,25 @@ namespace Pip_Boy.Items
     /// </summary>
     public class Misc : Item
     {
+        public MiscType miscType;
+
         #region Constructors
-        public Misc(string name, float weight, ushort value) : base(name, weight, value)
+        public Misc(string name, float weight, ushort value, MiscType type) : base(name, weight, value)
         {
-            Name = name;
-            Weight = weight;
-            Value = value;
+            miscType = type;
+            Icon = miscType switch
+            {
+                MiscType.Other => "?",
+                MiscType.Junk => "🗑️",
+                MiscType.Sellable => "💰",
+                MiscType.Crafting => "🔨",
+                MiscType.Key => "🔑",
+                MiscType.Package => "📦",
+                _ => "?"
+            };
         }
 
+        /// <inheritdoc/>
         public Misc() : base() { }
         #endregion
 
@@ -29,6 +40,40 @@ namespace Pip_Boy.Items
             return tempItem;
         }
 
-        public override string GetIcon() => "📃";
+        /// <summary>
+        /// The possible types for the <see cref="Misc"/> object.
+        /// </summary>
+        public enum MiscType
+        {
+            /// <summary>
+            /// Any other type
+            /// </summary>
+            Other,
+
+            /// <summary>
+            /// Any useless item.
+            /// </summary>
+            Junk,
+
+            /// <summary>
+            /// Any valuable item.
+            /// </summary>
+            Sellable,
+
+            /// <summary>
+            /// Item which can be used to craft another item.
+            /// </summary>
+            Crafting,
+
+            /// <summary>
+            /// A key which can unlock doors
+            /// </summary>
+            Key,
+
+            /// <summary>
+            /// A package which can be delivered
+            /// </summary>
+            Package
+        }
     }
 }

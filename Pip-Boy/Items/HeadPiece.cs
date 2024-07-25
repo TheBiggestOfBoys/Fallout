@@ -1,4 +1,6 @@
-﻿namespace Pip_Boy.Items
+﻿using Pip_Boy.Data_Types;
+
+namespace Pip_Boy.Items
 {
     /// <summary>
     /// A Head armor
@@ -6,8 +8,19 @@
     public class HeadPiece : Apparel
     {
         #region Constructors
-        public HeadPiece(string name, float weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : base(name, weight, value, effects, DT, powerArmor) { }
+        public HeadPiece(string name, float weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : base(name, weight, value, effects, DT, powerArmor)
+        {
+            Icon = pieceType switch
+            {
+                PieceType.Glasses => "👓",
+                PieceType.Hat => "🧢",
+                PieceType.Helmet => "⛑️",
+                PieceType.Other => "?",
+                _ => "?"
+            };
+        }
 
+        /// <inheritdoc/>
         public HeadPiece() : base() { }
         #endregion
 
@@ -26,14 +39,5 @@
             Helmet = 7,
             Other
         }
-
-        public override string GetIcon() => pieceType switch
-        {
-            PieceType.Glasses => "👓",
-            PieceType.Hat => "🧢",
-            PieceType.Helmet => "⛑️",
-            PieceType.Other => "?",
-            _ => "?"
-        };
     }
 }

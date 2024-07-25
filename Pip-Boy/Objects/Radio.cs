@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Media;
 using System.Text;
+using Pip_Boy.Data_Types;
 
 namespace Pip_Boy.Objects
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Pip_Boy
+namespace Pip_Boy.Data_Types
 {
     /// <summary>
     /// A way to keep <c>*.txt</c> file name and contents as an object.

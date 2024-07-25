@@ -1,4 +1,4 @@
-﻿namespace Pip_Boy
+﻿namespace Pip_Boy.Data_Types
 {
     /// <summary>
     /// Holds the <see cref="Name"/> and <see cref="Path"/> of a given <c>*.wav</c> file representing a song.

@@ -5,6 +5,7 @@ using System.IO;
 using System.Media;
 using System.Text;
 using System.Threading;
+using Pip_Boy.Data_Types;
 
 namespace Pip_Boy.Objects
 {

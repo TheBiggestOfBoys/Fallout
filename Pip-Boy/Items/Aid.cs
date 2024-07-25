@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pip_Boy.Data_Types;
+using System;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -12,11 +13,22 @@ namespace Pip_Boy.Items
         public readonly AidType TypeOfAid;
 
         #region Constructors
-        public Aid(string name, float weight, ushort value, Effect[] effects) : base(name, weight, value, effects) { }
+        public Aid(string name, float weight, ushort value, Effect[] effects, AidType type) : base(name, weight, value, effects)
+        {
+            TypeOfAid = type;
+            Icon = TypeOfAid switch
+            {
+                AidType.Food => "🍎",
+                AidType.Drink => "🥤",
+                AidType.Syringe => "💉",
+                AidType.Pill => "💊",
+                AidType.Inhale => "🌬",
+                AidType.Smoke => "🚬",
+                _ => "?"
+            };
+        }
 
-        /// <summary>
-        /// Empty constructor for serialization.
-        /// </summary>
+        /// <inheritdoc/>
         public Aid() : base() { }
         #endregion
 
@@ -32,17 +44,6 @@ namespace Pip_Boy.Items
             reader.Close();
             return tempItem;
         }
-
-        public override string GetIcon() => TypeOfAid switch
-        {
-            AidType.Food => "🍎",
-            AidType.Drink => "🥤",
-            AidType.Syringe => "💉",
-            AidType.Pill => "💊",
-            AidType.Inhale => "🌬",
-            AidType.Smoke => "🚬",
-            _ => "?"
-        };
 
         /// <summary>
         /// The type of aid the <see cref="Aid"/> object is.

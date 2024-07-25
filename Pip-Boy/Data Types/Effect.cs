@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Pip_Boy
+namespace Pip_Boy.Data_Types
 {
     /// <summary>
     /// An effect which changes the <see cref="Entities.Player"/>'s attributes.
@@ -16,9 +16,6 @@ namespace Pip_Boy
         /// The amount the attribute will be changed by.
         /// </summary>
         public readonly sbyte Value;
-
-        [GeneratedRegex("(?<=[a-z])(?=[A-Z])")]
-        private static partial Regex MyRegex();
 
         #region Constructors
         /// <summary>
@@ -49,7 +46,8 @@ namespace Pip_Boy
         public string ToTitleCase()
         {
             // Use a regular expression to split the string at capital letters
-            string[] words = MyRegex().Split(Effector.ToString());
+            Regex regex = new("(?<=[a-z])(?=[A-Z])");
+            string[] words = regex.Split(Effector.ToString());
 
             // Join the words with spaces
             return string.Join(' ', words);

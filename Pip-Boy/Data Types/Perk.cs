@@ -2,7 +2,7 @@
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Pip_Boy
+namespace Pip_Boy.Data_Types
 {
     /// <summary>
     /// A permanent modifier to the <see cref="Entities.Player"/>'s attributes.

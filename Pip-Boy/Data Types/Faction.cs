@@ -1,4 +1,4 @@
-﻿namespace Pip_Boy
+﻿namespace Pip_Boy.Data_Types
 {
     /// <summary>
     /// The faction object which can have reputation.

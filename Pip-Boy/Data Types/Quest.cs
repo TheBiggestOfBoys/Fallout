@@ -2,7 +2,7 @@
 using System.Numerics;
 using System.Text;
 
-namespace Pip_Boy
+namespace Pip_Boy.Data_Types
 {
     /// <summary>
     /// A journey that needs to be completed

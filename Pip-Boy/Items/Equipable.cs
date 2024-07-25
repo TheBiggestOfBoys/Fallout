@@ -1,4 +1,5 @@
-﻿using Pip_Boy.Entities;
+﻿using Pip_Boy.Data_Types;
+using Pip_Boy.Entities;
 using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
@@ -11,7 +12,7 @@ namespace Pip_Boy.Items
     public abstract class Equipable : Item
     {
         /// <summary>
-        /// The original value of the <see cref="Equipable"/>, uneffected by <see cref="Condition"/>.
+        /// The original value of the <see cref="Equipable"/>, unaffected by <see cref="Condition"/>.
         /// </summary>
         private readonly ushort originalValue;
 
@@ -38,9 +39,7 @@ namespace Pip_Boy.Items
             Effects = [.. effects];
         }
 
-        /// <summary>
-        /// Empty constructor for serialization.
-        /// </summary>
+        /// <inheritdoc/>
         public Equipable() : base()
         {
             originalValue = 0;

@@ -1,7 +1,9 @@
-﻿using Pip_Boy.Items;
+﻿using Pip_Boy.Data_Types;
+using Pip_Boy.Items;
 using Pip_Boy.Objects;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Pip_Boy.Entities
 {
@@ -23,13 +25,13 @@ namespace Pip_Boy.Entities
         /// </summary>
         public Dictionary<string, byte> SPECIAL = new()
         {
-            {"Strength", 5},
-            {"Perception", 5},
-            {"Endurance", 5},
-            {"Charisma", 5},
-            {"Intelligence", 5},
-            {"Agility", 5},
-            {"Luck", 5}
+            {"Strength", 1},
+            {"Perception", 1},
+            {"Endurance", 1},
+            {"Charisma", 1},
+            {"Intelligence", 1},
+            {"Agility", 1},
+            {"Luck", 1}
         };
 
         /// <summary>
@@ -61,32 +63,47 @@ namespace Pip_Boy.Entities
         /// <summary>
         /// The name of the <see cref="Entity"/>.
         /// </summary>
-        public string Name { get; set; }
+        public string Name;
 
         /// <summary>
         /// The <see cref="Entity"/>'s level, which determines attributes.
         /// </summary>
-        public byte Level { get; set; } = 1;
+        public byte Level;
 
         /// <summary>
         /// The maximum health the <see cref="Entity"/> can have.
         /// </summary>
-        public static ushort MaxHealth { get; private set; } = 100;
+        public ushort MaxHealth { get; private set; }
 
         /// <summary>
         /// THe current health the <see cref="Entity"/> has.
         /// </summary>
-        public int CurrentHealth { get; private set; } = 100;
+        public int CurrentHealth { get; private set; }
+
+        /// <summary>
+        /// What percent of health the <see cref="Entity"/> has.
+        /// </summary>
+        public float HealthPercentage { get => CurrentHealth / MaxHealth; }
 
         /// <summary>
         /// The resistance to physical damage.
         /// </summary>
-        public static byte DamageResistance { get; private set; } = 0;
+        public byte DamageResistance { get; private set; }
 
         /// <summary>
-        /// The percentage resistance to radiation.
+        /// The maximum number of Action Points (AP) the <see cref="Entity"/> has.
         /// </summary>
-        public static float RadiationResistance { get; set; } = 0f;
+        public byte MaxActionPoints { get; private set; }
+
+        /// <summary>
+        /// The current amount of Action Points (AP) the <see cref="Entity"/> has.
+        /// </summary>
+        public byte ActionPoints { get; private set; }
+
+        /// <summary>
+        /// An emoji representing the <see cref="Entity"/>.
+        /// </summary>
+        public string Icon;
         #endregion
 
         #region Constructor
@@ -97,6 +114,35 @@ namespace Pip_Boy.Entities
         {
             Inventory = new();
             Name = string.Empty;
+        }
+
+        /// <summary>
+        /// Construction based on level.
+        /// </summary>
+        public Entity(string name, byte level)
+        {
+            Name = name;
+            Level = level;
+            Inventory = new();
+
+            // Set attribute to random values, based on the level
+            Random random = new();
+
+            foreach (string key in SPECIAL.Keys)
+            {
+                SPECIAL[key] = (byte)random.Next(1, 10);
+            }
+
+            foreach (string key in Skills.Keys)
+            {
+                Skills[key] = (byte)random.Next(10, 100);
+            }
+
+            MaxHealth = (ushort)random.Next(100, 250);
+            CurrentHealth = MaxHealth;
+
+            MaxActionPoints = (byte)random.Next(5, 35);
+            ActionPoints = MaxActionPoints;
         }
         #endregion
 
@@ -215,6 +261,52 @@ namespace Pip_Boy.Entities
         public void ResetEffects()
         {
             Effects.Clear();
+        }
+        #endregion
+
+        #region Show Entity Info
+        /// <summary>
+        /// Shows the player's SPECIAL attributes
+        /// </summary>
+        /// <returns>A table of all SPECIAL attributes and their values</returns>
+        public string ShowSPECIAL()
+        {
+            StringBuilder stringBuilder = new("S.P.E.C.I.A.L.:");
+            foreach (string attribute in SPECIAL.Keys)
+            {
+                stringBuilder.AppendLine(attribute + ':' + '\t' + SPECIAL[attribute]);
+            }
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Shows the <see cref="Entity"/>'s current status
+        /// </summary>
+        /// <returns>A table of the <see cref="Entity"/>'s name, level and current health</returns>
+        public string ShowStatus()
+        {
+            StringBuilder stringBuilder = new();
+            stringBuilder.AppendLine("Name:\t" + Name + Icon);
+            stringBuilder.AppendLine("Level:\t" + Level);
+            stringBuilder.AppendLine("Health:\t" + CurrentHealth + '/' + MaxHealth);
+            stringBuilder.AppendLine("Action Points:\t" + ActionPoints + '/' + MaxActionPoints);
+
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Shows the <see cref="Entity"/>'s skill levels
+        /// </summary>
+        /// <returns>A table with every skill and its associated value</returns>
+        public string ShowSkills()
+        {
+            StringBuilder stringBuilder = new("Skills:");
+            stringBuilder.AppendLine();
+            foreach (string skill in Skills.Keys)
+            {
+                stringBuilder.AppendLine('\t' + skill + ':' + '\t' + Skills[skill]);
+            }
+            return stringBuilder.ToString();
         }
         #endregion
     }

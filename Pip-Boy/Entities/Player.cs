@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pip_Boy.Data_Types;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -13,6 +14,16 @@ namespace Pip_Boy.Entities
     [Serializable]
     public class Player : Human
     {
+        /// <summary>
+        /// How much radiation the <see cref="Player"/> has.
+        /// </summary>
+        public uint Rads { get; private set; } = 0;
+
+        /// <summary>
+        /// The percentage resistance to radiation.
+        /// </summary>
+        public float RadiationResistance { get; private set; }
+
         #region Arrays
         /// <summary>
         /// <see cref="List{T}"/> of all active <see cref="Perk"/> on the <see cref="Player"/>.
@@ -21,7 +32,6 @@ namespace Pip_Boy.Entities
         public List<Perk> Perks = [];
         #endregion
 
-        #region Player Info
         #region Directories
         /// <summary>
         /// The directory from which files will be loaded and saved
@@ -39,28 +49,13 @@ namespace Pip_Boy.Entities
         public readonly string inventoryDirectory;
         #endregion
 
-        /// <summary>
-        /// The maximum number of Action Points (AP) the <see cref="Player"/> has.
-        /// </summary>
-        public static byte MaxActionPoints { get; private set; } = 25;
-
-        /// <summary>
-        /// The current amount of Action Points (AP) the <see cref="Player"/> has.
-        /// </summary>
-        public byte ActionPoints { get; private set; } = 25;
-        #endregion
-
         #region Constructors
-        /// <summary>
-        /// Empty constructor for serialization
-        /// </summary>
-        public Player()
+        /// <inheritdoc/>
+        public Player() : base()
         {
-            Inventory = new();
             activeDirectory = string.Empty;
             perksDirectory = string.Empty;
             inventoryDirectory = string.Empty;
-            Name = string.Empty;
         }
 
         /// <summary>
@@ -76,6 +71,8 @@ namespace Pip_Boy.Entities
             inventoryDirectory = activeDirectory + "Inventory\\";
             Inventory = new(inventoryDirectory, this);
             Name = name;
+            Icon = "🕹️";
+
             byte index = 0;
             foreach (string key in SPECIAL.Keys)
             {
@@ -208,50 +205,6 @@ namespace Pip_Boy.Entities
             }
         }
 
-        #region Show Player Info
-        /// <summary>
-        /// Shows the player's current status
-        /// </summary>
-        /// <returns>A table of the player's name, level and current health</returns>
-        public string ShowStatus()
-        {
-            StringBuilder stringBuilder = new();
-            stringBuilder.AppendLine("Name:\t" + Name);
-            stringBuilder.AppendLine("Level:\t" + Level);
-            stringBuilder.AppendLine("Health:\t" + CurrentHealth + '/' + MaxHealth);
-            stringBuilder.AppendLine("Action Points:\t" + ActionPoints + '/' + MaxActionPoints);
-
-            return stringBuilder.ToString();
-        }
-
-        /// <summary>
-        /// Shows the player's SPECIAL attributes
-        /// </summary>
-        /// <returns>A table of all SPECIAL attributes and their values</returns>
-        public string ShowSPECIAL()
-        {
-            StringBuilder stringBuilder = new("S.P.E.C.I.A.L.:");
-            foreach (string attribute in SPECIAL.Keys)
-            {
-                stringBuilder.AppendLine(attribute + ':' + '\t' + SPECIAL[attribute]);
-            }
-            return stringBuilder.ToString();
-        }
-
-        /// <summary>
-        /// Shows the player's skill levels
-        /// </summary>
-        /// <returns>A table with every skill and its associated value</returns>
-        public string ShowSkills()
-        {
-            StringBuilder stringBuilder = new("Skills:");
-            foreach (string skill in Skills.Keys)
-            {
-                stringBuilder.AppendLine('\t' + skill + ':' + '\t' + Skills[skill]);
-            }
-            return stringBuilder.ToString();
-        }
-
         /// <summary>
         /// Shows all the player's perks
         /// </summary>
@@ -265,6 +218,5 @@ namespace Pip_Boy.Entities
             }
             return stringBuilder.ToString();
         }
-        #endregion
     }
 }

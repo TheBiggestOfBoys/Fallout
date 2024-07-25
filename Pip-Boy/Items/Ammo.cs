@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pip_Boy.Data_Types;
+using System;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -17,11 +18,17 @@ namespace Pip_Boy.Items
         {
             TypeOfAmmo = ammoType;
             Modification = ammoModification;
+
+            Icon = TypeOfAmmo switch
+            {
+                AmmoType.Bullet => "🧷",
+                AmmoType.Bomb => "🧨",
+                AmmoType.EnergyCell => "🔋",
+                _ => "?"
+            };
         }
 
-        /// <summary>
-        /// Empty constructor for serialization.
-        /// </summary>
+        /// <inheritdoc/>
         public Ammo() : base() { }
         #endregion
 
@@ -43,7 +50,6 @@ namespace Pip_Boy.Items
             Bullet,
             Bomb,
             EnergyCell,
-            Other
         }
 
         /// <summary>
@@ -61,15 +67,6 @@ namespace Pip_Boy.Items
             Incendiary
         }
         #endregion
-
-        public override string GetIcon() => TypeOfAmmo switch
-        {
-            AmmoType.Bullet => "🧷",
-            AmmoType.Bomb => "🧨",
-            AmmoType.EnergyCell => "🔋",
-            AmmoType.Other => "?",
-            _ => "?"
-        };
 
         /// <returns>An emoji icon for the <see cref="Modification"/></returns>
         public string GetModification() => Modification switch

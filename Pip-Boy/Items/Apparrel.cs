@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pip_Boy.Data_Types;
+using System;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -14,21 +15,21 @@ namespace Pip_Boy.Items
         /// <summary>
         /// How much damage the <see cref="Apparel"/> will negate
         /// </summary>
-        public byte DamageThreshold;
+        public byte DamageThreshold { get => (byte)(originalDamageThreshold * Condition); }
 
         /// <summary>
         /// If the <see cref="Apparel"/> object need the "Power Armor Training" <see cref="Perk"/> to be worn.
         /// </summary>
-        public bool RequiresPowerArmorTraining;
+        public readonly bool RequiresPowerArmorTraining;
 
         #region Constructors
         public Apparel(string name, float weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : base(name, weight, value, effects)
         {
             originalDamageThreshold = DT;
-            DamageThreshold = originalDamageThreshold;
             RequiresPowerArmorTraining = powerArmor;
         }
 
+        /// <inheritdoc/>
         public Apparel() : base() { }
         #endregion
 
@@ -40,15 +41,5 @@ namespace Pip_Boy.Items
             reader.Close();
             return tempItem;
         }
-
-        /// <summary>
-        /// Updates the <see cref="DamageThreshold"/> based on the <see cref="Apparel"/>'s <see cref="Equipable.Condition"/>
-        /// </summary>
-        public void UpdateDamageThreshold()
-        {
-            DamageThreshold = (byte)(originalDamageThreshold * Condition);
-        }
-
-        public override string GetIcon() => "🛡️";
     }
 }
