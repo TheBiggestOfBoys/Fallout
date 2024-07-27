@@ -6,7 +6,7 @@ namespace Pip_Boy.Items
     /// <summary>
     /// Can be junk, sellable items, or crafting components.
     /// </summary>
-    public class Misc : Item, ISerializable, IXmlSerializable
+    public class Misc : Item
     {
         public MiscType miscType;
 

@@ -10,7 +10,7 @@ namespace Pip_Boy.Items
     /// <summary>
     /// Can be used to attack <see cref="Entities.Entity"/>s.
     /// </summary>
-    public class Weapon : Equipable, ISerializable, IXmlSerializable
+    public class Weapon : Equipable
     {
         /// <summary>
         /// The original damage, unaffected by the <see cref="Weapon"/>'s <see cref="Equipable.Condition"/>.
@@ -71,23 +71,7 @@ namespace Pip_Boy.Items
 
         /// <inheritdoc/>
         public Weapon() : base() { }
-
-        /// <inheritdoc/>
-        protected Weapon(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-            originalDamage = info.GetByte("originalDamage");
-            Damage = info.GetByte("Damage");
-            DPS = info.GetByte("DPS");
-        }
         #endregion
-
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-            info.AddValue("originalDamage", originalDamage);
-            info.AddValue("Damage", Damage);
-            info.AddValue("DPS", DPS);
-        }
 
         /// <summary>
         /// The type of weapon, which determines what <see cref="Ammo"/> can be used.
@@ -136,57 +120,6 @@ namespace Pip_Boy.Items
                 }
                 return tempString;
             }
-        }
-
-        public override void ReadXml(XmlReader reader)
-        {
-            base.ReadXml(reader);
-
-            originalDamage = byte.Parse(reader.ReadElementString("originalDamage"));
-            Damage = byte.Parse(reader.ReadElementString("Damage"));
-            RateOfFire = ushort.Parse(reader.ReadElementString("RateOfFire"));
-            DPS = byte.Parse(reader.ReadElementString("DPS"));
-            StrengthRequirement = byte.Parse(reader.ReadElementString("StrengthRequirement"));
-            SkillRequirement = byte.Parse(reader.ReadElementString("SkillRequirement"));
-            TypeOfWeapon = (WeaponType)Enum.Parse(typeof(WeaponType), reader.ReadElementString("TypeOfWeapon"));
-
-            reader.ReadStartElement(); // Move to the "Modifications" element
-            List<string> modificationList = [];
-            while (reader.NodeType != XmlNodeType.EndElement)
-            {
-                if (reader.IsStartElement() && reader.Name == "Modification")
-                {
-                    modificationList.Add(reader.ReadElementString());
-                }
-                else
-                {
-                    reader.Read(); // Skip any other nodes
-                }
-            }
-            Modifications = [.. modificationList];
-            reader.ReadEndElement(); // End of "Modifications" element
-
-            reader.ReadEndElement(); // End of root element
-        }
-
-        public override void WriteXml(XmlWriter writer)
-        {
-            base.WriteXml(writer);
-            writer.WriteElementString("originalDamage", originalDamage.ToString());
-            writer.WriteElementString("Damage", Damage.ToString());
-            writer.WriteElementString("RateOfFire", RateOfFire.ToString());
-            writer.WriteElementString("DPS", DPS.ToString());
-            writer.WriteElementString("StrengthRequirement", StrengthRequirement.ToString());
-            writer.WriteElementString("SkillRequirement", SkillRequirement.ToString());
-            writer.WriteElementString("TypeOfWeapon", TypeOfWeapon.ToString());
-
-
-            writer.WriteStartElement("Modifications");
-            foreach (string modification in Modifications)
-            {
-                writer.WriteElementString("Modification", modification.ToString());
-            }
-            writer.WriteEndElement();
         }
     }
 }

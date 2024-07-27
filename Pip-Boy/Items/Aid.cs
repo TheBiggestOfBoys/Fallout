@@ -7,7 +7,7 @@ namespace Pip_Boy.Items
     /// <summary>
     /// Aid item which has corresponding effect
     /// </summary>
-    public class Aid : Equipable, ISerializable, IXmlSerializable
+    public class Aid : Equipable
     {
         public readonly AidType TypeOfAid;
 

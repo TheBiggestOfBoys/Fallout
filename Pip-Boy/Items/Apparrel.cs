@@ -7,7 +7,7 @@ namespace Pip_Boy.Items
     /// <summary>
     /// A wearable item, which can reduce damage taken.
     /// </summary>
-    public abstract class Apparel : Equipable, ISerializable, IXmlSerializable
+    public abstract class Apparel : Equipable
     {
         private readonly byte originalDamageThreshold;
 

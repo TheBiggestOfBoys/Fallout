@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Aid
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Name>Stimpack</Name>
+  <Weight>1</Weight>
+  <Value>30</Value>
+  <Icon>💉</Icon>
+  <Condition>1</Condition>
+  <IsEquipped>false</IsEquipped>
+  <Effects />
+</Aid>

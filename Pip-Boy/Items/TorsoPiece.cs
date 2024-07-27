@@ -7,7 +7,7 @@ namespace Pip_Boy.Items
     /// <summary>
     /// A torso armor
     /// </summary>
-    public class TorsoPiece : Apparel, ISerializable, IXmlSerializable
+    public class TorsoPiece : Apparel
     {
         public ArmorType TypeOfArmor => Weight switch
         {

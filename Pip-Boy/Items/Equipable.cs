@@ -11,7 +11,7 @@ namespace Pip_Boy.Items
     /// <summary>
     /// Defines behaviors for <see cref="Equipable"/> sub-classes, such as <see cref="Weapon"/>, <see cref="HeadPiece"/>, <see cref="TorsoPiece"/> and <see cref="Ammo"/>.
     /// </summary>
-    public abstract class Equipable : Item, ISerializable, IXmlSerializable
+    public abstract class Equipable : Item
     {
         /// <summary>
         /// The original value of the <see cref="Equipable"/>, unaffected by <see cref="Condition"/>.
@@ -47,18 +47,7 @@ namespace Pip_Boy.Items
             originalValue = 0;
             Effects = [];
         }
-
-        protected Equipable(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-            originalValue = info.GetUInt16("originalValue");
-        }
         #endregion
-
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-            info.AddValue("originalValue", originalValue);
-        }
 
         /// <summary>
         /// Equips this <see cref="Equipable"/> to an <see cref="Entity"/>.
@@ -102,52 +91,6 @@ namespace Pip_Boy.Items
                 effectsString += $"{Environment.NewLine}\t\t{effect}";
             }
             return isEquippedChar + base.ToString() + effectsString + $"{Environment.NewLine}\t\tCND: {Condition:0.00}";
-        }
-
-        public override void ReadXml(XmlReader reader)
-        {
-            base.ReadXml(reader);
-            originalValue = ushort.Parse(reader.ReadElementString("originalValue"));
-            Condition = float.Parse(reader.ReadElementString("Condition"));
-            IsEquipped = bool.Parse(reader.ReadElementString("IsEquipped"));
-
-            reader.Read();
-            if (reader.Name == "Effects")
-            {
-                while (reader.Read())
-                {
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "Effect")
-                    {
-                        // Read the "Effector" and "Value" sub-nodes
-                        string? effector = reader.GetAttribute("Effector");
-                        string? value = reader.GetAttribute("Value");
-
-                        if (effector is not null && value is not null)
-                        {
-                            Effect tempEffect = new((Effect.EffectTypes)Enum.Parse(typeof(Effect.EffectTypes), effector), sbyte.Parse(value));
-                            Effects.Add(tempEffect);
-                        }
-                    }
-                }
-            }
-        }
-
-        public override void WriteXml(XmlWriter writer)
-        {
-            base.WriteXml(writer);
-            writer.WriteElementString("originalValue", originalValue.ToString());
-            writer.WriteElementString("Condition", Condition.ToString());
-            writer.WriteElementString("IsEquipped", IsEquipped.ToString());
-
-            writer.WriteStartElement("Effects");
-            foreach (Effect effect in Effects)
-            {
-                writer.WriteStartElement("Effect");
-                writer.WriteElementString("Effector", effect.Effector.ToString());
-                writer.WriteElementString("Value", effect.Value.ToString());
-                writer.WriteEndElement();
-            }
-            writer.WriteEndElement();
         }
     }
 }
