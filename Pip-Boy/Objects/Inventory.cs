@@ -8,73 +8,77 @@ using System.Text;
 namespace Pip_Boy.Objects
 {
     /// <summary>
-    /// Controls behavior of the sub-lists, and the items contained within.
+    /// Controls behavior of the sub-lists, and the <see cref="Item"/>s contained within.
     /// </summary>
     public class Inventory
     {
         #region Lists
         /// <summary>
-        /// All weapons in the <c>Inventory</c>
+        /// All <see cref="Weapon"/>s in the<see cref="Inventory"/>.
         /// </summary>
         public List<Weapon> Weapons { get; private set; } = [];
+
         /// <summary>
-        /// All apparels in the <see cref="Inventory"/>
+        /// All <see cref="Apparel"/>s in the <see cref="Inventory"/>.
         /// </summary>
         public List<Apparel> Apparels { get; private set; } = [];
+
         /// <summary>
-        /// All aid items in the <see cref="Inventory"/>
+        /// All <see cref="Aid"/>s in the <see cref="Inventory"/>.
         /// </summary>
         public List<Aid> Aids { get; private set; } = [];
+
         /// <summary>
-        /// All misc items in the <see cref="Inventory"/>
+        /// All <see cref="Misc"/>s in the <see cref="Inventory"/>.
         /// </summary>
         public List<Misc> Miscs { get; private set; } = [];
+
         /// <summary>
-        /// All ammo items in the <see cref="Inventory"/>
+        /// All <see cref="Ammo"/>s in the <see cref="Inventory"/>.
         /// </summary>
         public List<Ammo> Ammos { get; private set; } = [];
         #endregion
 
         /// <summary>
-        /// The current <c>Item</c> sub-page, which determines which sub-list to display.
+        /// The current <see cref="Item"/> sub-page, which determines which sub-list to display.
         /// </summary>
         public ItemsPages itemPage = ItemsPages.Weapons;
 
         #region Folders
         /// <summary>
-        /// The sub-directories needed in the <c>InventoryFolderPath</c> directory
+        /// The sub-directories needed in the <see cref="InventoryFolderPath"/> directory
         /// </summary>
         readonly string[] expectedSubDirectories = ["Weapon", "Apparel", "Aid", "Misc", "Ammo"];
 
         /// <summary>
-        /// Directory which holds all sub-directories for <c>Inventory</c> items
+        /// Directory which holds all sub-directories for <see cref="Inventory"/> <see cref="Item"/>s
         /// </summary>
-        public string InventoryFolderPath { get; private set; }
+        public readonly string InventoryFolderPath;
 
         /// <summary>
-        /// Directory which holds all Serialized <c>Weapon</c> objects for the <c>Weapons</c> list
+        /// Directory which holds all Serialized <see cref="Weapon"/> objects for the <see cref="Weapons"/> list
         /// </summary>
-        public string WeaponFolderPath { get; private set; }
+        public readonly string WeaponFolderPath;
 
         /// <summary>
-        /// Directory which holds all Serialized <c>Apparel</c> objects for the <c>Apparels</c> list
+        /// Directory which holds all Serialized <see cref="Apparel"/> objects for the <see cref="Apparels"/> list
         /// </summary>
-        public string ApparelFolderPath { get; private set; }
+        public readonly string ApparelFolderPath;
 
         /// <summary>
-        /// Directory which holds all Serialized <c>Aid</c> objects for the <c>Aids</c> list
+        /// Directory which holds all Serialized <see cref="Aid"/> objects for the <see cref="Aids"/> list
         /// </summary>
-        public string AidFolderPath { get; private set; }
+        public readonly string AidFolderPath;
 
         /// <summary>
-        /// Directory which holds all Serialized <c>Misc</c> objects for the <c><see cref="Miscs"/></c> list
+        /// Directory which holds all Serialized <see cref="Misc"/> objects for the <see cref="Miscs"/> list
         /// </summary>
-        public string MiscFolderPath { get; private set; }
+        public readonly string MiscFolderPath;
 
         /// <summary>
-        /// Directory which holds all Serialized <c>Ammo</c> objects for the <c>Ammos</c> list
+        /// Directory which holds all Serialized <see cref="Ammo"/> objects for the <see cref="Ammos"/> list
         /// </summary>
-        public string AmmoFolderPath { get; private set; }
+        public readonly string AmmoFolderPath;
         #endregion
 
         /// <summary>
@@ -83,14 +87,14 @@ namespace Pip_Boy.Objects
         public ushort MaxCarryWeight { get; private set; }
 
         /// <summary>
-        /// The current weight of all items in <c>Inventory</c>
+        /// The current weight of all items in <see cref="Inventory"/>
         /// </summary>
-        public double CurrentCarryWeight { get; private set; }
+        public float CurrentCarryWeight => CalculateWeight();
 
         /// <summary>
-        /// If <c>CurrentCarryWeight</c> is greater than or equal to the <c>MaxCarryWeight</c>
+        /// If <see cref="CurrentCarryWeight"/> is greater than or equal to the <see cref="MaxCarryWeight"/>
         /// </summary>
-        public bool IsOverEncumbered { get; private set; }
+        public bool IsOverEncumbered => CurrentCarryWeight >= MaxCarryWeight;
 
         #region Constructors
         /// <summary>
@@ -104,10 +108,13 @@ namespace Pip_Boy.Objects
             AidFolderPath = string.Empty;
             MiscFolderPath = string.Empty;
             AmmoFolderPath = string.Empty;
-
-            MaxCarryWeight = 0;
         }
 
+        /// <summary>
+        /// Creates an inventory from folder and <see cref="Player"/>.
+        /// </summary>
+        /// <param name="folderPath">Where to load the items from.</param>
+        /// <param name="player">Used to determine max carry weight.</param>
         public Inventory(string folderPath, Player player)
         {
             // Set the folder paths
@@ -143,36 +150,38 @@ namespace Pip_Boy.Objects
                         switch (expectedSubDirectory)
                         {
                             case "Weapon":
-                                Weapons.Add(Item.FromFile<Weapon>(filePath));
+                                Weapons.Add(Weapon.FromFile(filePath));
                                 break;
                             case "Apparel":
-                                Apparels.Add(Item.FromFile<Apparel>(filePath));
+                                if (Item.GetTypeFromXML(filePath) == typeof(HeadPiece))
+                                    Apparels.Add(HeadPiece.FromFile(filePath));
+                                else if (Item.GetTypeFromXML(filePath) == typeof(TorsoPiece))
+                                    Apparels.Add(TorsoPiece.FromFile(filePath));
                                 break;
                             case "Aid":
-                                Aids.Add(Item.FromFile<Aid>(filePath));
+                                Aids.Add(Aid.FromFile(filePath));
                                 break;
                             case "Misc":
-                                Miscs.Add(Item.FromFile<Misc>(filePath));
+                                Miscs.Add(Misc.FromFile(filePath));
                                 break;
                             case "Ammo":
-                                Ammos.Add(Item.FromFile<Ammo>(filePath));
+                                Ammos.Add(Ammo.FromFile(filePath));
                                 break;
                         }
                     }
                 }
             }
-            CurrentCarryWeight = CalculateWeight();
         }
         #endregion
 
         /// <summary>
-        /// Sums up the weight of all items in the inventory
+        /// Sums up the weight of all items in the <see cref="Inventory"/>
         /// </summary>
         /// <returns>The total weight</returns>
-        private double CalculateWeight() => Weapons.Sum(x => x.Weight) + Apparels.Sum(x => x.Weight) + Aids.Sum(x => x.Weight) + Miscs.Sum(x => x.Weight) + Ammos.Sum(x => x.Weight);
+        private float CalculateWeight() => Weapons.Sum(x => x.Weight) + Apparels.Sum(x => x.Weight) + Aids.Sum(x => x.Weight) + Miscs.Sum(x => x.Weight) + Ammos.Sum(x => x.Weight);
 
         /// <summary>
-        /// Writes all items in the <c>Inventory</c> sub-lists to files in the correct directories.
+        /// Writes all items in the <see cref="Inventory"/> sub-lists to files in the correct directories.
         /// </summary>
         public void Save()
         {
@@ -221,18 +230,23 @@ namespace Pip_Boy.Objects
             {
                 case Weapon weapon:
                     Weapons.Add(weapon);
+                    Weapons.Sort((x, y) => string.Compare(x.Name, y.Name));
                     break;
                 case Apparel apparel:
                     Apparels.Add(apparel);
+                    Apparels.Sort((x, y) => string.Compare(x.Name, y.Name));
                     break;
                 case Aid aid:
                     Aids.Add(aid);
+                    Aids.Sort((x, y) => string.Compare(x.Name, y.Name));
                     break;
                 case Misc misc:
                     Miscs.Add(misc);
+                    Miscs.Sort((x, y) => string.Compare(x.Name, y.Name));
                     break;
                 case Ammo ammo:
                     Ammos.Add(ammo);
+                    Ammos.Sort((x, y) => string.Compare(x.Name, y.Name));
                     break;
             }
         }
@@ -246,22 +260,59 @@ namespace Pip_Boy.Objects
             if (item is Weapon weapon)
             {
                 Weapons.Remove(weapon);
+                Weapons.Sort((x, y) => string.Compare(x.Name, y.Name));
             }
             else if (item is Apparel apparel)
             {
                 Apparels.Remove(apparel);
+                Apparels.Sort((x, y) => string.Compare(x.Name, y.Name));
             }
             else if (item is Aid aid)
             {
                 Aids.Remove(aid);
+                Weapons.Sort((x, y) => string.Compare(x.Name, y.Name));
             }
             else if (item is Misc misc)
             {
                 Miscs.Remove(misc);
+                Miscs.Sort((x, y) => string.Compare(x.Name, y.Name));
             }
             else if (item is Ammo ammo)
             {
                 Ammos.Remove(ammo);
+                Ammos.Sort((x, y) => string.Compare(x.Name, y.Name));
+            }
+        }
+
+        /// <summary>
+        /// Counts how many occurrences of an <see cref="Item"/> are in a <see cref="List{Item}"/>
+        /// </summary>
+        /// <param name="list">The <see cref="List{Item}"/> to search through.</param>
+        /// <param name="item">The <see cref="Item"/> to look for.</param>
+        /// <returns></returns>
+        public static int CountItem(List<Item> list, Item item)
+        {
+            if (list.Contains(item))
+            {
+                int count = 1;
+                for (int index = list.FindIndex(f => f.Name == item.Name) + 1; index < list.Count; index++)
+                {
+                    if (list[index].Name == item.Name)
+                    {
+                        count++;
+                    }
+                    // Ideally the list should be sorted alphabetically by name, 
+                    // so there is no need to keep checking once the name isn't the same.
+                    else
+                    {
+                        return count;
+                    }
+                }
+                return count;
+            }
+            else
+            {
+                return 0;
             }
         }
         #endregion

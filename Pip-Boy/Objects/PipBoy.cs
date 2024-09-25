@@ -21,7 +21,7 @@ namespace Pip_Boy.Objects
         /// <summary>
         /// The <c>Player</c> object tied to the PIP-Boy.
         /// </summary>
-        public Player player = new("Player", [5, 5, 5, 5, 5, 5, 5], workingDirectory);
+        public Player player = new("Player", [5, 5, 5, 5, 5, 5, 5], "");
 
         /// <summary>
         /// Controls music.
@@ -31,7 +31,7 @@ namespace Pip_Boy.Objects
         /// <summary>
         /// Displays points of interest.
         /// </summary>
-        public Map map = new(25, 50, 20);
+        public Map map = new(25, 50, "Map Locations\\");
 
         /// <summary>
         /// Controls <c>PIPBoy</c> sound effects.
@@ -215,16 +215,16 @@ namespace Pip_Boy.Objects
 
                     #region Map
                     case ConsoleKey.NumPad8 when currentPage == Pages.DATA && dataPage == DataPages.Map:
-                        map.MovePlayer(true, null);
+                        map.MovePlayer(true, null, player);
                         break;
                     case ConsoleKey.NumPad2 when currentPage == Pages.DATA && dataPage == DataPages.Map:
-                        map.MovePlayer(false, null);
+                        map.MovePlayer(false, null, player);
                         break;
                     case ConsoleKey.NumPad4 when currentPage == Pages.DATA && dataPage == DataPages.Map:
-                        map.MovePlayer(null, false);
+                        map.MovePlayer(null, false, player);
                         break;
                     case ConsoleKey.NumPad6 when currentPage == Pages.DATA && dataPage == DataPages.Map:
-                        map.MovePlayer(null, true);
+                        map.MovePlayer(null, true, player);
                         break;
                         #endregion
                 }
@@ -395,7 +395,7 @@ namespace Pip_Boy.Objects
         /// <returns>The corresponding string</returns>
         public string ShowData() => dataPage switch
         {
-            DataPages.Map => map.ToString() + Environment.NewLine + "Key: " + Map.GenerateLegend(),
+            DataPages.Map => map.ToString(),
             DataPages.Quests => ShowQuests(),
             DataPages.Misc => ShowDataNotes(),
             DataPages.Radio => radio.ToString(),

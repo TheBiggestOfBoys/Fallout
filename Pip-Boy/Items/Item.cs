@@ -68,8 +68,7 @@ namespace Pip_Boy.Items
             {
                 string filePath = folderPath + Name + ".xml";
                 XmlSerializer x = new(type);
-                XmlWriterSettings xmlWriterSettings = new() { NewLineOnAttributes = true, Indent = true, CloseOutput = true };
-                XmlWriter writer = XmlWriter.Create(filePath, xmlWriterSettings);
+                StreamWriter writer = new(filePath);
                 //writer.WriteProcessingInstruction("xml-stylesheet", "type=\"text/css\" href=\"../Inventory Styling.css\"");
                 x.Serialize(writer, this);
                 writer.Close();
@@ -82,29 +81,6 @@ namespace Pip_Boy.Items
         }
 
         /// <summary>
-        /// Deserializes the <see cref="Item"/> object from an <c>*.xml</c> file.
-        /// </summary>
-        /// <typeparam name="T">The <see cref="Item"/> sub-class type to serialize to</typeparam>
-        /// <param name="filePath">The path to the <c>*.xml</c> file.</param>
-        /// <returns>The deserialized <see cref="Item"/> object.</returns>
-        /// <exception cref="NullReferenceException">If the <c>*.xml</c> file returns a null object.</exception>
-        public static T FromFile<T>(string filePath)
-        {
-            if (filePath.EndsWith(".xml"))
-            {
-                XmlSerializer x = new(typeof(T));
-                XmlReader reader = XmlReader.Create(filePath);
-                T? tempItem = (T?)x.Deserialize(reader) ?? throw new NullReferenceException("XMl file object is null!");
-                reader.Close();
-                return tempItem;
-            }
-            else
-            {
-                throw new FormatException("File is not '*.xml'!");
-            }
-        }
-
-        /// <summary>
         /// Reads the root tag of an <c>*.xml</c> file.
         /// </summary>
         /// <param name="filePath">The path to the file</param>
@@ -113,12 +89,21 @@ namespace Pip_Boy.Items
         /// <exception cref="FormatException">IF the file is no <c>*.xml</c>.</exception>
         public static Type GetTypeFromXML(string filePath)
         {
-            if (filePath.EndsWith(".xml"))
+            if (Path.GetExtension(filePath) == ".xml")
             {
                 XmlDocument doc = new();
                 doc.Load(filePath);
                 string typeName = doc.DocumentElement?.LocalName ?? throw new NullReferenceException("No head object tag found!");
-                Type type = Type.GetType(nameof(Pip_Boy.Items) + '.' + typeName) ?? throw new NullReferenceException("The type is null!");
+                Type type = typeName switch
+                {
+                    "Weapon" => typeof(Weapon),
+                    "HeadPiece" => typeof(HeadPiece),
+                    "TorsoPiece" => typeof(TorsoPiece),
+                    "Aid" => typeof(Aid),
+                    "Misc" => typeof(Misc),
+                    "Ammo" => typeof(Ammo),
+                    _ => throw new NullReferenceException("The type is null!"),
+                };
                 return type;
             }
             else

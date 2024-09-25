@@ -17,6 +17,21 @@ namespace Pip_Boy.Data_Types
         /// </summary>
         public readonly sbyte Value;
 
+        /// <summary>
+        /// The logo for the effect.
+        /// </summary>
+        public readonly string Icon;
+
+        /// <summary>
+        /// How long the effect will last for. -1 represent an effect which lasts forever (as long as the item is equipped).
+        /// </summary>
+        public readonly short Duration;
+
+        /// <summary>
+        /// How much time the effect has left
+        /// </summary>
+        public short TimeLeft;
+
         #region Constructors
         /// <summary>
         /// Empty constructor for serialization
@@ -24,7 +39,7 @@ namespace Pip_Boy.Data_Types
         public Effect()
         {
             Effector = EffectTypes.None;
-            Value = 0;
+            Icon = string.Empty;
         }
 
         /// <summary>
@@ -32,10 +47,14 @@ namespace Pip_Boy.Data_Types
         /// </summary>
         /// <param name="effector">The effect to change</param>
         /// <param name="value">The amount to change.</param>
-        public Effect(EffectTypes effector, sbyte value)
+        /// <param name="duration">How long the effect will last.</param>
+        public Effect(EffectTypes effector, sbyte value, short duration)
         {
             Effector = effector;
             Value = value;
+            Icon = IconDeterminer.Determine(effector);
+            Duration = duration;
+            TimeLeft = Duration;
         }
         #endregion
 
@@ -52,6 +71,12 @@ namespace Pip_Boy.Data_Types
             // Join the words with spaces
             return string.Join(' ', words);
         }
+
+        /// <summary>
+        /// A string representation of the <see cref="Effect"/>.
+        /// </summary>
+        /// <returns>A string representation of the <see cref="Effect"/>.</returns>
+        public override string ToString() => $"{Icon} {Effector}: {TimeLeft}";
 
         /// <summary>
         /// The possible attributes to change.

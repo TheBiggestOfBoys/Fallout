@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
+﻿using Pip_Boy.Data_Types;
+using Pip_Boy.Entities;
+using System.IO;
 using System.Text;
 
 namespace Pip_Boy.Objects
@@ -9,75 +8,71 @@ namespace Pip_Boy.Objects
     /// <summary>
     /// Contains locations of places of interest.
     /// </summary>
-    /// <param name="height">The height of the map</param>
-    /// <param name="width">The width of the map</param>
-    /// <param name="density">How many points of interest there should be</param>
-    public class Map(byte height, byte width, byte density)
+    public class Map
     {
         /// <summary>
-        /// The 2D char array, which is the visual representation of the <see cref="Map"/>.
+        /// Private array containing all locations.
         /// </summary>
-        public readonly char[][] Grid = GenerateMap(width, height, density);
-
-        Vector2 playerPosition = Vector2.Zero;
+        private readonly Location[] Locations;
 
         /// <summary>
-        /// Locations of interest on the map and the keys telling what the markers represent
+        /// The 2D <see cref="Location"/> array, which is the visual representation of the <see cref="Map"/>.
         /// </summary>
-        private static readonly Dictionary<char, string> Legend = new()
-        {
-            {'!', "Quest"},
-            {'?', "Undiscovered"},
-            {'#', "Settlement"},
-            {'@', "Base"},
-            {'+', "Doctor"}
-        };
+        public readonly Location?[][] Grid;
 
+        #region Constructor
         /// <summary>
-        /// Generates the Legend with the corresponding marker/key pairs
+        /// Creates a <see cref="Map"/> with the given dimensions
         /// </summary>
-        /// <returns>The Map's Legend</returns>
-        public static string GenerateLegend()
+        /// <param name="height">The height of the map</param>
+        /// <param name="width">The width of the map</param>
+        /// <param name="mapLocationsFolder">The folder to load the locations from</param>
+        public Map(byte height, byte width, string mapLocationsFolder)
         {
-            StringBuilder stringBuilder = new();
-            foreach (char key in Legend.Keys)
-            {
-                stringBuilder.Append($"{key} = {Legend[key]}, ");
-            }
-            return stringBuilder.ToString();
+            Locations = LoadLocations(mapLocationsFolder);
+            Grid = GenerateMap(width, height);
         }
+        #endregion
 
         /// <summary>
         /// Create a map with the given parameters
         /// </summary>
         /// <param name="height">The height of the map</param>
         /// <param name="width">The width of the map</param>
-        /// <param name="density">How many points of interest there should be</param>
         /// <returns></returns>
-        public static char[][] GenerateMap(byte height, byte width, byte density)
+        public Location?[][] GenerateMap(byte height, byte width)
         {
-            char[][] tempMap = new char[width][];
+            Location?[][] tempMap = new Location?[width][];
             // Size the map's width.
             for (byte i = 0; i < width; i++)
             {
                 // and height
-                tempMap[i] = new char[height];
-                // set every cell to an empty space
-                for (byte j = 0; j < height; j++)
-                {
-                    tempMap[i][j] = ' ';
-                }
+                tempMap[i] = new Location[height];
             }
 
-            // Now randomly assign markers in the array
-            Random random = new();
-            for (int i = 0; i < density; i++)
+            // Place locations on the map
+            foreach (Location location in Locations)
             {
-                int selection = random.Next(Legend.Count);
-                char selectedChar = Legend.Keys.ToArray()[selection];
-                tempMap[random.Next(width)][random.Next(height)] = selectedChar;
+                tempMap[(int)location.Position.Y][(int)location.Position.X] = location;
             }
             return tempMap;
+        }
+
+        /// <summary>
+        /// Create a map with the given parameters
+        /// </summary>
+        /// <param name="folder">Folder to load the <see cref="Location"/>s from</param>
+        /// <returns></returns>
+        public static Location[] LoadLocations(string folder)
+        {
+            string[] filePaths = Directory.GetFiles(folder);
+            Location[] tempLocations = new Location[filePaths.Length];
+            for (int i = 0; i < filePaths.Length; i++)
+            {
+                string filePath = filePaths[i];
+                tempLocations[i] = Location.FromFile(filePath);
+            }
+            return tempLocations;
         }
 
         /// <summary>
@@ -85,33 +80,28 @@ namespace Pip_Boy.Objects
         /// </summary>
         /// <param name="up">If the player moves up/down</param>
         /// <param name="right">If the player moves right/left</param>
-        public void MovePlayer(bool? up, bool? right)
+        /// <param name="player">The Player object to get the <see cref="Entity.Location"/> value from</param>
+        public void MovePlayer(bool? up, bool? right, Player player)
         {
-            Grid[(int)playerPosition.Y][(int)playerPosition.X] = ' ';
-
             switch (up)
             {
-                case true when playerPosition.Y > 0:
-                    playerPosition.Y--;
+                case true when player.Location.Y > 0:
+                    player.Location.Y--;
                     break;
-                case false when playerPosition.Y < Grid.Length:
-                    playerPosition.Y++;
+                case false when player.Location.Y < Grid.Length:
+                    player.Location.Y++;
                     break;
             }
 
             switch (right)
             {
-                case true when playerPosition.X < Grid[0].Length:
-                    playerPosition.X++;
+                case true when player.Location.X < Grid[0].Length:
+                    player.Location.X++;
                     break;
-                case false when playerPosition.X > 0:
-                    playerPosition.X--;
+                case false when player.Location.X > 0:
+                    player.Location.X--;
                     break;
             }
-
-            // Player will be represented by '>' on the map
-            // X & Y are intentionally flipped
-            Grid[(int)playerPosition.Y][(int)playerPosition.X] = '>';
         }
 
         /// <summary>
@@ -119,7 +109,7 @@ namespace Pip_Boy.Objects
         /// </summary>
         /// <param name="row">The row number</param>
         /// <returns>The char array</returns>
-        public char[] this[int row] => Grid[row];
+        public Location?[] this[int row] => Grid[row];
 
         /// <summary>
         /// Shows the map
@@ -128,9 +118,20 @@ namespace Pip_Boy.Objects
         public override string ToString()
         {
             StringBuilder stringBuilder = new();
-            foreach (char[] row in Grid)
+            for (int row = 0; row < Grid.Length; row++)
             {
-                stringBuilder.Append(row);
+                for (int col = 0; col < Grid.Length; col++)
+                {
+                    Location? location = Grid[row][col];
+                    if (location is not null)
+                    {
+                        stringBuilder.Append(location.Icon);
+                    }
+                    else
+                    {
+                        stringBuilder.Append(' ');
+                    }
+                }
                 stringBuilder.AppendLine();
             }
             return stringBuilder.ToString();

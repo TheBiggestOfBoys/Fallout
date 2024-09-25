@@ -31,7 +31,7 @@ namespace PIP_Boy_Tests
 
             // Check tag-to-type casting
             Type[] expectedTypes = [typeof(Weapon), typeof(TorsoPiece), typeof(HeadPiece), typeof(Ammo), typeof(Aid), typeof(Misc)];
-            Type[] actualTypes = new Type[5];
+            Type[] actualTypes = new Type[6];
             string[] filePaths = Directory.GetFiles("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\PIP Boy Tests\\Serialized Files\\");
             for (int i = 0; i < filePaths.Length; i++)
             {
@@ -40,9 +40,9 @@ namespace PIP_Boy_Tests
                 actualTypes[i] = type;
             }
 
-            for (int i = 0; i < expectedTypes.Length; i++)
+            foreach (Type type in expectedTypes)
             {
-                Assert.IsTrue(expectedTypes[i] == actualTypes[i]);
+                Assert.IsTrue(actualTypes.Contains(type));
             }
 
             string[] serializedFiles = Directory.GetFiles("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\PIP Boy Tests\\Serialized Files\\");

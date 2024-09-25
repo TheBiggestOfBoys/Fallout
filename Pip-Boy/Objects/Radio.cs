@@ -15,7 +15,7 @@ namespace Pip_Boy.Objects
         /// <summary>
         /// What the songs will be played from.
         /// </summary>
-        public static readonly SoundPlayer soundPlayer = new();
+        public SoundPlayer soundPlayer = new();
 
         /// <summary>
         /// The list of all <see cref="Song"/>s.

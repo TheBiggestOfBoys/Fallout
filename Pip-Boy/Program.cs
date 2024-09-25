@@ -13,7 +13,7 @@ namespace Pip_Boy
         static void Main()
         {
             PipBoy pipBoy = new(Directory.GetCurrentDirectory() + "\\PIP-Boy\\", ConsoleColor.DarkYellow);
-            bool boot = false;
+            bool boot = true;
             bool createPlayer = false;
 
             Console.ForegroundColor = pipBoy.Color;
@@ -33,7 +33,7 @@ namespace Pip_Boy
                 pipBoy.player = new("Jake Scott", [5, 6, 7, 8, 9, 3, 4], pipBoy.activeDirectory);
             }
 
-            pipBoy.map.MovePlayer(null, null);
+            pipBoy.map.MovePlayer(null, null, pipBoy.player);
         }
     }
 }

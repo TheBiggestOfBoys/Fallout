@@ -2,8 +2,6 @@
 using Pip_Boy.Entities;
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Xml;
 using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
@@ -16,7 +14,7 @@ namespace Pip_Boy.Items
         /// <summary>
         /// The original value of the <see cref="Equipable"/>, unaffected by <see cref="Condition"/>.
         /// </summary>
-        private ushort originalValue;
+        private readonly ushort originalValue;
 
         /// <summary>
         /// The percentage of the <see cref="Equipable"/> used to determine <see cref="Weapon.Damage"/>, <see cref="Apparel.DamageThreshold"/> and <see cref="Item.Value"/>.

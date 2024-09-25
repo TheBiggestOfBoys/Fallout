@@ -1,6 +1,4 @@
 ﻿using Pip_Boy.Data_Types;
-using System.Runtime.Serialization;
-using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
 {

@@ -3,6 +3,7 @@ using Pip_Boy.Items;
 using Pip_Boy.Objects;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
@@ -56,6 +57,11 @@ namespace Pip_Boy.Entities
         };
 
         /// <summary>
+        /// The <see cref="Entity"/>s limbs, which can be targeted.
+        /// </summary>
+        public Limb[] Limbs;
+
+        /// <summary>
         /// All <see cref="Effect"/>s that are active on the <see cref="Entity"/>.
         /// </summary>
         public List<Effect> Effects = [];
@@ -85,7 +91,7 @@ namespace Pip_Boy.Entities
         /// <summary>
         /// What percent of health the <see cref="Entity"/> has.
         /// </summary>
-        public float HealthPercentage { get => CurrentHealth / MaxHealth; }
+        public float HealthPercentage => CurrentHealth / MaxHealth;
 
         /// <summary>
         /// The resistance to physical damage.
@@ -106,6 +112,11 @@ namespace Pip_Boy.Entities
         /// An emoji representing the <see cref="Entity"/>.
         /// </summary>
         public string Icon;
+
+        /// <summary>
+        /// Where the <see cref="Entity"/> is on the <see cref="Map"/>/area.
+        /// </summary>
+        public Vector2 Location = new();
         #endregion
 
         #region Constructor
@@ -114,8 +125,10 @@ namespace Pip_Boy.Entities
         /// </summary>
         public Entity()
         {
-            Inventory = new();
             Name = string.Empty;
+            Inventory = new();
+            Icon = string.Empty;
+            Limbs = [];
         }
 
         /// <summary>
@@ -124,8 +137,10 @@ namespace Pip_Boy.Entities
         public Entity(string name, byte level)
         {
             Name = name;
-            Level = level;
             Inventory = new();
+            Icon = string.Empty;
+            Level = level;
+            Limbs = [];
 
             // Set attribute to random values, based on the level
             Random random = new();
@@ -308,6 +323,7 @@ namespace Pip_Boy.Entities
         public string ShowSPECIAL()
         {
             StringBuilder stringBuilder = new("S.P.E.C.I.A.L.:");
+            stringBuilder.AppendLine();
             foreach (string attribute in SPECIAL.Keys)
             {
                 stringBuilder.AppendLine(attribute + ':' + '\t' + SPECIAL[attribute]);
@@ -341,6 +357,20 @@ namespace Pip_Boy.Entities
             foreach (string skill in Skills.Keys)
             {
                 stringBuilder.AppendLine('\t' + skill + ':' + '\t' + Skills[skill]);
+            }
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Display the <see cref="Limb"/>s and their conditions.
+        /// </summary>
+        /// <returns></returns>
+        public virtual string ShowLimbs()
+        {
+            StringBuilder stringBuilder = new();
+            foreach (Limb limb in Limbs)
+            {
+                stringBuilder.Append(limb.Icon);
             }
             return stringBuilder.ToString();
         }

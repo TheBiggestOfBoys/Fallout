@@ -24,7 +24,7 @@ namespace Pip_Boy.Entities
 
         #region Arrays
         /// <summary>
-        /// <see cref="List{T}"/> of all active <see cref="Perk"/> on the <see cref="Player"/>.
+        /// <see cref="List{Perk}"/> of all active <see cref="Perk"/> on the <see cref="Player"/>.
         /// </summary>
         [NonSerialized]
         public List<Perk> Perks = [];
@@ -181,6 +181,7 @@ namespace Pip_Boy.Entities
         public string ShowPerks()
         {
             StringBuilder stringBuilder = new("Perks:");
+            stringBuilder.AppendLine();
             foreach (Perk perk in Perks)
             {
                 stringBuilder.AppendLine('\t' + perk.ToString());
