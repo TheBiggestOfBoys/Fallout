@@ -79,6 +79,11 @@ namespace Pip_Boy.Entities
         public byte Level;
 
         /// <summary>
+        /// The gender of the <see cref="Humanoid"/>, <c>false</c> is Male <c>true</c> is female (since <c>bool</c> defaults to <c>false</c>
+        /// </summary>
+        public readonly bool Gender;
+
+        /// <summary>
         /// The maximum health the <see cref="Entity"/> can have.
         /// </summary>
         public ushort MaxHealth { get; private set; }
@@ -374,6 +379,12 @@ namespace Pip_Boy.Entities
             }
             return stringBuilder.ToString();
         }
+
+        /// <summary>
+        /// Show 1-line preview of the <see cref="Entity"/>
+        /// </summary>
+        /// <returns><see cref="Name"/>, <see cref="Icon"/>, <see cref="Gender"/>, <see cref="Level"/> & <see cref="HealthPercentage"/></returns>
+        public override string ToString() => $"{Name}{Icon}{IconDeterminer.Determine(Gender)}-{Level}: {HealthPercentage:P}";
         #endregion
     }
 }

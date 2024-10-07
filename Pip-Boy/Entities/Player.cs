@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using static Pip_Boy.Data_Types.Effect;
 
 namespace Pip_Boy.Entities
 {
@@ -12,15 +13,39 @@ namespace Pip_Boy.Entities
     [Serializable]
     public class Player : Human
     {
+        #region Radiation Stuff
         /// <summary>
         /// How much radiation the <see cref="Player"/> has.
         /// </summary>
-        public uint Rads { get; private set; } = 0;
+        public uint Rads { get; private set; } = 0u;
+
+        /// <summary>
+        /// How sick the <see cref="Player"/> is, based on <see cref="Rads"/>. 
+        /// </summary>
+        public RadiationSicknessLevels RadiationSicknessLevel => (RadiationSicknessLevels)Rads;
+
+        /// <summary>
+        /// The emoji icon that represents the current <see cref="RadiationSicknessLevel"/>.
+        /// </summary>
+        public string RadiationIcon => IconDeterminer.Determine(RadiationSicknessLevel);
+
+        /// <summary>
+        /// The <see cref="Effect"/>s to apply for each <see cref="RadiationSicknessLevel"/>.
+        /// </summary>
+        public static readonly Effect[][] RadiationSicknessEffects = [
+            [],
+            [new(EffectTypes.Endurance, -1, 0)],
+            [new(EffectTypes.Endurance, -2, 0), new(EffectTypes.Agility, -1, 0)],
+            [new(EffectTypes.Endurance, -3, 0), new(EffectTypes.Agility, -2, 0), new(EffectTypes.Strength, -1, 0)],
+            [new(EffectTypes.Endurance, -3, 0), new(EffectTypes.Agility, -2, 0), new(EffectTypes.Strength, -2, 0)],
+            [new(EffectTypes.HitPoints, -128, 0)], // Instant Death
+        ];
 
         /// <summary>
         /// The percentage resistance to radiation.
         /// </summary>
         public float RadiationResistance { get; private set; }
+        #endregion
 
         #region Arrays
         /// <summary>
@@ -187,6 +212,39 @@ namespace Pip_Boy.Entities
                 stringBuilder.AppendLine('\t' + perk.ToString());
             }
             return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Displays the Radiation statuses.
+        /// </summary>
+        /// <returns>The status screen</returns>
+        public string RADScreen()
+        {
+            StringBuilder stringBuilder = new("RAD");
+            stringBuilder.AppendLine();
+            stringBuilder.AppendLine("RADs: " + Rads);
+            stringBuilder.AppendLine($"Radiation Resistance: {RadiationResistance:P}");
+            stringBuilder.AppendLine("Radiation Sickness Level: " + RadiationSicknessLevel + '-' + RadiationIcon);
+            stringBuilder.AppendLine("Radiation Effects:");
+            int radiationEffectIndex = (int)(Rads / RadiationSicknessEffects.Length);
+            foreach (Effect effect in RadiationSicknessEffects[radiationEffectIndex])
+            {
+                stringBuilder.AppendLine('\t' + effect.ToString());
+            }
+            return stringBuilder.ToString();
+        }
+
+        public enum RadiationSicknessLevels : uint
+        {
+            None = 0u,
+            Minor = 200u,
+            Advanced = 400u,
+            Critical = 600u,
+            Deadly = 800u,
+            /// <summary>
+            /// Instant Death
+            /// </summary>
+            Fatal = 1000u,
         }
     }
 }
