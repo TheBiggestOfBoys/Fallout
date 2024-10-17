@@ -22,7 +22,7 @@ namespace Pip_Boy.Items
         /// <summary>
         /// How much the <see cref="Item"/> weighs.
         /// </summary>
-        public float Weight;
+        public static float Weight;
 
         /// <summary>
         /// How much the <see cref="Item"/> costs.
@@ -32,7 +32,7 @@ namespace Pip_Boy.Items
         /// <summary>
         /// An emoji representation of the <see cref="Item"/>.
         /// </summary>
-        public string Icon;
+        public static string Icon;
 
         #region Constructors
         public Item(string name, float weight, ushort value)

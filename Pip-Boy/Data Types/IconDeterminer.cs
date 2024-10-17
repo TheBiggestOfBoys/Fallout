@@ -1,6 +1,12 @@
 ﻿using static Pip_Boy.Data_Types.Attribute;
 using static Pip_Boy.Data_Types.Effect;
 using static Pip_Boy.Entities.Player;
+using static Pip_Boy.Items.Aid;
+using static Pip_Boy.Items.Ammo;
+using static Pip_Boy.Items.HeadPiece;
+using static Pip_Boy.Items.Misc;
+using static Pip_Boy.Items.TorsoPiece;
+using static Pip_Boy.Items.Weapon;
 
 namespace Pip_Boy.Data_Types
 {
@@ -11,46 +17,61 @@ namespace Pip_Boy.Data_Types
     {
         #region Variables
         #region Attributes
-        const string StrengthLogo = "💪";
-        const string PerceptionLogo = "👁️";
-        const string EnduranceLogo = "🏋️";
-        const string CharismaLogo = "🗣️";
-        const string IntelligenceLogo = "🧠";
-        const string AgilityLogo = "🤸";
-        const string LuckLogo = "🍀";
+        public const string StrengthLogo = "💪";
+        public const string PerceptionLogo = "👁️";
+        public const string EnduranceLogo = "🏋️";
+        public const string CharismaLogo = "🗣️";
+        public const string IntelligenceLogo = "🧠";
+        public const string AgilityLogo = "🤸";
+        public const string LuckLogo = "🍀";
         #endregion
         #region Skills
-        const string BarterLogo = "🤑";
-        const string EnergyWeaponsLogo = "⚡";
-        const string ExplosiveLogo = "💥";
-        const string GunLogo = "🔫";
-        const string LockpickLogo = "🔒";
-        const string MedicineLogo = "⚕️";
-        const string MeleeWeaponsLogo = "🔪";
-        const string RepairLogo = "🔧";
-        const string ScienceLogo = "🧪";
-        const string SneakLogo = "🥷";
-        const string SpeechLogo = "💬";
-        const string SurvivalLogo = "⛺";
-        const string UnarmedLogo = "👊";
+        public const string BarterLogo = "🤑";
+        public const string EnergyWeaponsLogo = "⚡";
+        public const string ExplosiveLogo = "💥";
+        public const string GunLogo = "🔫";
+        public const string LockpickLogo = "🔒";
+        public const string MedicineLogo = "⚕️";
+        public const string MeleeWeaponsLogo = "🔪";
+        public const string RepairLogo = "🔧";
+        public const string ScienceLogo = "🧪";
+        public const string SneakLogo = "🥷";
+        public const string SpeechLogo = "💬";
+        public const string SurvivalLogo = "⛺";
+        public const string UnarmedLogo = "👊";
         #endregion
         #region Effects
-        const string HitPointsLogo = "HP";
-        const string ActionPointsLogo = "AP";
-        const string DamageResistanceLogo = "🛡️";
-        const string FireLogo = "🔥";
-        const string PoisonLogo = "🤢";
-        const string StunLogo = "😵‍💫";
+        public const string HitPointsLogo = "HP";
+        public const string ActionPointsLogo = "AP";
+        public const string DamageResistanceLogo = "🛡️";
+        public const string FireLogo = "🔥";
+        public const string PoisonLogo = "🤢";
+        public const string StunLogo = "😵‍💫";
         #endregion
         #region Radiation & Injury
-        static readonly string[] RadiationSicknessLogos = ["😐", "🤒", "🤢", "🤮", "🧟", "💀"];
-        static readonly string[] InjuryLevelLogos = ["😐", "🤕", "💀"];
+        public const string RadiationLogo = "☢️";
+        public static readonly string[] RadiationSicknessLogos = ["😐", "🤒", "🤢", "🤮", "🧟", "💀"];
+        public static readonly string[] InjuryLevelLogos = ["🙂", "😐", "🙁", "🤕", "😵", "💀"];
         #endregion
         #region Entities
-        const string MaleHuman = "👨";
-        const string FemaleHuman = "👩";
+        public const string MaleHuman = "👨";
+        public const string FemaleHuman = "👩";
         #endregion
-        const string UnknownLogo = "?";
+        #region Ammo
+        #region Types
+        public const string BulletLogo = "🧷";
+        public const string BombLogo = "🧨";
+        public const string EnergyCellLogo = "🔋";
+        #endregion
+        #region Modifications
+        public const string HollowPointLogo = "⭕";
+        public const string ArmorPiercingLogo = "🛡️";
+        public const string HandLoadLogo = "🤚";
+        public const string SpecialLoadLogo = "*";
+        public const string SurplusLoadLogo = "+";
+        #endregion
+        #endregion
+        public const string UnknownLogo = "?";
         #endregion
 
         #region Determine
@@ -143,6 +164,81 @@ namespace Pip_Boy.Data_Types
         /// <param name="gender"><c>false</c> is male, <c>true</c> is female</param>
         /// <returns>The emoji logo</returns>
         public static char Determine(bool gender) => gender ? '♂' : '♀';
+
+
+        /// <summary>
+        /// Determines the emoji logo for the <see cref="AidType"/>.
+        /// </summary>
+        /// <param name="typeOfAid">The type of <see cref="Items.Aid"/> the item is.</param>
+        /// <returns>The emoji logo</returns>
+        public static string Determine(AidType typeOfAid) => typeOfAid switch
+        {
+            AidType.Food => "🍎",
+            AidType.Drink => "🥤",
+            AidType.Syringe => "💉",
+            AidType.Pill => "💊",
+            AidType.Inhale => "🌬",
+            AidType.Smoke => "🚬",
+            _ => UnknownLogo
+        };
+
+        public static string Determine(AmmoType ammoType) => ammoType switch
+        {
+            AmmoType.Bullet => BulletLogo,
+            AmmoType.Bomb => BombLogo,
+            AmmoType.EnergyCell => EnergyCellLogo,
+            _ => UnknownLogo
+        };
+
+        public static string Determine(AmmoModification ammoModification) => ammoModification switch
+        {
+            AmmoModification.Standard => string.Empty,
+            AmmoModification.HollowPoint => SpecialLoadLogo,
+            AmmoModification.ArmorPiercing => ArmorPiercingLogo,
+            AmmoModification.HandLoad => HandLoadLogo,
+            AmmoModification.Special => SpecialLoadLogo,
+            AmmoModification.Surplus => SurplusLoadLogo,
+            AmmoModification.Explosive => ExplosiveLogo,
+            AmmoModification.Incendiary => FireLogo,
+            _ => UnknownLogo
+        };
+
+        public static string Determine(MiscType miscType) => miscType switch
+        {
+            MiscType.Junk => "🗑️",
+            MiscType.Sellable => "💰",
+            MiscType.Crafting => "🔨",
+            MiscType.Key => "🔑",
+            MiscType.Package => "📦",
+            MiscType.Other or _ => UnknownLogo
+        };
+
+        public static string Determine(PieceType pieceType) => pieceType switch
+        {
+            PieceType.Glasses => "👓",
+            PieceType.Hat => "🧢",
+            PieceType.Helmet => "⛑️",
+            PieceType.Other or _ => UnknownLogo
+        };
+
+        public static string Determine(ArmorType armorType) => armorType switch
+        {
+            ArmorType.Clothing => "👕",
+            ArmorType.Light => "🎽",
+            ArmorType.Medium => "🧱",
+            ArmorType.Heavy => ArmorPiercingLogo,
+            _ => UnknownLogo
+        };
+
+        public static string Determine(WeaponType weaponType) => weaponType switch
+        {
+            WeaponType.Melee => MeleeWeaponsLogo,
+            WeaponType.Unarmed => UnarmedLogo,
+            WeaponType.Gun => GunLogo,
+            WeaponType.Explosive => ExplosiveLogo,
+            WeaponType.Energy => EnergyWeaponsLogo,
+            _ => UnknownLogo
+        };
         #endregion
     }
 }

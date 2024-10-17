@@ -17,6 +17,13 @@ namespace Pip_Boy.Objects
     /// <param name="color">The display color</param>
     public class PipBoy(string workingDirectory, ConsoleColor color)
     {
+        #region System Info
+        /// <summary>
+        /// The Current <see cref="DateOnly"/> and <see cref="TimeOnly"/>.
+        /// </summary>
+        public DateTime dateTime = DateTime.Now;
+        #endregion
+
         #region Objects
         /// <summary>
         /// The <c>Player</c> object tied to the PIP-Boy.

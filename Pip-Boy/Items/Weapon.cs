@@ -57,15 +57,8 @@ namespace Pip_Boy.Items
             originalDamage = damage;
             RateOfFire = rateOfFire;
 
-            Icon = TypeOfWeapon switch
-            {
-                WeaponType.Melee => "⚔️",
-                WeaponType.Unarmed => "👊",
-                WeaponType.Gun => "🔫",
-                WeaponType.Explosive => "💣",
-                WeaponType.Energy => "⚡",
-                _ => "?",
-            };
+            Icon = IconDeterminer.Determine(weaponType);
+
         }
 
         /// <inheritdoc/>

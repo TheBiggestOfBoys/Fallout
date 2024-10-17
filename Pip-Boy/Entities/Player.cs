@@ -220,7 +220,7 @@ namespace Pip_Boy.Entities
         /// <returns>The status screen</returns>
         public string RADScreen()
         {
-            StringBuilder stringBuilder = new("RAD");
+            StringBuilder stringBuilder = new("RAD\t" + IconDeterminer.RadiationLogo);
             stringBuilder.AppendLine();
             stringBuilder.AppendLine("RADs: " + Rads);
             stringBuilder.AppendLine($"Radiation Resistance: {RadiationResistance:P}");

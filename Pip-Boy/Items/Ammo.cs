@@ -19,13 +19,7 @@ namespace Pip_Boy.Items
             TypeOfAmmo = ammoType;
             Modification = ammoModification;
 
-            Icon = TypeOfAmmo switch
-            {
-                AmmoType.Bullet => "🧷",
-                AmmoType.Bomb => "🧨",
-                AmmoType.EnergyCell => "🔋",
-                _ => "?"
-            };
+            Icon = IconDeterminer.Determine(ammoType);
         }
 
         /// <inheritdoc/>
@@ -82,21 +76,7 @@ namespace Pip_Boy.Items
         }
         #endregion
 
-        /// <returns>An emoji icon for the <see cref="Modification"/></returns>
-        public string GetModification() => Modification switch
-        {
-            AmmoModification.Standard => "",
-            AmmoModification.HollowPoint => "⭕",
-            AmmoModification.ArmorPiercing => "🛡️",
-            AmmoModification.HandLoad => "🤚",
-            AmmoModification.Special => "*",
-            AmmoModification.Surplus => "+",
-            AmmoModification.Explosive => "💥",
-            AmmoModification.Incendiary => "🔥",
-            _ => "",
-        };
-
         /// <returns>The <see cref="Item.ToString()"/>, with the <see cref="TypeOfAmmo"/> and <see cref="Modification"/></returns>
-        public override string ToString() => base.ToString() + $"{Environment.NewLine}\t\tAmmo Type: {TypeOfAmmo}{Environment.NewLine}\t\tAmmo Modification: {Modification}{GetModification()}";
+        public override string ToString() => base.ToString() + $"{Environment.NewLine}\t\tAmmo Type: {TypeOfAmmo}{Environment.NewLine}\t\tAmmo Modification: {Modification}{IconDeterminer.Determine(Modification)}";
     }
 }

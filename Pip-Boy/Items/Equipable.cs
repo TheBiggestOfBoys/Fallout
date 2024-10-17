@@ -2,6 +2,7 @@
 using Pip_Boy.Entities;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
@@ -83,12 +84,12 @@ namespace Pip_Boy.Items
         public override string ToString()
         {
             char isEquippedChar = IsEquipped ? '*' : 'O';
-            string effectsString = string.Empty;
+            StringBuilder effectsString = new();
             foreach (Effect effect in Effects)
             {
-                effectsString += $"{Environment.NewLine}\t\t{effect}";
+                effectsString.AppendLine($"\t\t{effect}");
             }
-            return isEquippedChar + base.ToString() + effectsString + $"{Environment.NewLine}\t\tCND: {Condition:0.00}";
+            return isEquippedChar + base.ToString() + effectsString.ToString() + $"{Environment.NewLine}\t\tCND: {Condition:0.00}";
         }
     }
 }

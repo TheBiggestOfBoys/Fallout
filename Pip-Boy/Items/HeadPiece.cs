@@ -10,17 +10,20 @@ namespace Pip_Boy.Items
     /// </summary>
     public class HeadPiece : Apparel
     {
+        public static PieceType pieceType = GetPieceType(Weight);
+
+        private static PieceType GetPieceType(float weight) => weight switch
+        {
+            <= (byte)PieceType.Glasses => PieceType.Glasses,
+            <= (byte)PieceType.Hat => PieceType.Hat,
+            <= (byte)PieceType.Helmet => PieceType.Helmet,
+            _ => PieceType.Other,
+        };
+
         #region Constructors
         public HeadPiece(string name, float weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : base(name, weight, value, effects, DT, powerArmor)
         {
-            Icon = pieceType switch
-            {
-                PieceType.Glasses => "👓",
-                PieceType.Hat => "🧢",
-                PieceType.Helmet => "⛑️",
-                PieceType.Other => "?",
-                _ => "?"
-            };
+            Icon = IconDeterminer.Determine(pieceType);
         }
 
         /// <inheritdoc/>
@@ -49,14 +52,6 @@ namespace Pip_Boy.Items
                 throw new FormatException("File is not '*.xml'!");
             }
         }
-
-        public PieceType pieceType => Weight switch
-        {
-            <= (byte)PieceType.Glasses => PieceType.Glasses,
-            <= (byte)PieceType.Hat => PieceType.Hat,
-            <= (byte)PieceType.Helmet => PieceType.Helmet,
-            _ => PieceType.Other,
-        };
 
         public enum PieceType : byte
         {

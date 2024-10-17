@@ -16,16 +16,7 @@ namespace Pip_Boy.Items
         public Aid(string name, float weight, ushort value, Effect[] effects, AidType type) : base(name, weight, value, effects)
         {
             TypeOfAid = type;
-            Icon = TypeOfAid switch
-            {
-                AidType.Food => "🍎",
-                AidType.Drink => "🥤",
-                AidType.Syringe => "💉",
-                AidType.Pill => "💊",
-                AidType.Inhale => "🌬",
-                AidType.Smoke => "🚬",
-                _ => "?"
-            };
+            Icon = IconDeterminer.Determine(type);
         }
 
         /// <inheritdoc/>

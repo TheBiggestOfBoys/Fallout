@@ -257,30 +257,28 @@ namespace Pip_Boy.Objects
         /// <param name="item">The <c>Item</c> to drop</param>
         public void Drop(Item item)
         {
-            if (item is Weapon weapon)
+            switch (item)
             {
-                Weapons.Remove(weapon);
-                Weapons.Sort((x, y) => string.Compare(x.Name, y.Name));
-            }
-            else if (item is Apparel apparel)
-            {
-                Apparels.Remove(apparel);
-                Apparels.Sort((x, y) => string.Compare(x.Name, y.Name));
-            }
-            else if (item is Aid aid)
-            {
-                Aids.Remove(aid);
-                Weapons.Sort((x, y) => string.Compare(x.Name, y.Name));
-            }
-            else if (item is Misc misc)
-            {
-                Miscs.Remove(misc);
-                Miscs.Sort((x, y) => string.Compare(x.Name, y.Name));
-            }
-            else if (item is Ammo ammo)
-            {
-                Ammos.Remove(ammo);
-                Ammos.Sort((x, y) => string.Compare(x.Name, y.Name));
+                case Weapon weapon:
+                    Weapons.Remove(weapon);
+                    Weapons.Sort((x, y) => string.Compare(x.Name, y.Name));
+                    break;
+                case Apparel apparel:
+                    Apparels.Remove(apparel);
+                    Apparels.Sort((x, y) => string.Compare(x.Name, y.Name));
+                    break;
+                case Aid aid:
+                    Aids.Remove(aid);
+                    Weapons.Sort((x, y) => string.Compare(x.Name, y.Name));
+                    break;
+                case Misc misc:
+                    Miscs.Remove(misc);
+                    Miscs.Sort((x, y) => string.Compare(x.Name, y.Name));
+                    break;
+                case Ammo ammo:
+                    Ammos.Remove(ammo);
+                    Ammos.Sort((x, y) => string.Compare(x.Name, y.Name));
+                    break;
             }
         }
 

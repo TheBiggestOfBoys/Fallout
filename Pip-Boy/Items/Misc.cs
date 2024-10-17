@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pip_Boy.Data_Types;
+using System;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -15,16 +16,7 @@ namespace Pip_Boy.Items
         public Misc(string name, float weight, ushort value, MiscType type) : base(name, weight, value)
         {
             miscType = type;
-            Icon = miscType switch
-            {
-                MiscType.Other => "?",
-                MiscType.Junk => "🗑️",
-                MiscType.Sellable => "💰",
-                MiscType.Crafting => "🔨",
-                MiscType.Key => "🔑",
-                MiscType.Package => "📦",
-                _ => "?"
-            };
+            Icon = IconDeterminer.Determine(type);
         }
 
         /// <inheritdoc/>
