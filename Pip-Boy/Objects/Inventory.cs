@@ -129,7 +129,7 @@ namespace Pip_Boy.Objects
             MiscFolderPath = InventoryFolderPath + "Misc" + '\\';
             AmmoFolderPath = InventoryFolderPath + "Ammo" + '\\';
 
-            MaxCarryWeight = (ushort)(150 + (player.SPECIAL["Strength"] * 10));
+            MaxCarryWeight = (ushort)(150 + (player.SPECIAL[0].Value * 10));
 
             // Get the sub-directories of the <c>Inventory</c> directory
             string[] subDirectories = Directory.GetDirectories(folderPath);

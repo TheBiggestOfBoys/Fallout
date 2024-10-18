@@ -97,9 +97,9 @@ namespace Pip_Boy.Entities
             Icon = "🕹️";
 
             byte index = 0;
-            foreach (string key in SPECIAL.Keys)
+            for (int i = 0; i < SPECIAL.Length; i++)
             {
-                SPECIAL[key] = attributeValues[index];
+                SPECIAL[i].Value = attributeValues[index];
                 index++;
             }
         }
@@ -107,7 +107,7 @@ namespace Pip_Boy.Entities
         /// <summary>
         /// Player creation using console input
         /// </summary>
-        public Player(string directory)
+        public Player(string directory) : base()
         {
             activeDirectory = directory;
             perksDirectory = activeDirectory + "Perks\\";
@@ -120,12 +120,14 @@ namespace Pip_Boy.Entities
                 tempName = Console.ReadLine();
                 Console.Clear();
             }
+
             Name = tempName.ToString();
 
             // You have 21 points to disperse across all the SPPECIAL attributes, and each one starts at 1, so 28 total
             byte totalPoints = 28;
-            foreach (string attribute in SPECIAL.Keys)
+            for (int index = 0; index < SPECIAL.Length; index++)
             {
+                Data_Types.Attribute attribute = SPECIAL[index];
                 byte value = 1;
 
                 ConsoleKey key = ConsoleKey.Escape;
@@ -147,7 +149,7 @@ namespace Pip_Boy.Entities
                 }
 
                 totalPoints -= value;
-                SPECIAL[attribute] = value;
+                attribute.Value = value;
             }
         }
         #endregion

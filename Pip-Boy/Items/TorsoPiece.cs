@@ -10,7 +10,7 @@ namespace Pip_Boy.Items
     /// </summary>
     public class TorsoPiece : Apparel
     {
-        public static ArmorType TypeOfArmor = GetArmorType(Weight);
+        public ArmorType TypeOfArmor;
 
         private static ArmorType GetArmorType(float weight) => weight switch
         {
@@ -24,6 +24,7 @@ namespace Pip_Boy.Items
         public TorsoPiece(string name, float weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : base(name, weight, value, effects, DT, powerArmor)
         {
             Icon = IconDeterminer.Determine(TypeOfArmor);
+            TypeOfArmor = GetArmorType(Weight);
         }
 
         /// <inheritdoc/>

@@ -25,36 +25,39 @@ namespace Pip_Boy.Entities
 
         /// <summary>
         /// The SPECIAL attributes, which effects player stats.
+        /// The order will not change.
         /// </summary>
-        public Dictionary<string, byte> SPECIAL = new()
-        {
-            {"Strength", 1},
-            {"Perception", 1},
-            {"Endurance", 1},
-            {"Charisma", 1},
-            {"Intelligence", 1},
-            {"Agility", 1},
-            {"Luck", 1}
-        };
+        public Data_Types.Attribute[] SPECIAL =
+        [
+            new(Data_Types.Attribute.AttributeName.Strength, 1),
+            new(Data_Types.Attribute.AttributeName.Perception, 1),
+            new(Data_Types.Attribute.AttributeName.Endurance, 1),
+            new(Data_Types.Attribute.AttributeName.Charisma, 1),
+            new(Data_Types.Attribute.AttributeName.Intelligence, 1),
+            new(Data_Types.Attribute.AttributeName.Agility, 1),
+            new(Data_Types.Attribute.AttributeName.Luck, 1)
+        ];
 
         /// <summary>
         /// The Skills, which effects player stats.
+        /// The order will not change.
         /// </summary>
-        public Dictionary<string, byte> Skills = new(){
-            {"Barter", 10},
-            {"Energy Weapons", 10},
-            {"Explosives", 10},
-            {"Gun", 10},
-            {"Lockpick", 10},
-            {"Medicine", 10},
-            {"Melee Weapons", 10},
-            {"Repair", 10},
-            {"Science", 10},
-            {"Sneak", 10},
-            {"Speech", 10},
-            {"Survival", 10},
-            {"Unarmed", 10}
-        };
+        public Data_Types.Attribute[] Skills =
+        [
+            new(Data_Types.Attribute.AttributeName.Barter, 10),
+            new(Data_Types.Attribute.AttributeName.EnergyWeapons, 10),
+            new(Data_Types.Attribute.AttributeName.Explosives, 10),
+            new(Data_Types.Attribute.AttributeName.Gun, 10),
+            new(Data_Types.Attribute.AttributeName.Lockpick, 10),
+            new(Data_Types.Attribute.AttributeName.Medicine, 10),
+            new(Data_Types.Attribute.AttributeName.MeleeWeapons, 10),
+            new(Data_Types.Attribute.AttributeName.Repair, 10),
+            new(Data_Types.Attribute.AttributeName.Science, 10),
+            new(Data_Types.Attribute.AttributeName.Sneak, 10),
+            new(Data_Types.Attribute.AttributeName.Speech, 10),
+            new(Data_Types.Attribute.AttributeName.Survival, 10),
+            new(Data_Types.Attribute.AttributeName.Unarmed, 10)
+        ];
 
         /// <summary>
         /// The <see cref="Entity"/>s limbs, which can be targeted.
@@ -121,7 +124,7 @@ namespace Pip_Boy.Entities
         /// <summary>
         /// Where the <see cref="Entity"/> is on the <see cref="Map"/>/area.
         /// </summary>
-        public Vector2 Location = new();
+        public Vector2 Location;
         #endregion
 
         #region Constructor
@@ -150,14 +153,14 @@ namespace Pip_Boy.Entities
             // Set attribute to random values, based on the level
             Random random = new();
 
-            foreach (string key in SPECIAL.Keys)
+            for (int i = 0; i < SPECIAL.Length; i++)
             {
-                SPECIAL[key] = (byte)random.Next(1, 10);
+                SPECIAL[i].Value = (byte)random.Next(1, 10);
             }
 
-            foreach (string key in Skills.Keys)
+            for (int i = 0; i < Skills.Length; i++)
             {
-                Skills[key] = (byte)random.Next(10, 100);
+                Skills[i].Value = (byte)random.Next(10, 100);
             }
 
             MaxHealth = (ushort)random.Next(100, 250);
@@ -217,6 +220,11 @@ namespace Pip_Boy.Entities
         /// The equipped <see cref="Weapon"/>, which can be null
         /// </summary>
         public Weapon? weapon;
+
+        /// <summary>
+        /// The equipped <see cref="Aid"/>, which can be null.  The item is "used" once equipped.
+        /// </summary>
+        public Aid? aid;
 
         /// <summary>
         /// The equipped <see cref="Ammo"/>, for the <see cref="weapon"/> which can be null, if the <see cref="weapon"/> is <see cref="Weapon.WeaponType.Melee"/> or <see cref="Weapon.WeaponType.Unarmed"/>
@@ -286,26 +294,26 @@ namespace Pip_Boy.Entities
             ResetEffects();
             foreach (Effect effect in Effects)
             {
-                foreach (string attribute in SPECIAL.Keys)
+                for (int i = 0; i < SPECIAL.Length; i++)
                 {
-                    if (effect.ToTitleCase() == attribute)
+                    Data_Types.Attribute attribute = SPECIAL[i];
+                    if (effect.Effector.ToString() == attribute.Name.ToString())
                     {
-                        if (SPECIAL[attribute] + effect.Value >= 1)
+                        if (attribute.Value + effect.Value >= 1)
                         {
-                            SPECIAL[attribute] = (byte)(SPECIAL[attribute] + effect.Value);
+                            attribute.Value = (byte)(attribute.Value + effect.Value);
                         }
-                        break;
                     }
                 }
-                foreach (string attribute in Skills.Keys)
+                for (int i = 0; i < Skills.Length; i++)
                 {
-                    if (effect.ToTitleCase() == attribute)
+                    Data_Types.Attribute skill = Skills[i];
+                    if (effect.Effector.ToString() == skill.Name.ToString())
                     {
-                        if (Skills[attribute] + effect.Value >= 1)
+                        if (skill.Value + effect.Value >= 10)
                         {
-                            Skills[attribute] = (byte)(Skills[attribute] + effect.Value);
+                            skill.Value = (byte)(skill.Value + effect.Value);
                         }
-                        break;
                     }
                 }
             }
@@ -329,9 +337,9 @@ namespace Pip_Boy.Entities
         {
             StringBuilder stringBuilder = new("S.P.E.C.I.A.L.:");
             stringBuilder.AppendLine();
-            foreach (string attribute in SPECIAL.Keys)
+            foreach (Data_Types.Attribute attribute in SPECIAL)
             {
-                stringBuilder.AppendLine(attribute + ':' + '\t' + SPECIAL[attribute]);
+                stringBuilder.AppendLine('\t' + attribute.ToString());
             }
             return stringBuilder.ToString();
         }
@@ -359,9 +367,9 @@ namespace Pip_Boy.Entities
         {
             StringBuilder stringBuilder = new("Skills:");
             stringBuilder.AppendLine();
-            foreach (string skill in Skills.Keys)
+            foreach (Data_Types.Attribute skill in Skills)
             {
-                stringBuilder.AppendLine('\t' + skill + ':' + '\t' + Skills[skill]);
+                stringBuilder.AppendLine('\t' + skill.ToString());
             }
             return stringBuilder.ToString();
         }
@@ -375,7 +383,7 @@ namespace Pip_Boy.Entities
             StringBuilder stringBuilder = new();
             foreach (Limb limb in Limbs)
             {
-                stringBuilder.Append(limb.Icon);
+                stringBuilder.Append($"{limb.Icon}:{limb.Condition:P}");
             }
             return stringBuilder.ToString();
         }

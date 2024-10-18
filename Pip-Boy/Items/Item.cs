@@ -12,17 +12,15 @@ namespace Pip_Boy.Items
     [Serializable]
     public abstract class Item
     {
-        private readonly Type type;
-
         /// <summary>
         /// What the <see cref="Item"/> is called.
         /// </summary>
-        public string Name;
+        public readonly string Name;
 
         /// <summary>
         /// How much the <see cref="Item"/> weighs.
         /// </summary>
-        public static float Weight;
+        public readonly float Weight;
 
         /// <summary>
         /// How much the <see cref="Item"/> costs.
@@ -32,13 +30,11 @@ namespace Pip_Boy.Items
         /// <summary>
         /// An emoji representation of the <see cref="Item"/>.
         /// </summary>
-        public static string Icon;
+        public string Icon;
 
         #region Constructors
         public Item(string name, float weight, ushort value)
         {
-            type = GetType();
-
             Name = name;
             Weight = weight;
             Value = value;
@@ -49,8 +45,6 @@ namespace Pip_Boy.Items
         /// </summary>
         public Item()
         {
-            type = GetType();
-
             Name = string.Empty;
             Weight = 0;
             Value = 0;
@@ -67,7 +61,7 @@ namespace Pip_Boy.Items
             if (Directory.Exists(folderPath))
             {
                 string filePath = folderPath + Name + ".xml";
-                XmlSerializer x = new(type);
+                XmlSerializer x = new(GetType());
                 StreamWriter writer = new(filePath);
                 //writer.WriteProcessingInstruction("xml-stylesheet", "type=\"text/css\" href=\"../Inventory Styling.css\"");
                 x.Serialize(writer, this);

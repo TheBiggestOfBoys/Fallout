@@ -10,7 +10,7 @@ namespace Pip_Boy.Items
     /// </summary>
     public class HeadPiece : Apparel
     {
-        public static PieceType pieceType = GetPieceType(Weight);
+        public PieceType pieceType ;
 
         private static PieceType GetPieceType(float weight) => weight switch
         {
@@ -24,6 +24,7 @@ namespace Pip_Boy.Items
         public HeadPiece(string name, float weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : base(name, weight, value, effects, DT, powerArmor)
         {
             Icon = IconDeterminer.Determine(pieceType);
+            pieceType = GetPieceType(Weight);
         }
 
         /// <inheritdoc/>
