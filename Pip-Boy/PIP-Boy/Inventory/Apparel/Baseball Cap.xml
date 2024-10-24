@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<HeadPiece xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<Value>5</Value>
+	<Icon>?</Icon>
+	<Condition>1</Condition>
+	<IsEquipped>false</IsEquipped>
+	<Effects />
+	<pieceType>Glasses</pieceType>
+</HeadPiece>

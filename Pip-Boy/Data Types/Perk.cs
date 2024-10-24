@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Xml;
-using System.Xml.Serialization;
 
 namespace Pip_Boy.Data_Types
 {
@@ -53,33 +51,6 @@ namespace Pip_Boy.Data_Types
         {
             Name = string.Empty;
             Description = string.Empty;
-        }
-        #endregion
-
-        #region File Stuff
-        /// <summary>
-        /// Serializes the <see cref="Perk"/> to an <c>*.xml</c> file.
-        /// </summary>
-        /// <param name="folderPath">The folder to write the file to.</param>
-        public void ToFile(string folderPath)
-        {
-            XmlSerializer x = new(GetType());
-            XmlWriter writer = XmlWriter.Create(folderPath + Name + ".xml");
-            x.Serialize(writer, this);
-            writer.Close();
-        }
-
-        /// <summary>
-        /// Deserializes an <c>*.xml</c> file to an <see cref="Perk"/> object.
-        /// </summary>
-        /// <param name="filePath">The path to the <c>*.xml</c> file.</param>
-        public static Perk FromFile(string filePath)
-        {
-            XmlSerializer x = new(typeof(Perk));
-            XmlReader reader = XmlReader.Create(filePath);
-            Perk? tempItem = (Perk?)x.Deserialize(reader) ?? throw new NullReferenceException("XMl file object is null!");
-            reader.Close();
-            return tempItem;
         }
         #endregion
 

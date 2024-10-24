@@ -1,4 +1,5 @@
 ﻿using Pip_Boy.Data_Types;
+using Pip_Boy.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -90,8 +91,8 @@ namespace Pip_Boy.Entities
         public Player(string name, byte[] attributeValues, string directory)
         {
             activeDirectory = directory;
-            perksDirectory = activeDirectory + "Perks\\";
-            inventoryDirectory = activeDirectory + "Inventory\\";
+            perksDirectory = activeDirectory + "PIP-Boy\\" + "Perks\\";
+            inventoryDirectory = activeDirectory + "PIP-Boy\\" + "Inventory\\";
             Inventory = new(inventoryDirectory, this);
             Name = name;
             Icon = "🕹️";
@@ -173,7 +174,7 @@ namespace Pip_Boy.Entities
         {
             foreach (Perk perk in Perks)
             {
-                perk.ToFile(perksDirectory);
+                _ = PipBoy.ToFile(perksDirectory, perk);
             }
         }
 
@@ -184,7 +185,7 @@ namespace Pip_Boy.Entities
         {
             foreach (string filePath in Directory.GetFiles(activeDirectory + "Perks\\"))
             {
-                Perks.Add(Perk.FromFile(filePath));
+                Perks.Add(PipBoy.FromFile<Perk>(filePath));
             }
         }
         #endregion

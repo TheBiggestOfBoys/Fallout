@@ -5,8 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
-using System.Xml;
-using System.Xml.Serialization;
 
 namespace Pip_Boy.Entities
 {
@@ -168,40 +166,6 @@ namespace Pip_Boy.Entities
 
             MaxActionPoints = (byte)random.Next(5, 35);
             ActionPoints = MaxActionPoints;
-        }
-        #endregion
-
-        #region File Stuff
-        /// <summary>
-        /// Serializes the <see cref="Item"/> to an <c>*.xml</c> file.
-        /// </summary>
-        /// <param name="folderPath">The folder to write the <c>*.xml</c> file to.</param>
-        public string ToFile(string folderPath)
-        {
-            string filePath = folderPath + Name + ".xml";
-            XmlSerializer x = new(GetType());
-            XmlWriterSettings xmlWriterSettings = new() { NewLineOnAttributes = true, Indent = true, CloseOutput = true };
-            XmlWriter writer = XmlWriter.Create(filePath, xmlWriterSettings);
-            writer.WriteProcessingInstruction("xml-stylesheet", "type=\"text/css\" href=\"../Inventory Styling.css\"");
-            x.Serialize(writer, this);
-            writer.Close();
-            return filePath;
-        }
-
-        /// <summary>
-        /// Deserializes an <see cref="Entity"/> object from an <c>*.xml</c> file.
-        /// </summary>
-        /// <typeparam name="T">The <see cref="Entity"/> sub-class type to serialize to</typeparam>
-        /// <param name="filePath">The path to the <c>*.xml</c> file.</param>
-        /// <returns>The deserialized <see cref="Entity"/> object.</returns>
-        /// <exception cref="NullReferenceException">If the <c>*.xml</c> file returns a null object.</exception>
-        public static T FromFile<T>(string filePath)
-        {
-            XmlSerializer x = new(typeof(T));
-            XmlReader reader = XmlReader.Create(filePath);
-            T? tempItem = (T?)x.Deserialize(reader) ?? throw new NullReferenceException("XMl file object is null!");
-            reader.Close();
-            return tempItem;
         }
         #endregion
 

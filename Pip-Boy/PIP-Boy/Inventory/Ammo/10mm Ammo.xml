@@ -1,12 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/css" href="../Inventory Styling.css"?>
-<Ammo
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Name>10mm Ammo</Name>
-  <Weight>0</Weight>
-  <Value>1</Value>
-  <Condition>1</Condition>
-  <IsEquipped>false</IsEquipped>
-  <Effects />
+<Ammo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<Value>1</Value>
+	<Icon>🧷</Icon>
+	<Condition>1</Condition>
+	<IsEquipped>false</IsEquipped>
+	<Effects />
 </Ammo>

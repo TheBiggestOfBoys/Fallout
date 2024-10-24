@@ -1,7 +1,6 @@
 ﻿using Pip_Boy.Data_Types;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
@@ -64,29 +63,6 @@ namespace Pip_Boy.Items
         /// <inheritdoc/>
         public Weapon() : base() { }
         #endregion
-
-        /// <summary>
-        /// Deserializes the <see cref="Weapon"/> object from an <c>*.xml</c> file.
-        /// </summary>
-        /// <typeparam name="T">The <see cref="Weapon"/> sub-class type to serialize to</typeparam>
-        /// <param name="filePath">The path to the <c>*.xml</c> file.</param>
-        /// <returns>The deserialized <see cref="Weapon"/> object.</returns>
-        /// <exception cref="NullReferenceException">If the <c>*.xml</c> file returns a null object.</exception>
-        public static Weapon FromFile(string filePath)
-        {
-            if (Path.GetExtension(filePath) == ".xml")
-            {
-                XmlSerializer x = new(typeof(Weapon));
-                StringReader reader = new(filePath);
-                Weapon? tempItem = (Weapon?)x.Deserialize(reader) ?? throw new NullReferenceException("XMl file object is null!");
-                reader.Close();
-                return tempItem;
-            }
-            else
-            {
-                throw new FormatException("File is not '*.xml'!");
-            }
-        }
 
         /// <summary>
         /// The type of weapon, which determines what <see cref="Ammo"/> can be used.

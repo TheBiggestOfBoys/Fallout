@@ -33,9 +33,12 @@ namespace Pip_Boy.Objects
         /// <param name="folderPath">The path to the folder containing the songs</param>
         public Radio(string folderPath)
         {
-            foreach (string path in Directory.GetFiles(folderPath, "*.wav"))
+            if (Directory.Exists(folderPath))
             {
-                songs.Add(new(path));
+                foreach (string path in Directory.GetFiles(folderPath, "*.wav"))
+                {
+                    songs.Add(new(path));
+                }
             }
         }
 

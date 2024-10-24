@@ -1,12 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/css" href="../Inventory Styling.css"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <TorsoPiece xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Name>Vault 13 Jumpsuit</Name>
-  <Weight>5</Weight>
-  <Value>25</Value>
-  <Condition>1</Condition>
-  <IsEquipped>false</IsEquipped>
-  <Effects />
-  <DamageThreshold>3</DamageThreshold>
-  <RequiresPowerArmorTraining>false</RequiresPowerArmorTraining>
+	<Value>25</Value>
+	<Icon>?</Icon>
+	<Condition>1</Condition>
+	<IsEquipped>false</IsEquipped>
+	<Effects />
+	<TypeOfArmor>Clothing</TypeOfArmor>
 </TorsoPiece>

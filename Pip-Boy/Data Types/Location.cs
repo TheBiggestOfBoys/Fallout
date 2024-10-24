@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Numerics;
-using System.Xml;
-using System.Xml.Serialization;
 
 namespace Pip_Boy.Data_Types
 {
@@ -62,33 +60,6 @@ namespace Pip_Boy.Data_Types
             Name = string.Empty;
             Description = string.Empty;
             Icon = string.Empty;
-        }
-        #endregion
-
-        #region File Stuff
-        /// <summary>
-        /// Serializes the <see cref="Location"/> to an <c>*.xml</c> file.
-        /// </summary>
-        /// <param name="folderPath">The folder to write the file to.</param>
-        public void ToFile(string folderPath)
-        {
-            XmlSerializer x = new(GetType());
-            XmlWriter writer = XmlWriter.Create(folderPath + Name + ".xml");
-            x.Serialize(writer, this);
-            writer.Close();
-        }
-
-        /// <summary>
-        /// Deserializes an <c>*.xml</c> file to an <see cref="Location"/> object.
-        /// </summary>
-        /// <param name="filePath">The path to the <c>*.xml</c> file.</param>
-        public static Location FromFile(string filePath)
-        {
-            XmlSerializer x = new(typeof(Location));
-            XmlReader reader = XmlReader.Create(filePath);
-            Location? tempItem = (Location?)x.Deserialize(reader) ?? throw new NullReferenceException("XMl file object is null!");
-            reader.Close();
-            return tempItem;
         }
         #endregion
 

@@ -70,7 +70,7 @@ namespace Pip_Boy.Objects
             for (int i = 0; i < filePaths.Length; i++)
             {
                 string filePath = filePaths[i];
-                tempLocations[i] = Location.FromFile(filePath);
+                tempLocations[i] = PipBoy.FromFile<Location>(filePath);
             }
             return tempLocations;
         }

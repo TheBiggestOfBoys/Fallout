@@ -1,11 +1,14 @@
 ﻿using Pip_Boy.Data_Types;
 using Pip_Boy.Entities;
+using Pip_Boy.Items;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Media;
 using System.Text;
 using System.Threading;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Pip_Boy.Objects
 {
@@ -28,7 +31,7 @@ namespace Pip_Boy.Objects
         /// <summary>
         /// The <c>Player</c> object tied to the PIP-Boy.
         /// </summary>
-        public Player player = new("Player", [5, 5, 5, 5, 5, 5, 5], "");
+        public Player player = new("Player", [5, 5, 5, 5, 5, 5, 5], string.Empty);
 
         /// <summary>
         /// Controls music.
@@ -38,7 +41,7 @@ namespace Pip_Boy.Objects
         /// <summary>
         /// Displays points of interest.
         /// </summary>
-        public Map map = new(25, 50, "Map Locations\\");
+        public Map map = new(25, 50, "PIP-Boy\\Map Locations\\");
 
         /// <summary>
         /// Controls <c>PIPBoy</c> sound effects.
@@ -496,6 +499,196 @@ namespace Pip_Boy.Objects
             soundEffects.SoundLocation = path;
             soundEffects.Load();
             soundEffects.Play();
+        }
+        #endregion
+
+        #region File Stuff
+        /// <summary>
+        /// Serializes the <see cref="Item"/> to an <c>*.xml</c> file.
+        /// </summary>
+        /// <param name="folderPath">The folder to write the <c>*.xml</c> file to.</param>
+        /// <param name="item">The <see cref="Item"/> to serialize.</param>
+        public static string ToFile<T>(string folderPath, Item item)
+        {
+            if (Directory.Exists(folderPath))
+            {
+                string filePath = folderPath + item.Name + ".xml";
+                XmlSerializer x = new(typeof(T));
+                XmlWriterSettings writerSettings = new()
+                {
+                    Indent = true,              // Indent elements for readability
+                    IndentChars = "\t",         // Use tabs for indentation
+                    NewLineChars = "\n",        // Use newline for element endings
+                    NewLineHandling = NewLineHandling.Replace, // Standardize newline handling
+                    Encoding = Encoding.UTF8,   // Set encoding to UTF-8
+                    OmitXmlDeclaration = false, // Include XML declaration
+                    NewLineOnAttributes = false // Keep attributes on the same line
+                };
+
+                try
+                {
+                    using (XmlWriter writer = XmlWriter.Create(filePath, writerSettings))
+                    {
+                        x.Serialize(writer, item);
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new InvalidOperationException($"Failed to serialize the item to the file: {filePath}", e);
+                }
+                return filePath;
+            }
+            throw new DirectoryNotFoundException("Folder not found. " + folderPath);
+        }
+
+
+        /// <summary>
+        /// Serializes the <see cref="Entity"/> to an <c>*.xml</c> file.
+        /// </summary>
+        /// <param name="folderPath">The folder to write the <c>*.xml</c> file to.</param>
+        /// <param name="entity">The <see cref="Entity"/> to serialize.</param>
+        public static string ToFile<T>(string folderPath, Entity entity)
+        {
+            if (Directory.Exists(folderPath))
+            {
+                string filePath = folderPath + entity.Name + ".xml";
+                XmlSerializer x = new(typeof(T));
+                XmlWriterSettings writerSettings = new()
+                {
+                    Indent = true,              // Indent elements for readability
+                    IndentChars = "\t",         // Use tabs for indentation
+                    NewLineChars = "\n",        // Use newline for element endings
+                    NewLineHandling = NewLineHandling.Replace, // Standardize newline handling
+                    Encoding = Encoding.UTF8,   // Set encoding to UTF-8
+                    OmitXmlDeclaration = false, // Include XML declaration
+                    NewLineOnAttributes = false // Keep attributes on the same line
+                };
+
+                try
+                {
+                    using (XmlWriter writer = XmlWriter.Create(filePath, writerSettings))
+                    {
+                        x.Serialize(writer, entity);
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new InvalidOperationException($"Failed to serialize the item to the file: {filePath}", e);
+                }
+                return filePath;
+            }
+            throw new DirectoryNotFoundException("Folder not found. " + folderPath);
+        }
+
+        /// <summary>
+        /// Serializes the <see cref="Perk"/> to an <c>*.xml</c> file.
+        /// </summary>
+        /// <param name="folderPath">The folder to write the <c>*.xml</c> file to.</param>
+        /// <param name="perk">The <see cref="Perk"/> to serialize.</param>
+        public static string ToFile(string folderPath, Perk perk)
+        {
+            if (Directory.Exists(folderPath))
+            {
+                string filePath = folderPath + perk.Name + ".xml";
+                XmlSerializer x = new(typeof(Perk));
+                XmlWriterSettings writerSettings = new()
+                {
+                    Indent = true,              // Indent elements for readability
+                    IndentChars = "\t",         // Use tabs for indentation
+                    NewLineChars = "\n",        // Use newline for element endings
+                    NewLineHandling = NewLineHandling.Replace, // Standardize newline handling
+                    Encoding = Encoding.UTF8,   // Set encoding to UTF-8
+                    OmitXmlDeclaration = false, // Include XML declaration
+                    NewLineOnAttributes = false // Keep attributes on the same line
+                };
+
+                try
+                {
+                    using (XmlWriter writer = XmlWriter.Create(filePath, writerSettings))
+                    {
+                        x.Serialize(writer, perk);
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new InvalidOperationException($"Failed to serialize the item to the file: {filePath}", e);
+                }
+                return filePath;
+            }
+            throw new DirectoryNotFoundException("Folder not found. " + folderPath);
+        }
+
+        /// <summary>
+        /// Deserializes an <see cref="Entity"/> object from an <c>*.xml</c> file.
+        /// </summary>
+        /// <typeparam name="T">The <see cref="Entity"/> sub-class type to serialize to</typeparam>
+        /// <param name="filePath">The path to the <c>*.xml</c> file.</param>
+        /// <returns>The deserialized <see cref="Entity"/> object.</returns>
+        /// <exception cref="NullReferenceException">If the <c>*.xml</c> file returns a null object.</exception>
+        public static T FromFile<T>(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                if (Path.GetExtension(filePath) == ".xml")
+                {
+                    XmlSerializer x = new(typeof(T));
+                    XmlReaderSettings readerSettings = new()
+                    {
+                        IgnoreWhitespace = true,     // Ignore insignificant whitespace
+                        IgnoreComments = true,       // Ignore comments in the XML
+                        IgnoreProcessingInstructions = true, // Ignore processing instructions
+                        CheckCharacters = true,      // Ensure valid XML characters
+                        DtdProcessing = DtdProcessing.Ignore, // Disable DTD processing for security
+                        ValidationType = ValidationType.None // Change to Schema if XML schema validation is needed
+                    };
+
+                    try
+                    {
+                        using (XmlReader reader = XmlReader.Create(filePath, readerSettings))
+                        {
+                            return (T)x.Deserialize(reader);
+                        }
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        throw new InvalidOperationException($"Failed to deserialize the file: {filePath}", e);
+                    }
+                }
+                throw new FileLoadException("File is not '*.xml'. ", filePath);
+            }
+            throw new FileNotFoundException("File not found. ", filePath);
+        }
+
+        /// <summary>
+        /// Reads the root tag of an <c>*.xml</c> file.
+        /// </summary>
+        /// <param name="filePath">The path to the file</param>
+        /// <returns>The <see cref="Type"/> from the tag name.</returns>
+        /// <exception cref="NullReferenceException">If no head object tag is found.</exception>
+        /// <exception cref="FormatException">IF the file is no <c>*.xml</c>.</exception>
+        public static Type GetTypeFromXML(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                if (Path.GetExtension(filePath) == ".xml")
+                {
+                    XmlDocument doc = new();
+                    doc.Load(filePath);
+                    string typeName = doc.DocumentElement?.LocalName ?? throw new NullReferenceException("No head object tag found!");
+                    return typeName switch
+                    {
+                        "Weapon" => typeof(Weapon),
+                        "HeadPiece" => typeof(HeadPiece),
+                        "TorsoPiece" => typeof(TorsoPiece),
+                        "Aid" => typeof(Aid),
+                        "Misc" => typeof(Misc),
+                        "Ammo" => typeof(Ammo),
+                        _ => throw new NullReferenceException("The type is null!"),
+                    };
+                }
+                throw new FormatException("File is not '*.xml'!");
+            }
+            throw new FileNotFoundException("File not found.", filePath);
         }
         #endregion
 
