@@ -117,64 +117,65 @@ namespace Pip_Boy.Objects
         /// <param name="player">Used to determine max carry weight.</param>
         public Inventory(string folderPath, Player player)
         {
-            if (Directory.Exists(folderPath))
+            if (!Directory.Exists(folderPath))
             {
-                // Set the folder paths
-                if (!folderPath.EndsWith('\\'))
-                {
-                    folderPath += '\\';
-                }
-                InventoryFolderPath = folderPath;
-                WeaponFolderPath = InventoryFolderPath + "Weapon\\";
-                ApparelFolderPath = InventoryFolderPath + "Apparel\\";
-                AidFolderPath = InventoryFolderPath + "Aid\\";
-                MiscFolderPath = InventoryFolderPath + "Misc\\";
-                AmmoFolderPath = InventoryFolderPath + "Ammo\\";
+                throw new DirectoryNotFoundException("Folder not found. " + folderPath);
+            }
 
-                MaxCarryWeight = (ushort)(150 + (player.SPECIAL[0].Value * 10));
+            // Set the folder paths
+            if (!folderPath.EndsWith('\\'))
+            {
+                folderPath += '\\';
+            }
+            InventoryFolderPath = folderPath;
+            WeaponFolderPath = InventoryFolderPath + "Weapon\\";
+            ApparelFolderPath = InventoryFolderPath + "Apparel\\";
+            AidFolderPath = InventoryFolderPath + "Aid\\";
+            MiscFolderPath = InventoryFolderPath + "Misc\\";
+            AmmoFolderPath = InventoryFolderPath + "Ammo\\";
 
-                // Get the sub-directories of the <c>Inventory</c> directory
-                string[] subDirectories = Directory.GetDirectories(folderPath);
-                // Strip the containing directory info
-                for (int index = 0; index < subDirectories.Length; index++)
-                {
-                    subDirectories[index] = subDirectories[index].Split('\\')[^1];
-                }
+            MaxCarryWeight = (ushort)(150 + (player.SPECIAL[0].Value * 10));
 
-                foreach (string expectedSubDirectory in expectedSubDirectories)
+            // Get the sub-directories of the Inventory directory
+            string[] subDirectories = Directory.GetDirectories(folderPath);
+            // Strip the containing directory info
+            for (int index = 0; index < subDirectories.Length; index++)
+            {
+                subDirectories[index] = Path.GetFileName(subDirectories[index]);
+            }
+
+            foreach (string expectedSubDirectory in expectedSubDirectories)
+            {
+                if (subDirectories.Contains(expectedSubDirectory))
                 {
-                    if (subDirectories.Contains(expectedSubDirectory))
+                    string currentFolder = folderPath + expectedSubDirectory + '\\';
+                    string[] filePaths = Directory.GetFiles(currentFolder);
+                    foreach (string filePath in filePaths)
                     {
-                        string currentFolder = folderPath + expectedSubDirectory + '\\';
-                        string[] filePaths = Directory.GetFiles(currentFolder);
-                        foreach (string filePath in filePaths)
+                        switch (expectedSubDirectory)
                         {
-                            switch (expectedSubDirectory)
-                            {
-                                case "Weapon":
-                                    Weapons.Add(PipBoy.FromFile<Weapon>(filePath));
-                                    break;
-                                case "Apparel":
-                                    if (PipBoy.GetTypeFromXML(filePath) == typeof(HeadPiece))
-                                        Apparels.Add(PipBoy.FromFile<HeadPiece>(filePath));
-                                    else if (PipBoy.GetTypeFromXML(filePath) == typeof(TorsoPiece))
-                                        Apparels.Add(PipBoy.FromFile<TorsoPiece>(filePath));
-                                    break;
-                                case "Aid":
-                                    Aids.Add(PipBoy.FromFile<Aid>(filePath));
-                                    break;
-                                case "Misc":
-                                    Miscs.Add(PipBoy.FromFile<Misc>(filePath));
-                                    break;
-                                case "Ammo":
-                                    Ammos.Add(PipBoy.FromFile<Ammo>(filePath));
-                                    break;
-                            }
+                            case "Weapon":
+                                Weapons.Add(PipBoy.FromFile<Weapon>(filePath));
+                                break;
+                            case "Apparel":
+                                if (PipBoy.GetTypeFromXML(filePath) == typeof(HeadPiece))
+                                    Apparels.Add(PipBoy.FromFile<HeadPiece>(filePath));
+                                else if (PipBoy.GetTypeFromXML(filePath) == typeof(TorsoPiece))
+                                    Apparels.Add(PipBoy.FromFile<TorsoPiece>(filePath));
+                                break;
+                            case "Aid":
+                                Aids.Add(PipBoy.FromFile<Aid>(filePath));
+                                break;
+                            case "Misc":
+                                Miscs.Add(PipBoy.FromFile<Misc>(filePath));
+                                break;
+                            case "Ammo":
+                                Ammos.Add(PipBoy.FromFile<Ammo>(filePath));
+                                break;
                         }
                     }
                 }
             }
-            throw new DirectoryNotFoundException("Folder not found. " + folderPath);
         }
         #endregion
 

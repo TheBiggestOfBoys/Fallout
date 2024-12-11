@@ -35,6 +35,7 @@
 	<ItemGroup>
 		<Folder Include="PIP-Boy\Data\" />
 		<Folder Include="PIP-Boy\Factions\" />
+		<Folder Include="PIP-Boy\Map Locations\" />
 		<Folder Include="PIP-Boy\Quests\Active Quests\" />
 		<Folder Include="PIP-Boy\Quests\Completed Quests\" />
 	</ItemGroup>

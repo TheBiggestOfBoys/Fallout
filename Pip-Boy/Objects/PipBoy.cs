@@ -31,7 +31,7 @@ namespace Pip_Boy.Objects
         /// <summary>
         /// The <c>Player</c> object tied to the PIP-Boy.
         /// </summary>
-        public Player player = new("Player", [5, 5, 5, 5, 5, 5, 5], string.Empty);
+        public Player player = new(workingDirectory);
 
         /// <summary>
         /// Controls music.
@@ -503,6 +503,7 @@ namespace Pip_Boy.Objects
         #endregion
 
         #region File Stuff
+        #region To File
         /// <summary>
         /// Serializes the <see cref="Item"/> to an <c>*.xml</c> file.
         /// </summary>
@@ -525,17 +526,8 @@ namespace Pip_Boy.Objects
                     NewLineOnAttributes = false // Keep attributes on the same line
                 };
 
-                try
-                {
-                    using (XmlWriter writer = XmlWriter.Create(filePath, writerSettings))
-                    {
-                        x.Serialize(writer, item);
-                    }
-                }
-                catch (Exception e)
-                {
-                    throw new InvalidOperationException($"Failed to serialize the item to the file: {filePath}", e);
-                }
+                XmlWriter writer = XmlWriter.Create(filePath, writerSettings);
+                x.Serialize(writer, item);
                 return filePath;
             }
             throw new DirectoryNotFoundException("Folder not found. " + folderPath);
@@ -564,17 +556,9 @@ namespace Pip_Boy.Objects
                     NewLineOnAttributes = false // Keep attributes on the same line
                 };
 
-                try
-                {
-                    using (XmlWriter writer = XmlWriter.Create(filePath, writerSettings))
-                    {
-                        x.Serialize(writer, entity);
-                    }
-                }
-                catch (Exception e)
-                {
-                    throw new InvalidOperationException($"Failed to serialize the item to the file: {filePath}", e);
-                }
+                XmlWriter writer = XmlWriter.Create(filePath, writerSettings);
+                x.Serialize(writer, entity);
+
                 return filePath;
             }
             throw new DirectoryNotFoundException("Folder not found. " + folderPath);
@@ -602,22 +586,16 @@ namespace Pip_Boy.Objects
                     NewLineOnAttributes = false // Keep attributes on the same line
                 };
 
-                try
-                {
-                    using (XmlWriter writer = XmlWriter.Create(filePath, writerSettings))
-                    {
-                        x.Serialize(writer, perk);
-                    }
-                }
-                catch (Exception e)
-                {
-                    throw new InvalidOperationException($"Failed to serialize the item to the file: {filePath}", e);
-                }
+                XmlWriter writer = XmlWriter.Create(filePath, writerSettings);
+                x.Serialize(writer, perk);
+
                 return filePath;
             }
             throw new DirectoryNotFoundException("Folder not found. " + folderPath);
         }
+        #endregion
 
+        #region From File
         /// <summary>
         /// Deserializes an <see cref="Entity"/> object from an <c>*.xml</c> file.
         /// </summary>
@@ -642,17 +620,9 @@ namespace Pip_Boy.Objects
                         ValidationType = ValidationType.None // Change to Schema if XML schema validation is needed
                     };
 
-                    try
-                    {
-                        using (XmlReader reader = XmlReader.Create(filePath, readerSettings))
-                        {
-                            return (T)x.Deserialize(reader);
-                        }
-                    }
-                    catch (InvalidOperationException e)
-                    {
-                        throw new InvalidOperationException($"Failed to deserialize the file: {filePath}", e);
-                    }
+                    XmlReader reader = XmlReader.Create(filePath, readerSettings);
+
+                    return (T)x.Deserialize(reader);
                 }
                 throw new FileLoadException("File is not '*.xml'. ", filePath);
             }
@@ -675,22 +645,23 @@ namespace Pip_Boy.Objects
                     XmlDocument doc = new();
                     doc.Load(filePath);
                     string typeName = doc.DocumentElement?.LocalName ?? throw new NullReferenceException("No head object tag found!");
-                    return typeName switch
-                    {
-                        "Weapon" => typeof(Weapon),
-                        "HeadPiece" => typeof(HeadPiece),
-                        "TorsoPiece" => typeof(TorsoPiece),
-                        "Aid" => typeof(Aid),
-                        "Misc" => typeof(Misc),
-                        "Ammo" => typeof(Ammo),
-                        _ => throw new NullReferenceException("The type is null!"),
-                    };
+                    return Type.GetType("Pip_Boy.Items." + typeName, true);
                 }
                 throw new FormatException("File is not '*.xml'!");
             }
             throw new FileNotFoundException("File not found.", filePath);
         }
         #endregion
+        #endregion
+
+        /// <summary>
+        /// Write all data to files before deletion.
+        /// </summary>
+        public void Shutdown()
+        {
+            player.SavePlayerPerks();
+            player.Inventory.Save();
+        }
 
         #region Enums
         /// <summary>

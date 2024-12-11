@@ -91,8 +91,8 @@ namespace Pip_Boy.Entities
         public Player(string name, byte[] attributeValues, string directory)
         {
             activeDirectory = directory;
-            perksDirectory = activeDirectory + "PIP-Boy\\" + "Perks\\";
-            inventoryDirectory = activeDirectory + "PIP-Boy\\" + "Inventory\\";
+            perksDirectory = activeDirectory + "Perks\\";
+            inventoryDirectory = activeDirectory + "Inventory\\";
             Inventory = new(inventoryDirectory, this);
             Name = name;
             Icon = "🕹️";
