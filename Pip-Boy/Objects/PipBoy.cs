@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Media;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Xml;
@@ -31,7 +32,7 @@ namespace Pip_Boy.Objects
         /// <summary>
         /// The <c>Player</c> object tied to the PIP-Boy.
         /// </summary>
-        public Player player = new(workingDirectory);
+        public Player player = new();
 
         /// <summary>
         /// Controls music.
@@ -505,90 +506,38 @@ namespace Pip_Boy.Objects
         #region File Stuff
         #region To File
         /// <summary>
-        /// Serializes the <see cref="Item"/> to an <c>*.xml</c> file.
-        /// </summary>
-        /// <param name="folderPath">The folder to write the <c>*.xml</c> file to.</param>
-        /// <param name="item">The <see cref="Item"/> to serialize.</param>
-        public static string ToFile<T>(string folderPath, Item item)
-        {
-            if (Directory.Exists(folderPath))
-            {
-                string filePath = folderPath + item.Name + ".xml";
-                XmlSerializer x = new(typeof(T));
-                XmlWriterSettings writerSettings = new()
-                {
-                    Indent = true,              // Indent elements for readability
-                    IndentChars = "\t",         // Use tabs for indentation
-                    NewLineChars = "\n",        // Use newline for element endings
-                    NewLineHandling = NewLineHandling.Replace, // Standardize newline handling
-                    Encoding = Encoding.UTF8,   // Set encoding to UTF-8
-                    OmitXmlDeclaration = false, // Include XML declaration
-                    NewLineOnAttributes = false // Keep attributes on the same line
-                };
-
-                XmlWriter writer = XmlWriter.Create(filePath, writerSettings);
-                x.Serialize(writer, item);
-                return filePath;
-            }
-            throw new DirectoryNotFoundException("Folder not found. " + folderPath);
-        }
-
-
-        /// <summary>
         /// Serializes the <see cref="Entity"/> to an <c>*.xml</c> file.
         /// </summary>
         /// <param name="folderPath">The folder to write the <c>*.xml</c> file to.</param>
-        /// <param name="entity">The <see cref="Entity"/> to serialize.</param>
-        public static string ToFile<T>(string folderPath, Entity entity)
+        /// <param name="obj">The <see cref="object"/> to serialize.</param>
+        public static string ToFile(string folderPath, object obj)
         {
             if (Directory.Exists(folderPath))
             {
-                string filePath = folderPath + entity.Name + ".xml";
-                XmlSerializer x = new(typeof(T));
+                Type type = obj.GetType();
+                string name = obj switch
+                {
+                    (Item item) => item.Name,
+                    (Entity entity) => entity.Name,
+                    (Perk perk) => perk.Name,
+                    _ => throw new Exception("Object is invalid type!"),
+                };
+                string filePath = folderPath + name + ".xml";
+                DataContractSerializer x = new(type);
+
                 XmlWriterSettings writerSettings = new()
                 {
                     Indent = true,              // Indent elements for readability
                     IndentChars = "\t",         // Use tabs for indentation
                     NewLineChars = "\n",        // Use newline for element endings
                     NewLineHandling = NewLineHandling.Replace, // Standardize newline handling
-                    Encoding = Encoding.UTF8,   // Set encoding to UTF-8
                     OmitXmlDeclaration = false, // Include XML declaration
                     NewLineOnAttributes = false // Keep attributes on the same line
                 };
 
                 XmlWriter writer = XmlWriter.Create(filePath, writerSettings);
-                x.Serialize(writer, entity);
-
-                return filePath;
-            }
-            throw new DirectoryNotFoundException("Folder not found. " + folderPath);
-        }
-
-        /// <summary>
-        /// Serializes the <see cref="Perk"/> to an <c>*.xml</c> file.
-        /// </summary>
-        /// <param name="folderPath">The folder to write the <c>*.xml</c> file to.</param>
-        /// <param name="perk">The <see cref="Perk"/> to serialize.</param>
-        public static string ToFile(string folderPath, Perk perk)
-        {
-            if (Directory.Exists(folderPath))
-            {
-                string filePath = folderPath + perk.Name + ".xml";
-                XmlSerializer x = new(typeof(Perk));
-                XmlWriterSettings writerSettings = new()
-                {
-                    Indent = true,              // Indent elements for readability
-                    IndentChars = "\t",         // Use tabs for indentation
-                    NewLineChars = "\n",        // Use newline for element endings
-                    NewLineHandling = NewLineHandling.Replace, // Standardize newline handling
-                    Encoding = Encoding.UTF8,   // Set encoding to UTF-8
-                    OmitXmlDeclaration = false, // Include XML declaration
-                    NewLineOnAttributes = false // Keep attributes on the same line
-                };
-
-                XmlWriter writer = XmlWriter.Create(filePath, writerSettings);
-                x.Serialize(writer, perk);
-
+                x.WriteObject(writer, obj);
+                writer.Close();
                 return filePath;
             }
             throw new DirectoryNotFoundException("Folder not found. " + folderPath);
@@ -609,7 +558,8 @@ namespace Pip_Boy.Objects
             {
                 if (Path.GetExtension(filePath) == ".xml")
                 {
-                    XmlSerializer x = new(typeof(T));
+                    DataContractSerializer x = new(typeof(T));
+
                     XmlReaderSettings readerSettings = new()
                     {
                         IgnoreWhitespace = true,     // Ignore insignificant whitespace
@@ -622,7 +572,7 @@ namespace Pip_Boy.Objects
 
                     XmlReader reader = XmlReader.Create(filePath, readerSettings);
 
-                    return (T)x.Deserialize(reader);
+                    return (T)x.ReadObject(reader);
                 }
                 throw new FileLoadException("File is not '*.xml'. ", filePath);
             }
@@ -653,6 +603,52 @@ namespace Pip_Boy.Objects
         }
         #endregion
         #endregion
+
+        /// <summary>
+        /// Player creation using console input
+        /// </summary>
+        public Player CreatePlayer()
+        {
+            string? tempName = null;
+            while (tempName == null)
+            {
+                Console.Write("Enter Player Name: ");
+                tempName = Console.ReadLine();
+                Console.Clear();
+            }
+
+            // You have 21 points to disperse across all the SPPECIAL attributes, and each one starts at 1, so 28 total
+            byte[] attributeValues = new byte[7];
+            byte totalPoints = 28;
+            int index = 0;
+            foreach (Data_Types.Attribute attribute in Enum.GetValues(typeof(Data_Types.Attribute)))
+            {
+                byte value = 1;
+
+                ConsoleKey key = ConsoleKey.Escape;
+                while (key != ConsoleKey.Enter)
+                {
+                    Console.WriteLine($"Total Points: {totalPoints - value}");
+                    Console.WriteLine($"Enter {attribute} value (1 - 10): {value}");
+                    key = Console.ReadKey().Key;
+                    switch (key)
+                    {
+                        case ConsoleKey.LeftArrow when value > 1 && value < totalPoints:
+                            value--;
+                            break;
+                        case ConsoleKey.RightArrow when value < 10 && value < totalPoints:
+                            value++;
+                            break;
+                    }
+                    Console.Clear();
+                }
+
+                totalPoints -= value;
+                attributeValues = new byte[index];
+                index++;
+            }
+            return new(tempName, attributeValues, activeDirectory);
+        }
 
         /// <summary>
         /// Write all data to files before deletion.

@@ -3,6 +3,7 @@ using Pip_Boy.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Text;
 using static Pip_Boy.Data_Types.Effect;
 
@@ -18,21 +19,25 @@ namespace Pip_Boy.Entities
         /// <summary>
         /// How much radiation the <see cref="Player"/> has.
         /// </summary>
+        [DataMember]
         public uint Rads { get; private set; } = 0u;
 
         /// <summary>
         /// How sick the <see cref="Player"/> is, based on <see cref="Rads"/>. 
         /// </summary>
+        [DataMember]
         public RadiationSicknessLevels RadiationSicknessLevel => (RadiationSicknessLevels)Rads;
 
         /// <summary>
         /// The emoji icon that represents the current <see cref="RadiationSicknessLevel"/>.
         /// </summary>
+        [DataMember]
         public string RadiationIcon => IconDeterminer.Determine(RadiationSicknessLevel);
 
         /// <summary>
         /// The <see cref="Effect"/>s to apply for each <see cref="RadiationSicknessLevel"/>.
         /// </summary>
+        [DataMember]
         public static readonly Effect[][] RadiationSicknessEffects = [
             [],
             [new(EffectTypes.Endurance, -1, 0)],
@@ -45,6 +50,7 @@ namespace Pip_Boy.Entities
         /// <summary>
         /// The percentage resistance to radiation.
         /// </summary>
+        [DataMember]
         public float RadiationResistance { get; private set; }
         #endregion
 
@@ -52,7 +58,7 @@ namespace Pip_Boy.Entities
         /// <summary>
         /// <see cref="List{Perk}"/> of all active <see cref="Perk"/> on the <see cref="Player"/>.
         /// </summary>
-        [NonSerialized]
+        [DataMember]
         public List<Perk> Perks = [];
         #endregion
 
@@ -88,13 +94,12 @@ namespace Pip_Boy.Entities
         /// <param name="name">The player's name</param>
         /// <param name="attributeValues">The special values</param>
         /// <param name="directory">The directory to load files from</param>
-        public Player(string name, byte[] attributeValues, string directory)
+        public Player(string name, byte[] attributeValues, string directory) : base(name, 0)
         {
             activeDirectory = directory;
             perksDirectory = activeDirectory + "Perks\\";
             inventoryDirectory = activeDirectory + "Inventory\\";
             Inventory = new(inventoryDirectory, this);
-            Name = name;
             Icon = "🕹️";
 
             byte index = 0;
@@ -102,55 +107,6 @@ namespace Pip_Boy.Entities
             {
                 SPECIAL[i].Value = attributeValues[index];
                 index++;
-            }
-        }
-
-        /// <summary>
-        /// Player creation using console input
-        /// </summary>
-        public Player(string directory) : base()
-        {
-            activeDirectory = directory;
-            perksDirectory = activeDirectory + "Perks\\";
-            inventoryDirectory = activeDirectory + "Inventory\\";
-            Inventory = new(inventoryDirectory, this);
-            string? tempName = null;
-            while (tempName == null)
-            {
-                Console.Write("Enter Player Name: ");
-                tempName = Console.ReadLine();
-                Console.Clear();
-            }
-
-            Name = tempName.ToString();
-
-            // You have 21 points to disperse across all the SPPECIAL attributes, and each one starts at 1, so 28 total
-            byte totalPoints = 28;
-            for (int index = 0; index < SPECIAL.Length; index++)
-            {
-                Data_Types.Attribute attribute = SPECIAL[index];
-                byte value = 1;
-
-                ConsoleKey key = ConsoleKey.Escape;
-                while (key != ConsoleKey.Enter)
-                {
-                    Console.WriteLine($"Total Points: {totalPoints - value}");
-                    Console.WriteLine($"Enter {attribute} value (1 - 10): {value}");
-                    key = Console.ReadKey().Key;
-                    switch (key)
-                    {
-                        case ConsoleKey.LeftArrow when value > 1 && value < totalPoints:
-                            value--;
-                            break;
-                        case ConsoleKey.RightArrow when value < 10 && value < totalPoints:
-                            value++;
-                            break;
-                    }
-                    Console.Clear();
-                }
-
-                totalPoints -= value;
-                attribute.Value = value;
             }
         }
         #endregion

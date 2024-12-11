@@ -4,6 +4,7 @@ using Pip_Boy.Objects;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Pip_Boy.Entities
@@ -11,20 +12,21 @@ namespace Pip_Boy.Entities
     /// <summary>
     /// Generic type which other <see cref="Entity"/> sub-classes will inherit from
     /// </summary>
-    [Serializable]
+    [DataContract]
     public abstract class Entity
     {
         #region Arrays
         /// <summary>
         /// This holds all objects belonging to the <see cref="Entity"/>.
         /// </summary>
-        [NonSerialized]
+        [DataMember]
         public Inventory Inventory;
 
         /// <summary>
         /// The SPECIAL attributes, which effects player stats.
         /// The order will not change.
         /// </summary>
+        [DataMember]
         public Data_Types.Attribute[] SPECIAL =
         [
             new(Data_Types.Attribute.AttributeName.Strength, 1),
@@ -40,6 +42,7 @@ namespace Pip_Boy.Entities
         /// The Skills, which effects player stats.
         /// The order will not change.
         /// </summary>
+        [DataMember]
         public Data_Types.Attribute[] Skills =
         [
             new(Data_Types.Attribute.AttributeName.Barter, 10),
@@ -60,11 +63,13 @@ namespace Pip_Boy.Entities
         /// <summary>
         /// The <see cref="Entity"/>s limbs, which can be targeted.
         /// </summary>
+        [DataMember]
         public Limb[] Limbs;
 
         /// <summary>
         /// All <see cref="Effect"/>s that are active on the <see cref="Entity"/>.
         /// </summary>
+        [DataMember]
         public List<Effect> Effects = [];
         #endregion
 
@@ -72,56 +77,67 @@ namespace Pip_Boy.Entities
         /// <summary>
         /// The name of the <see cref="Entity"/>.
         /// </summary>
-        public string Name;
+        [DataMember]
+        public readonly string Name;
 
         /// <summary>
         /// The <see cref="Entity"/>'s level, which determines attributes.
         /// </summary>
+        [DataMember]
         public byte Level;
 
         /// <summary>
         /// The gender of the <see cref="Humanoid"/>, <c>false</c> is Male <c>true</c> is female (since <c>bool</c> defaults to <c>false</c>
         /// </summary>
+        [DataMember]
         public readonly bool Gender;
 
         /// <summary>
         /// The maximum health the <see cref="Entity"/> can have.
         /// </summary>
+        [DataMember]
         public ushort MaxHealth { get; private set; }
 
         /// <summary>
         /// THe current health the <see cref="Entity"/> has.
         /// </summary>
+        [DataMember]
         public int CurrentHealth { get; private set; }
 
         /// <summary>
         /// What percent of health the <see cref="Entity"/> has.
         /// </summary>
+        [DataMember]
         public float HealthPercentage => CurrentHealth / MaxHealth;
 
         /// <summary>
         /// The resistance to physical damage.
         /// </summary>
+        [DataMember]
         public byte DamageResistance { get; private set; }
 
         /// <summary>
         /// The maximum number of Action Points (AP) the <see cref="Entity"/> has.
         /// </summary>
+        [DataMember]
         public byte MaxActionPoints { get; private set; }
 
         /// <summary>
         /// The current amount of Action Points (AP) the <see cref="Entity"/> has.
         /// </summary>
+        [DataMember]
         public byte ActionPoints { get; private set; }
 
         /// <summary>
         /// An emoji representing the <see cref="Entity"/>.
         /// </summary>
+        [DataMember]
         public string Icon;
 
         /// <summary>
         /// Where the <see cref="Entity"/> is on the <see cref="Map"/>/area.
         /// </summary>
+        [DataMember]
         public Vector2 Location;
         #endregion
 

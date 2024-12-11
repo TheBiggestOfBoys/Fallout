@@ -1,11 +1,10 @@
-﻿using static Pip_Boy.Data_Types.Attribute;
+﻿using Pip_Boy.Items;
+using static Pip_Boy.Data_Types.Attribute;
 using static Pip_Boy.Data_Types.Effect;
 using static Pip_Boy.Entities.Player;
 using static Pip_Boy.Items.Aid;
 using static Pip_Boy.Items.Ammo;
-using static Pip_Boy.Items.HeadPiece;
 using static Pip_Boy.Items.Misc;
-using static Pip_Boy.Items.TorsoPiece;
 using static Pip_Boy.Items.Weapon;
 
 namespace Pip_Boy.Data_Types
@@ -213,20 +212,11 @@ namespace Pip_Boy.Data_Types
             MiscType.Other or _ => UnknownLogo
         };
 
-        public static string Determine(PieceType pieceType) => pieceType switch
+        public static string Determine(Apparel apparel) => apparel.pieceType switch
         {
-            PieceType.Glasses => "👓",
-            PieceType.Hat => "🧢",
-            PieceType.Helmet => "⛑️",
-            PieceType.Other or _ => UnknownLogo
-        };
-
-        public static string Determine(ArmorType armorType) => armorType switch
-        {
-            ArmorType.Clothing => "👕",
-            ArmorType.Light => "🎽",
-            ArmorType.Medium => "🧱",
-            ArmorType.Heavy => ArmorPiercingLogo,
+            Apparel.PieceType.Nothing => apparel is HeadPiece ? "👓" : "👕",
+            Apparel.PieceType.Light => apparel is HeadPiece ? "🧢" : "🎽",
+            Apparel.PieceType.Heavy => apparel is HeadPiece ? "⛑️" : "🧱",
             _ => UnknownLogo
         };
 

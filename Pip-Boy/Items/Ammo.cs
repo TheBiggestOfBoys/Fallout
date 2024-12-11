@@ -1,5 +1,6 @@
 ﻿using Pip_Boy.Data_Types;
 using System;
+using System.Runtime.Serialization;
 
 namespace Pip_Boy.Items
 {
@@ -8,7 +9,9 @@ namespace Pip_Boy.Items
     /// </summary>
     public class Ammo : Equipable
     {
+        [DataMember]
         public readonly AmmoType TypeOfAmmo;
+        [DataMember]
         public readonly AmmoModification Modification;
 
         #region Constructors

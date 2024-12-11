@@ -1,4 +1,5 @@
 ﻿using Pip_Boy.Data_Types;
+using System.Runtime.Serialization;
 
 namespace Pip_Boy.Items
 {
@@ -7,6 +8,7 @@ namespace Pip_Boy.Items
     /// </summary>
     public class Aid : Equipable
     {
+        [DataMember]
         public readonly AidType TypeOfAid;
 
         #region Constructors

@@ -2,6 +2,7 @@
 using Pip_Boy.Entities;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -15,22 +16,25 @@ namespace Pip_Boy.Items
         /// <summary>
         /// The original value of the <see cref="Equipable"/>, unaffected by <see cref="Condition"/>.
         /// </summary>
+        [DataMember]
         private readonly ushort originalValue;
 
         /// <summary>
         /// The percentage of the <see cref="Equipable"/> used to determine <see cref="Weapon.Damage"/>, <see cref="Apparel.DamageThreshold"/> and <see cref="Item.Value"/>.
         /// </summary>
+        [DataMember]
         public float Condition = 1f;
 
         /// <summary>
         /// If the <see cref="Equipable"/> is equipped to an <see cref="Entity"/>
         /// </summary>
+        [DataMember]
         public bool IsEquipped = false;
 
         /// <summary>
         /// The effects that the <see cref="Equipable"/> will apply when <see cref="Equip(Entity)"/>'d to an <see cref="Entity"/>.
         /// </summary>
-        [XmlArray]
+        [DataMember]
         public readonly List<Effect> Effects;
 
         #region Constructors

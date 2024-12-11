@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Runtime.Serialization;
+using System.Text;
 
 namespace Pip_Boy.Entities
 {
@@ -10,6 +11,7 @@ namespace Pip_Boy.Entities
         /// <summary>
         /// How much money the <see cref="Entity"/> has.
         /// </summary>
+        [DataMember]
         public ushort Caps;
 
         /// <inheritdoc/>

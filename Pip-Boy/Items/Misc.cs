@@ -1,4 +1,5 @@
 ﻿using Pip_Boy.Data_Types;
+using System.Runtime.Serialization;
 
 namespace Pip_Boy.Items
 {
@@ -7,7 +8,8 @@ namespace Pip_Boy.Items
     /// </summary>
     public class Misc : Item
     {
-        public MiscType miscType;
+        [DataMember]
+        public readonly MiscType miscType;
 
         #region Constructors
         public Misc(string name, float weight, ushort value, MiscType type) : base(name, weight, value)

@@ -205,7 +205,7 @@ namespace Terminal_Minigame
                 Console.Write("    ");
 
                 // Print the address and ASCII representation for the second half
-                Console.Write("{0:X6}  ", address + bytesRead / 2);
+                Console.Write("{0:X6}  ", address + (bytesRead / 2));
                 PrintAscii(buffer, bytesRead / 2, bytesRead);
 
                 Console.WriteLine();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Pip_Boy.Items
@@ -6,27 +7,31 @@ namespace Pip_Boy.Items
     /// <summary>
     /// Generic super-class for all other <see cref="Objects.Inventory"/> items.
     /// </summary>
-    [Serializable]
+    [DataContract]
     public abstract class Item
     {
         /// <summary>
         /// What the <see cref="Item"/> is called.
         /// </summary>
+        [DataMember]
         public readonly string Name;
 
         /// <summary>
         /// How much the <see cref="Item"/> weighs.
         /// </summary>
+        [DataMember]
         public readonly float Weight;
 
         /// <summary>
         /// How much the <see cref="Item"/> costs.
         /// </summary>
+        [DataMember]
         public ushort Value;
 
         /// <summary>
         /// An emoji representation of the <see cref="Item"/>.
         /// </summary>
+        [DataMember]
         public string Icon;
 
         #region Constructors

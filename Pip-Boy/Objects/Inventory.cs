@@ -192,23 +192,23 @@ namespace Pip_Boy.Objects
         {
             foreach (Weapon weapon in Weapons)
             {
-                _ = PipBoy.ToFile<Weapon>(WeaponFolderPath, weapon);
+                _ = PipBoy.ToFile(WeaponFolderPath, weapon);
             }
             foreach (Apparel apparel in Apparels)
             {
-                _ = PipBoy.ToFile<Apparel>(ApparelFolderPath, apparel);
+                _ = PipBoy.ToFile(ApparelFolderPath, apparel);
             }
             foreach (Aid aid in Aids)
             {
-                _ = PipBoy.ToFile<Aid>(AidFolderPath, aid);
+                _ = PipBoy.ToFile(AidFolderPath, aid);
             }
             foreach (Misc misc in Miscs)
             {
-                _ = PipBoy.ToFile<Misc>(MiscFolderPath, misc);
+                _ = PipBoy.ToFile(MiscFolderPath, misc);
             }
             foreach (Ammo ammo in Ammos)
             {
-                _ = PipBoy.ToFile<Ammo>(AmmoFolderPath, ammo);
+                _ = PipBoy.ToFile(AmmoFolderPath, ammo);
             }
         }
 

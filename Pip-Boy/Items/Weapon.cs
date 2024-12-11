@@ -1,6 +1,7 @@
 ﻿using Pip_Boy.Data_Types;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
@@ -13,6 +14,7 @@ namespace Pip_Boy.Items
         /// <summary>
         /// The original damage, unaffected by the <see cref="Weapon"/>'s <see cref="Equipable.Condition"/>.
         /// </summary>
+        [DataMember]
         private readonly byte originalDamage;
 
         /// <summary>
@@ -23,6 +25,7 @@ namespace Pip_Boy.Items
         /// <summary>
         /// How many times the weapon can be used per minute.
         /// </summary>
+        [DataMember]
         public ushort RateOfFire;
 
         /// <summary>
@@ -33,12 +36,15 @@ namespace Pip_Boy.Items
         /// <summary>
         /// The required 'Strength' level in the SPECIAL attributes to effectively use the <see cref="Weapon"/>.
         /// </summary>
+        [DataMember]
         public byte StrengthRequirement;
 
         /// <summary>
         /// The required skill level in the skill attributes to effectively use the <see cref="Weapon"/>.
         /// </summary>
+        [DataMember]
         public byte SkillRequirement;
+        [DataMember]
         public WeaponType TypeOfWeapon;
 
         /// <summary>
