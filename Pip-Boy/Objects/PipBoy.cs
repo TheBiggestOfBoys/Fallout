@@ -4,12 +4,12 @@ using Pip_Boy.Items;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Media;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Xml;
-using System.Xml.Serialization;
 
 namespace Pip_Boy.Objects
 {
@@ -17,37 +17,35 @@ namespace Pip_Boy.Objects
     /// The <c>PIPBoy</c> object, which displays player info, <c>Inventory</c>, and other data.
     /// It controls output and error handling
     /// </summary>
-    /// <param name="workingDirectory">The directory to load items, sounds, songs, and player info from</param>
-    /// <param name="color">The display color</param>
-    public class PipBoy(string workingDirectory, ConsoleColor color)
+    public class PipBoy
     {
         #region System Info
         /// <summary>
         /// The Current <see cref="DateOnly"/> and <see cref="TimeOnly"/>.
         /// </summary>
-        public DateTime dateTime = DateTime.Now;
+        public DateTime dateTime;
         #endregion
 
         #region Objects
         /// <summary>
         /// The <c>Player</c> object tied to the PIP-Boy.
         /// </summary>
-        public Player player = new();
+        public Player player;
 
         /// <summary>
         /// Controls music.
         /// </summary>
-        public Radio radio = new(workingDirectory + "Songs\\");
+        public Radio radio;
 
         /// <summary>
         /// Displays points of interest.
         /// </summary>
-        public Map map = new(25, 50, "PIP-Boy\\Map Locations\\");
+        public Map map;
 
         /// <summary>
         /// Controls <c>PIPBoy</c> sound effects.
         /// </summary>
-        public SoundPlayer soundEffects = new();
+        public SoundPlayer soundEffects;
         #endregion
 
         #region Lists
@@ -63,7 +61,7 @@ namespace Pip_Boy.Objects
         /// <summary>
         /// Data items collected
         /// </summary>
-        public List<Data> miscData = [];
+        public string[] miscData = [];
 
         /// <summary>
         /// An array of all factions.  Descriptions are taken from the Fallout Wiki (phrasing breaks immersion).  I might change these later.
@@ -81,7 +79,7 @@ namespace Pip_Boy.Objects
         ];
 
         /// <summary>
-        /// The current index of the selected <c>Faction</c> in the <c>General</c> sub page of the <c>STAT</c> page
+        /// The current index of the selected <see cref="Faction"/> in the <c>General</c> sub page of the <c>STAT</c> page
         /// </summary>
         public byte factionIndex = 0;
 
@@ -89,29 +87,69 @@ namespace Pip_Boy.Objects
         /// <summary>
         /// Sound
         /// </summary>
-        public string[] sounds = Directory.GetFiles(workingDirectory + "Sounds\\", "*.wav");
+        public string[] sounds;
 
         /// <summary>
         /// Sounds for static between songs and menu navigation
         /// </summary>
-        public string[] staticSounds = Directory.GetFiles(workingDirectory + "Sounds\\static\\", "*wav");
+        public string[] staticSounds;
 
         /// <summary>
         /// Geiger click sounds, for when in the RAD menu
         /// </summary>
-        public string[] radiationSounds = Directory.GetFiles(workingDirectory + "Sounds\\radiation\\", "*wav");
+        public string[] radiationSounds;
         #endregion
         #endregion
 
         /// <summary>
         /// The directory from which files will be loaded and saved
         /// </summary>
-        public readonly string activeDirectory = workingDirectory;
+        public readonly string activeDirectory;
 
         /// <summary>
         /// The color of the <c>PIPBoy</c>'s text
         /// </summary>
-        public readonly ConsoleColor Color = color;
+        public readonly ConsoleColor Color;
+
+        #region Constructors
+        /// <param name="workingDirectory">The directory to load items, sounds, songs, and player info from</param>
+        /// <param name="color">The display color</param>
+        public PipBoy(string workingDirectory, ConsoleColor color, bool boot)
+        {
+            // Sounds
+            sounds = Directory.GetFiles(workingDirectory + "Sounds\\", "*.wav");
+            staticSounds = Directory.GetFiles(workingDirectory + "Sounds\\static\\", "*wav");
+            radiationSounds = Directory.GetFiles(workingDirectory + "Sounds\\radiation\\", "*wav");
+
+            radio = new(workingDirectory + "Songs\\");
+            map = new(25, 50, "PIP-Boy\\Map Locations\\");
+            map.MovePlayer(null, null, player);
+            soundEffects = new();
+
+            activeDirectory = workingDirectory;
+            dateTime = DateTime.Now;
+            Color = color;
+
+            Console.ForegroundColor = Color;
+            Console.Title = "PIP-Boy 3000 MKIV";
+            Console.OutputEncoding = Encoding.UTF8;
+
+            if (boot)
+            {
+                Boot();
+            }
+
+            if (Directory.GetFiles(activeDirectory).Length == 0)
+            {
+                player = CreatePlayer();
+            }
+            else
+            {
+                player = LoadPlayer();
+            }
+
+        }
+        #endregion
 
         /// <summary>
         /// Displays Fake OS Boot screen info
@@ -218,7 +256,7 @@ namespace Pip_Boy.Objects
                         radio.ChangeSong(false);
                         radio.Play();
                         break;
-                    case ConsoleKey.DownArrow when radio.songIndex < radio.songs.Count:
+                    case ConsoleKey.DownArrow when radio.songIndex < radio.songs.Length:
                         radio.ChangeSong(true);
                         radio.Play();
                         break;
@@ -240,7 +278,7 @@ namespace Pip_Boy.Objects
                         #endregion
                 }
             }
-            player.Inventory.Save();
+            Shutdown();
         }
 
         /// <summary>
@@ -434,9 +472,11 @@ namespace Pip_Boy.Objects
         public string ShowDataNotes()
         {
             StringBuilder stringBuilder = new();
-            foreach (Data data in miscData)
+            foreach (string data in miscData)
             {
-                stringBuilder.AppendLine(data.ToString());
+                stringBuilder.AppendLine(Path.GetFileNameWithoutExtension(data));
+                stringBuilder.AppendLine(new string('-', 10));
+                stringBuilder.AppendLine(File.ReadAllText(data));
             }
             return stringBuilder.ToString();
         }
@@ -451,8 +491,7 @@ namespace Pip_Boy.Objects
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Error.WriteLine(message);
-            Console.Beep(500, 500);
-            Console.Beep(500, 500);
+            Console.Beep();
             Console.ForegroundColor = Color;
         }
 
@@ -506,7 +545,7 @@ namespace Pip_Boy.Objects
         #region File Stuff
         #region To File
         /// <summary>
-        /// Serializes the <see cref="Entity"/> to an <c>*.xml</c> file.
+        /// Serializes the <see cref="object"/> to an <c>*.xml</c> file.
         /// </summary>
         /// <param name="folderPath">The folder to write the <c>*.xml</c> file to.</param>
         /// <param name="obj">The <see cref="object"/> to serialize.</param>
@@ -517,10 +556,10 @@ namespace Pip_Boy.Objects
                 Type type = obj.GetType();
                 string name = obj switch
                 {
-                    (Item item) => item.Name,
-                    (Entity entity) => entity.Name,
-                    (Perk perk) => perk.Name,
-                    _ => throw new Exception("Object is invalid type!"),
+                    Item item => item.Name,
+                    Entity entity => entity.Name,
+                    Perk perk => perk.Name,
+                    _ => throw new Exception("Object is invalid type!")
                 };
                 string filePath = folderPath + name + ".xml";
                 DataContractSerializer x = new(type);
@@ -571,7 +610,6 @@ namespace Pip_Boy.Objects
                     };
 
                     XmlReader reader = XmlReader.Create(filePath, readerSettings);
-
                     return (T)x.ReadObject(reader);
                 }
                 throw new FileLoadException("File is not '*.xml'. ", filePath);
@@ -604,6 +642,7 @@ namespace Pip_Boy.Objects
         #endregion
         #endregion
 
+        #region Player Stuff
         /// <summary>
         /// Player creation using console input
         /// </summary>
@@ -621,7 +660,10 @@ namespace Pip_Boy.Objects
             byte[] attributeValues = new byte[7];
             byte totalPoints = 28;
             int index = 0;
-            foreach (Data_Types.Attribute attribute in Enum.GetValues(typeof(Data_Types.Attribute)))
+
+            Data_Types.Attribute.AttributeName[] SPECIALAttributes = (Data_Types.Attribute.AttributeName[])Enum.GetValues(typeof(Data_Types.Attribute.AttributeName));
+            SPECIALAttributes = SPECIALAttributes.Take(7).ToArray();
+            foreach (Data_Types.Attribute.AttributeName attribute in SPECIALAttributes)
             {
                 byte value = 1;
 
@@ -629,7 +671,7 @@ namespace Pip_Boy.Objects
                 while (key != ConsoleKey.Enter)
                 {
                     Console.WriteLine($"Total Points: {totalPoints - value}");
-                    Console.WriteLine($"Enter {attribute} value (1 - 10): {value}");
+                    Console.WriteLine($"Enter {attribute} {IconDeterminer.Determine(attribute)} value (1 - 10): {value}");
                     key = Console.ReadKey().Key;
                     switch (key)
                     {
@@ -644,11 +686,22 @@ namespace Pip_Boy.Objects
                 }
 
                 totalPoints -= value;
-                attributeValues = new byte[index];
+                attributeValues[index] = value;
                 index++;
             }
             return new(tempName, attributeValues, activeDirectory);
         }
+
+        /// <summary>
+        /// Load the <see cref="Player"/> from the folder, since it should be the only file in the <see cref="activeDirectory"/>
+        /// </summary>
+        /// <returns></returns>
+        public Player LoadPlayer()
+        {
+            return FromFile<Player>(Directory.GetFiles(activeDirectory)[0]);
+        }
+
+        #endregion
 
         /// <summary>
         /// Write all data to files before deletion.
@@ -657,6 +710,7 @@ namespace Pip_Boy.Objects
         {
             player.SavePlayerPerks();
             player.Inventory.Save();
+            ToFile(activeDirectory, player);
         }
 
         #region Enums

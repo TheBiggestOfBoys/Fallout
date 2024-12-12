@@ -144,19 +144,6 @@ namespace Pip_Boy.Entities
                 Perks.Add(PipBoy.FromFile<Perk>(filePath));
             }
         }
-        #endregion
-
-        /// <summary>
-        /// Handles leveling up, and picking a <c>Perk</c>
-        /// </summary>
-        public void LevelUp()
-        {
-            Level++;
-            if (Level % 2 == 0)
-            {
-                Perks.Add(new());
-            }
-        }
 
         /// <summary>
         /// Shows all the player's perks
@@ -171,6 +158,19 @@ namespace Pip_Boy.Entities
                 stringBuilder.AppendLine('\t' + perk.ToString());
             }
             return stringBuilder.ToString();
+        }
+        #endregion
+
+        /// <summary>
+        /// Handles leveling up, and picking a <c>Perk</c>
+        /// </summary>
+        public void LevelUp()
+        {
+            Level++;
+            if (Level % 2 == 0)
+            {
+                Perks.Add(new());
+            }
         }
 
         /// <summary>
