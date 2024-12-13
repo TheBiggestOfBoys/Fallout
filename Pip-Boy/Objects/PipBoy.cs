@@ -4,8 +4,8 @@ using Pip_Boy.Items;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Media;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
@@ -107,6 +107,11 @@ namespace Pip_Boy.Objects
         public readonly string activeDirectory;
 
         /// <summary>
+        /// The path of the player's <c>*.xml</c> file.
+        /// </summary>
+        public readonly string playerFilePath;
+
+        /// <summary>
         /// The color of the <c>PIPBoy</c>'s text
         /// </summary>
         public readonly ConsoleColor Color;
@@ -114,6 +119,7 @@ namespace Pip_Boy.Objects
         #region Constructors
         /// <param name="workingDirectory">The directory to load items, sounds, songs, and player info from</param>
         /// <param name="color">The display color</param>
+        /// <param name="boot">Whether to show the boot screen.</param>
         public PipBoy(string workingDirectory, ConsoleColor color, bool boot)
         {
             // Sounds
@@ -123,12 +129,12 @@ namespace Pip_Boy.Objects
 
             radio = new(workingDirectory + "Songs\\");
             map = new(25, 50, "PIP-Boy\\Map Locations\\");
-            map.MovePlayer(null, null, player);
             soundEffects = new();
 
             activeDirectory = workingDirectory;
             dateTime = DateTime.Now;
             Color = color;
+            playerFilePath = Directory.GetFiles(activeDirectory, "*.xml")[0];
 
             Console.ForegroundColor = Color;
             Console.Title = "PIP-Boy 3000 MKIV";
@@ -139,44 +145,18 @@ namespace Pip_Boy.Objects
                 Boot();
             }
 
-            if (Directory.GetFiles(activeDirectory).Length == 0)
+            if (Directory.GetFiles(activeDirectory, "*.xml").Length == 0)
             {
-                player = CreatePlayer();
+                player = Player.CreatePlayer(activeDirectory);
             }
             else
             {
-                player = LoadPlayer();
+                player = FromFile<Player>(playerFilePath);
+                player.Inventory = new(activeDirectory + "Inventory\\", player);
             }
-
+            map.MovePlayer(null, null, player);
         }
         #endregion
-
-        /// <summary>
-        /// Displays Fake OS Boot screen info
-        /// </summary>
-        public void Boot()
-        {
-            PlaySound(sounds[2]);
-
-            SlowType("PIP-Boy 3000 MKIV");
-            SlowType("Copyright 2075 RobCo Industries");
-            SlowType("64kb Memory");
-            SlowType(new string('-', Console.WindowWidth));
-
-            PlaySound(sounds[6]);
-
-            Console.Clear();
-            Console.WriteLine();
-            SlowType("VAULT-TEC");
-            Thread.Sleep(1250);
-
-            Console.Clear();
-            SlowType("LOADING...");
-            Thread.Sleep(2500);
-            Console.Clear();
-
-            PlaySound(sounds[8]);
-        }
 
         #region Page Info
         /// <summary>
@@ -275,7 +255,11 @@ namespace Pip_Boy.Objects
                     case ConsoleKey.NumPad6 when currentPage == Pages.DATA && dataPage == DataPages.Map:
                         map.MovePlayer(null, true, player);
                         break;
-                        #endregion
+                    #endregion
+
+                    case ConsoleKey.L:
+                        Spawner.Prompt();
+                        break;
                 }
             }
             Shutdown();
@@ -525,13 +509,13 @@ namespace Pip_Boy.Objects
             foreach (char c in message)
             {
                 Console.Write(c);
-                Thread.Sleep(10);
+                Thread.Sleep(5);
             }
             Console.WriteLine();
         }
 
         /// <summary>
-        /// Play a <c>PIPBoy</c> sound-effect
+        /// Play a <see cref="PipBoy"/> sound-effect
         /// </summary>
         /// <param name="path">The path to the <c>*.wav</c> file.</param>
         public void PlaySound(string path)
@@ -539,6 +523,49 @@ namespace Pip_Boy.Objects
             soundEffects.SoundLocation = path;
             soundEffects.Load();
             soundEffects.Play();
+        }
+
+        /// <summary>
+        /// Displays Fake OS Boot screen info
+        /// </summary>
+        public void Boot()
+        {
+            PlaySound(sounds[2]);
+
+            SlowType("PIP-Boy 3000 MKIV");
+            SlowType("Copyright 2075 RobCo Industries");
+            SlowType("64kb Memory");
+            SlowType(new string('-', Console.WindowWidth));
+
+            PlaySound(sounds[6]);
+
+            Console.Clear();
+            Console.WriteLine();
+            SlowType("VAULT-TEC");
+            Thread.Sleep(1250);
+
+            Console.Clear();
+            SlowType("LOADING...");
+            Thread.Sleep(2500);
+            Console.Clear();
+
+            PlaySound(sounds[8]);
+        }
+
+        /// <summary>
+        /// Write all data to files before deletion.
+        /// </summary>
+        public void Shutdown()
+        {
+            PlaySound(sounds[2]);
+
+            SlowType("Shutting Down...");
+            SlowType(new string('-', Console.WindowWidth));
+            Thread.Sleep(1000);
+
+            player.SavePlayerPerks();
+            player.Inventory.Save();
+            ToFile(activeDirectory, player);
         }
         #endregion
 
@@ -561,6 +588,12 @@ namespace Pip_Boy.Objects
                     Perk perk => perk.Name,
                     _ => throw new Exception("Object is invalid type!")
                 };
+
+                if (name == string.Empty)
+                {
+                    name = type.Name;
+                }
+
                 string filePath = folderPath + name + ".xml";
                 DataContractSerializer x = new(type);
 
@@ -571,7 +604,8 @@ namespace Pip_Boy.Objects
                     NewLineChars = "\n",        // Use newline for element endings
                     NewLineHandling = NewLineHandling.Replace, // Standardize newline handling
                     OmitXmlDeclaration = false, // Include XML declaration
-                    NewLineOnAttributes = false // Keep attributes on the same line
+                    NewLineOnAttributes = false, // Keep attributes on the same line
+                    CloseOutput = true,
                 };
 
                 XmlWriter writer = XmlWriter.Create(filePath, writerSettings);
@@ -606,7 +640,8 @@ namespace Pip_Boy.Objects
                         IgnoreProcessingInstructions = true, // Ignore processing instructions
                         CheckCharacters = true,      // Ensure valid XML characters
                         DtdProcessing = DtdProcessing.Ignore, // Disable DTD processing for security
-                        ValidationType = ValidationType.None // Change to Schema if XML schema validation is needed
+                        ValidationType = ValidationType.None, // Change to Schema if XML schema validation is needed
+                        CloseInput = true,
                     };
 
                     XmlReader reader = XmlReader.Create(filePath, readerSettings);
@@ -642,75 +677,25 @@ namespace Pip_Boy.Objects
         #endregion
         #endregion
 
-        #region Player Stuff
         /// <summary>
-        /// Player creation using console input
+        /// Enter the values to create an object from the console.
         /// </summary>
-        public Player CreatePlayer()
+        /// <typeparam name="T">The <see cref="Type"/> of <see cref="object"/> to construct.</typeparam>
+        /// <returns>The <see cref="object"/> of the given <see cref="Type"/>.</returns>
+        public static T CreateObject<T>() where T : new()
         {
-            string? tempName = null;
-            while (tempName == null)
+            T obj = new();
+            foreach (PropertyInfo prop in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
-                Console.Write("Enter Player Name: ");
-                tempName = Console.ReadLine();
-                Console.Clear();
-            }
-
-            // You have 21 points to disperse across all the SPPECIAL attributes, and each one starts at 1, so 28 total
-            byte[] attributeValues = new byte[7];
-            byte totalPoints = 28;
-            int index = 0;
-
-            Data_Types.Attribute.AttributeName[] SPECIALAttributes = (Data_Types.Attribute.AttributeName[])Enum.GetValues(typeof(Data_Types.Attribute.AttributeName));
-            SPECIALAttributes = SPECIALAttributes.Take(7).ToArray();
-            foreach (Data_Types.Attribute.AttributeName attribute in SPECIALAttributes)
-            {
-                byte value = 1;
-
-                ConsoleKey key = ConsoleKey.Escape;
-                while (key != ConsoleKey.Enter)
+                if (prop.CanWrite)
                 {
-                    Console.WriteLine($"Total Points: {totalPoints - value}");
-                    Console.WriteLine($"Enter {attribute} {IconDeterminer.Determine(attribute)} value (1 - 10): {value}");
-                    key = Console.ReadKey().Key;
-                    switch (key)
-                    {
-                        case ConsoleKey.LeftArrow when value > 1 && value < totalPoints:
-                            value--;
-                            break;
-                        case ConsoleKey.RightArrow when value < 10 && value < totalPoints:
-                            value++;
-                            break;
-                    }
-                    Console.Clear();
+                    Console.WriteLine($"Enter the value for {prop.Name} ({prop.PropertyType}):");
+                    string? input = Console.ReadLine();
+                    object? value = Convert.ChangeType(input, prop.PropertyType);
+                    prop.SetValue(obj, value);
                 }
-
-                totalPoints -= value;
-                attributeValues[index] = value;
-                index++;
             }
-            return new(tempName, attributeValues, activeDirectory);
-        }
-
-        /// <summary>
-        /// Load the <see cref="Player"/> from the folder, since it should be the only file in the <see cref="activeDirectory"/>
-        /// </summary>
-        /// <returns></returns>
-        public Player LoadPlayer()
-        {
-            return FromFile<Player>(Directory.GetFiles(activeDirectory)[0]);
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Write all data to files before deletion.
-        /// </summary>
-        public void Shutdown()
-        {
-            player.SavePlayerPerks();
-            player.Inventory.Save();
-            ToFile(activeDirectory, player);
+            return obj;
         }
 
         #region Enums
@@ -720,11 +705,11 @@ namespace Pip_Boy.Objects
         public enum Pages
         {
             /// <summary>
-            /// The <c>Player</c>'s stats.
+            /// The <see cref="Player"/>'s stats.
             /// </summary>
             STATS,
             /// <summary>
-            /// The <c>Inventory</c>.
+            /// The <see cref="Inventory"/>.
             /// </summary>
             ITEMS,
             /// <summary>
@@ -740,23 +725,23 @@ namespace Pip_Boy.Objects
         public enum StatsPages
         {
             /// <summary>
-            /// The <c>Player</c>'s actives <c>Effect</c>s
+            /// The <see cref="Player"/>'s actives <see cref="Effect"/>s.
             /// </summary>
             Status,
             /// <summary>
-            /// The <c>Player</c>'s SPECIAL Stats
+            /// The <see cref="Player"/>'s SPECIAL <see cref="Attribute"/>s.
             /// </summary>
             SPECIAL,
             /// <summary>
-            /// The <c>Player</c>'s <c>Skill</c>s
+            /// The <see cref="Player"/>'s skill <see cref="Attribute"/>s.
             /// </summary>
             Skills,
             /// <summary>
-            /// The <c>Player</c>'s <c>Perk</c>s
+            /// The <see cref="Player"/>'s <see cref="Perk"/>s.
             /// </summary>
             Perks,
             /// <summary>
-            /// The <c>Player</c>'s Reputations with other <c>Faction</c>s
+            /// The <see cref="Player"/>'s Reputations with other <see cref="Faction"/>s.
             /// </summary>
             General
         }
@@ -767,11 +752,11 @@ namespace Pip_Boy.Objects
         public enum DataPages
         {
             /// <summary>
-            /// The <c>Map</c> object with it's markers and legends.
+            /// The <see cref="Objects.Map"/> object with it's markers and legends.
             /// </summary>
             Map,
             /// <summary>
-            /// The <c>List</c> of active <c>Quest</c>s.
+            /// The <see cref="List{Quest}"/> of active <see cref="Quest"/>s.
             /// </summary>
             Quests,
             /// <summary>
@@ -779,7 +764,7 @@ namespace Pip_Boy.Objects
             /// </summary>
             Misc,
             /// <summary>
-            /// The <c>Radio</c> object and it's <c>List</c> of <c>Songs</c>.
+            /// The <see cref="Radio"/> object and it's <see cref="List{T}"/> of <c>Songs</c> file paths.
             /// </summary>
             Radio
         }

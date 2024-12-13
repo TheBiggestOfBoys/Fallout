@@ -34,6 +34,9 @@ namespace Pip_Boy.Items
         public string Icon;
 
         #region Constructors
+        /// <summary>
+        /// Constructs an new <see cref="Item"/> from the given values
+        /// </summary>
         public Item(string name, float weight, ushort value)
         {
             Name = name;

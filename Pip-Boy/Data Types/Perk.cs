@@ -1,31 +1,36 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Pip_Boy.Data_Types
 {
     /// <summary>
     /// A permanent modifier to the <see cref="Entities.Player"/>'s attributes.
     /// </summary>
-    [Serializable]
+    [DataContract]
     public class Perk
     {
         /// <summary>
         /// What the <see cref="Perk"/> is called.
         /// </summary>
+        [DataMember]
         public readonly string Name;
 
         /// <summary>
         /// A description of what the <see cref="Perk"/> does.
         /// </summary>
+        [DataMember]
         public readonly string Description;
 
         /// <summary>
         /// What level the <see cref="Perk"/> is.
         /// </summary>
+        [DataMember]
         public byte Level;
 
         /// <summary>
         /// If the <see cref="Perk"/> can be leveled up
         /// </summary>
+        [DataMember]
         public readonly bool IsMultiLevel;
 
         #region Constructors

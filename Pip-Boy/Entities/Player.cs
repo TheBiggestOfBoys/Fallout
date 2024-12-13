@@ -3,6 +3,7 @@ using Pip_Boy.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using static Pip_Boy.Data_Types.Effect;
@@ -12,7 +13,6 @@ namespace Pip_Boy.Entities
     /// <summary>
     /// This contains all player behavior.
     /// </summary>
-    [Serializable]
     public class Player : Human
     {
         #region Radiation Stuff
@@ -74,7 +74,7 @@ namespace Pip_Boy.Entities
         public readonly string perksDirectory;
 
         /// <summary>
-        /// The directory from which <see cref="Objects.Inventory"/> <c>Item</c>s will be loaded and saved.
+        /// The directory from which <see cref="Inventory"/> <see cref="Items.Item"/>s will be loaded and saved.
         /// </summary>
         public readonly string inventoryDirectory;
         #endregion
@@ -94,7 +94,7 @@ namespace Pip_Boy.Entities
         /// <param name="name">The player's name</param>
         /// <param name="attributeValues">The special values</param>
         /// <param name="directory">The directory to load files from</param>
-        public Player(string name, byte[] attributeValues, string directory) : base(name, 0)
+        public Player(string name, byte[] attributeValues, string directory) : base(name, 1)
         {
             activeDirectory = directory;
             perksDirectory = activeDirectory + "Perks\\";
@@ -108,19 +108,10 @@ namespace Pip_Boy.Entities
                 SPECIAL[i].Value = attributeValues[index];
                 index++;
             }
+
+            LoadPlayerPerks();
         }
         #endregion
-
-        /// <summary>
-        /// Loads the <see cref="Player"/> and <see cref="Perks"/> from files.
-        /// </summary>
-        public void LoadPlayerFull()
-        {
-            // Add logic/function to load player from file
-            LoadPlayerPerks();
-            // Add logic/function to load quests from file
-            // Add logic/function to data entries from file
-        }
 
         #region Perk Stuff
         /// <summary>
@@ -130,7 +121,7 @@ namespace Pip_Boy.Entities
         {
             foreach (Perk perk in Perks)
             {
-                _ = PipBoy.ToFile(perksDirectory, perk);
+                PipBoy.ToFile(perksDirectory, perk);
             }
         }
 
@@ -139,7 +130,8 @@ namespace Pip_Boy.Entities
         /// </summary>
         public void LoadPlayerPerks()
         {
-            foreach (string filePath in Directory.GetFiles(activeDirectory + "Perks\\"))
+            string[] filePaths = Directory.GetFiles(perksDirectory, "*.xml");
+            foreach (string filePath in filePaths)
             {
                 Perks.Add(PipBoy.FromFile<Perk>(filePath));
             }
@@ -159,7 +151,6 @@ namespace Pip_Boy.Entities
             }
             return stringBuilder.ToString();
         }
-        #endregion
 
         /// <summary>
         /// Handles leveling up, and picking a <c>Perk</c>
@@ -171,6 +162,58 @@ namespace Pip_Boy.Entities
             {
                 Perks.Add(new());
             }
+        }
+        #endregion
+
+        /// <summary>
+        /// Player creation using console input
+        /// </summary>
+        /// <param name="folder">The folder to load data from</param>
+        /// <returns>The <see cref="Player"/>.</returns>
+        public static Player CreatePlayer(string folder)
+        {
+            string? tempName = null;
+            while (tempName is null)
+            {
+                Console.Write("Enter Player Name: ");
+                tempName = Console.ReadLine();
+                Console.Clear();
+            }
+
+            // You have 21 points to disperse across all the SPPECIAL attributes, and each one starts at 1, so 28 total
+            byte[] attributeValues = new byte[7];
+            byte totalPoints = 28;
+            int index = 0;
+
+            Data_Types.Attribute.AttributeName[] SPECIALAttributes = (Data_Types.Attribute.AttributeName[])Enum.GetValues(typeof(Data_Types.Attribute.AttributeName));
+            SPECIALAttributes = SPECIALAttributes.Take(7).ToArray();
+            foreach (Data_Types.Attribute.AttributeName attribute in SPECIALAttributes)
+            {
+                byte value = 1;
+
+                ConsoleKey key = ConsoleKey.Escape;
+                while (key != ConsoleKey.Enter)
+                {
+                    Console.WriteLine($"Total Points: {totalPoints - value}");
+                    Console.WriteLine($"Enter {attribute} {IconDeterminer.Determine(attribute)} value (1 - 10): {value}");
+                    key = Console.ReadKey().Key;
+                    switch (key)
+                    {
+                        case ConsoleKey.LeftArrow when value > 1 && value < totalPoints:
+                            value--;
+                            break;
+                        case ConsoleKey.RightArrow when value < 10 && value < totalPoints:
+                            value++;
+                            break;
+                    }
+                    Console.Clear();
+                }
+
+                totalPoints -= value;
+                attributeValues[index] = value;
+                index++;
+            }
+            return new(tempName, attributeValues, folder);
         }
 
         /// <summary>

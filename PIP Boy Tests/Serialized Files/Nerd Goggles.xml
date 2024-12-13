@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<HeadPiece xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-	<Value>25</Value>
+<HeadPiece xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/Pip_Boy.Items">
 	<Icon>👓</Icon>
+	<Name>Nerd Goggles</Name>
+	<Value>25</Value>
+	<Weight>1</Weight>
 	<Condition>1</Condition>
 	<IsEquipped>false</IsEquipped>
-	<Effects />
 </HeadPiece>

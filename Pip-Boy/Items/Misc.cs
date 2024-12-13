@@ -12,6 +12,7 @@ namespace Pip_Boy.Items
         public readonly MiscType miscType;
 
         #region Constructors
+        /// <inheritdoc/>
         public Misc(string name, float weight, ushort value, MiscType type) : base(name, weight, value)
         {
             miscType = type;

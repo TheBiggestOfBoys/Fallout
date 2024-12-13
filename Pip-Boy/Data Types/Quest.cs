@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Pip_Boy.Data_Types
@@ -9,16 +10,19 @@ namespace Pip_Boy.Data_Types
     /// </summary>
     /// <param name="name"></param>
     /// <param name="steps"></param>
+    [DataContract]
     public class Quest(string name, List<Quest.Step> steps)
     {
         /// <summary>
         /// The Name of the <see cref="Quest"/>
         /// </summary>
+        [DataMember]
         public readonly string Name = name;
 
         /// <summary>
         /// List of all the <see cref="Step"/>s, which must be completed
         /// </summary>
+        [DataMember]
         public List<Step> Steps = steps;
 
         /// <summary>

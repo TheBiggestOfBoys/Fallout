@@ -1,35 +1,42 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
 
 namespace Pip_Boy.Data_Types
 {
     /// <summary>
     /// An effect which changes the <see cref="Entities.Player"/>'s attributes.
     /// </summary>
+    [DataContract]
     public partial class Effect
     {
         /// <summary>
         /// The attribute the <see cref="Effect"/> will change.
         /// </summary>
+        [DataMember]
         public readonly EffectTypes Effector;
 
         /// <summary>
         /// The amount the attribute will be changed by.
         /// </summary>
+        [DataMember]
         public readonly sbyte Value;
 
         /// <summary>
         /// The logo for the effect.
         /// </summary>
+        [DataMember]
         public readonly string Icon;
 
         /// <summary>
         /// How long the effect will last for. -1 represent an effect which lasts forever (as long as the item is equipped).
         /// </summary>
+        [DataMember]
         public readonly short Duration;
 
         /// <summary>
         /// How much time the effect has left
         /// </summary>
+        [DataMember]
         public short TimeLeft;
 
         #region Constructors

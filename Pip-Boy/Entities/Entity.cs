@@ -107,7 +107,6 @@ namespace Pip_Boy.Entities
         /// <summary>
         /// What percent of health the <see cref="Entity"/> has.
         /// </summary>
-        [DataMember]
         public float HealthPercentage => CurrentHealth / MaxHealth;
 
         /// <summary>
@@ -371,7 +370,7 @@ namespace Pip_Boy.Entities
         /// <summary>
         /// Show 1-line preview of the <see cref="Entity"/>
         /// </summary>
-        /// <returns><see cref="Name"/>, <see cref="Icon"/>, <see cref="Gender"/>, <see cref="Level"/> & <see cref="HealthPercentage"/></returns>
+        /// <returns><see cref="Name"/>, <see cref="Icon"/>, <see cref="Gender"/>, <see cref="Level"/> and <see cref="HealthPercentage"/></returns>
         public override string ToString() => $"{Name}{Icon}{IconDeterminer.Determine(Gender)}-{Level}: {HealthPercentage:P}";
         #endregion
     }

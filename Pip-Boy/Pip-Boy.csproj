@@ -33,6 +33,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Entity Files\" />
 		<Folder Include="PIP-Boy\Data\" />
 		<Folder Include="PIP-Boy\Factions\" />
 		<Folder Include="PIP-Boy\Map Locations\" />

@@ -18,7 +18,7 @@ namespace Pip_Boy.Objects
         /// <summary>
         /// The 2D <see cref="Location"/> array, which is the visual representation of the <see cref="Map"/>.
         /// </summary>
-        public readonly Location?[][] Grid;
+        public readonly Location?[,] Grid;
 
         #region Constructor
         /// <summary>
@@ -40,20 +40,14 @@ namespace Pip_Boy.Objects
         /// <param name="height">The height of the map</param>
         /// <param name="width">The width of the map</param>
         /// <returns></returns>
-        public Location?[][] GenerateMap(byte height, byte width)
+        public Location?[,] GenerateMap(byte height, byte width)
         {
-            Location?[][] tempMap = new Location?[width][];
-            // Size the map's width.
-            for (byte i = 0; i < width; i++)
-            {
-                // and height
-                tempMap[i] = new Location[height];
-            }
+            Location?[,] tempMap = new Location?[width, height];
 
             // Place locations on the map
             foreach (Location location in Locations)
             {
-                tempMap[(int)location.Position.Y][(int)location.Position.X] = location;
+                tempMap[(int)location.Position.Y, (int)location.Position.X] = location;
             }
             return tempMap;
         }
@@ -88,14 +82,14 @@ namespace Pip_Boy.Objects
                 case true when player.Location.Y > 0:
                     player.Location.Y--;
                     break;
-                case false when player.Location.Y < Grid.Length:
+                case false when player.Location.Y < Grid.GetLength(0):
                     player.Location.Y++;
                     break;
             }
 
             switch (right)
             {
-                case true when player.Location.X < Grid[0].Length:
+                case true when player.Location.X < Grid.GetLength(1):
                     player.Location.X++;
                     break;
                 case false when player.Location.X > 0:
@@ -105,32 +99,18 @@ namespace Pip_Boy.Objects
         }
 
         /// <summary>
-        /// Allows indexing of the map's 2D array
-        /// </summary>
-        /// <param name="row">The row number</param>
-        /// <returns>The char array</returns>
-        public Location?[] this[int row] => Grid[row];
-
-        /// <summary>
         /// Shows the map
         /// </summary>
         /// <returns>The 2D array as a string</returns>
         public override string ToString()
         {
             StringBuilder stringBuilder = new();
-            for (int row = 0; row < Grid.Length; row++)
+            for (int row = 0; row < Grid.GetLength(0); row++)
             {
-                for (int col = 0; col < Grid.Length; col++)
+                for (int col = 0; col < Grid.GetLength(1); col++)
                 {
-                    Location? location = Grid[row][col];
-                    if (location is not null)
-                    {
-                        stringBuilder.Append(location.Icon);
-                    }
-                    else
-                    {
-                        stringBuilder.Append(' ');
-                    }
+                    Location? location = Grid[row, col];
+                    stringBuilder.Append(location is not null ? location.Icon : " ");
                 }
                 stringBuilder.AppendLine();
             }

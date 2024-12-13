@@ -1,5 +1,4 @@
-﻿using Pip_Boy.Items;
-using Pip_Boy.Objects;
+﻿using Pip_Boy.Objects;
 using System;
 using System.IO;
 

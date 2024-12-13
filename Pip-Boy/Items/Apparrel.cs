@@ -27,6 +27,7 @@ namespace Pip_Boy.Items
         public readonly bool RequiresPowerArmorTraining;
 
         #region Constructors
+        /// <inheritdoc/>
         public Apparel(string name, float weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : base(name, weight, value, effects)
         {
             originalDamageThreshold = DT;

@@ -8,6 +8,7 @@ namespace Pip_Boy.Items
     public class TorsoPiece : Apparel
     {
         #region Constructors
+        /// <inheritdoc/>
         public TorsoPiece(string name, float weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : base(name, weight, value, effects, DT, powerArmor) { }
 
         /// <inheritdoc/>

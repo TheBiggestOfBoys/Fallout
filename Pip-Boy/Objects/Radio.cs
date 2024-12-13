@@ -8,32 +8,26 @@ namespace Pip_Boy.Objects
     /// <summary>
     /// Contains all songs and logic for playing them.
     /// </summary>
-    public class Radio
+    /// <remarks>
+    /// Initialize a radio object with '.wav' files from a folder
+    /// </remarks>
+    /// <param name="folderPath">The path to the folder containing the songs</param>
+    public class Radio(string folderPath)
     {
         /// <summary>
         /// What the songs will be played from.
         /// </summary>
-        public SoundPlayer soundPlayer;
+        public SoundPlayer soundPlayer = new SoundPlayer();
 
         /// <summary>
         /// The list of all <c>*.wav</c> audio files.
         /// </summary>
-        public string[] songs;
+        public string[] songs = Directory.GetFiles(folderPath, "*.wav");
 
         /// <summary>
         /// Selected position in the <c>songs</c> list.
         /// </summary>
         public int songIndex = 0;
-
-        /// <summary>
-        /// Initialize a radio object with '.wav' files from a folder
-        /// </summary>
-        /// <param name="folderPath">The path to the folder containing the songs</param>
-        public Radio(string folderPath)
-        {
-            soundPlayer = new SoundPlayer();
-            songs = Directory.GetFiles(folderPath);
-        }
 
         /// <summary>
         /// Plays a random song from the list

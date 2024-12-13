@@ -20,7 +20,7 @@ namespace Pip_Boy.Items
         /// <summary>
         /// The varying damage which is just: <code><see cref="originalDamage"/> * <see cref="Equipable.Condition"/></code>
         /// </summary>
-        public byte Damage { get => (byte)(originalDamage * Condition); set { } }
+        public byte Damage => (byte)(originalDamage * Condition);
 
         /// <summary>
         /// How many times the weapon can be used per minute.
@@ -31,7 +31,7 @@ namespace Pip_Boy.Items
         /// <summary>
         /// Average Damage per Second based on <see cref="Damage"/> per shot and <see cref="RateOfFire"/>.
         /// </summary>
-        public byte DPS { get { return (byte)(RateOfFire / 60 * Damage); } set { } }
+        public byte DPS => (byte)(RateOfFire / 60 * Damage);
 
         /// <summary>
         /// The required 'Strength' level in the SPECIAL attributes to effectively use the <see cref="Weapon"/>.
@@ -44,8 +44,12 @@ namespace Pip_Boy.Items
         /// </summary>
         [DataMember]
         public byte SkillRequirement;
+
+        /// <summary>
+        /// What kind of <see cref="Weapon"/> is it, determining the type of damage dealt.
+        /// </summary>
         [DataMember]
-        public WeaponType TypeOfWeapon;
+        public readonly WeaponType TypeOfWeapon;
 
         /// <summary>
         /// All equipped modifications on the <see cref="Weapon"/>.
@@ -54,6 +58,7 @@ namespace Pip_Boy.Items
         public List<string> Modifications = [];
 
         #region Constructors
+        /// <inheritdoc/>
         public Weapon(string name, float weight, ushort value, Effect[] effects, WeaponType weaponType, byte strengthRequirement, byte skillRequirement, byte damage, ushort rateOfFire) : base(name, weight, value, effects)
         {
             TypeOfWeapon = weaponType;
@@ -63,7 +68,6 @@ namespace Pip_Boy.Items
             RateOfFire = rateOfFire;
 
             Icon = IconDeterminer.Determine(weaponType);
-
         }
 
         /// <inheritdoc/>

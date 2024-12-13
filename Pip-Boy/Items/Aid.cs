@@ -12,6 +12,7 @@ namespace Pip_Boy.Items
         public readonly AidType TypeOfAid;
 
         #region Constructors
+        /// <inheritdoc/>
         public Aid(string name, float weight, ushort value, Effect[] effects, AidType type) : base(name, weight, value, effects)
         {
             TypeOfAid = type;

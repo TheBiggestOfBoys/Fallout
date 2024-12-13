@@ -37,6 +37,7 @@ namespace Pip_Boy.Items
         public readonly List<Effect> Effects;
 
         #region Constructors
+        /// <inheritdoc/>
         public Equipable(string name, float weight, ushort value, Effect[] effects) : base(name, weight, value)
         {
             originalValue = value;

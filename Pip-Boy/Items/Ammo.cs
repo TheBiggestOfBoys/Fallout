@@ -9,12 +9,22 @@ namespace Pip_Boy.Items
     /// </summary>
     public class Ammo : Equipable
     {
+
+        /// <summary>
+        /// The type of ammo needed for the <see cref="Weapon"/>.
+        /// </summary>
         [DataMember]
         public readonly AmmoType TypeOfAmmo;
+
+        /// <summary>
+        /// The modification applied to the <see cref="Ammo"/>.
+        /// Will change damage and/or damage type.
+        /// </summary>
         [DataMember]
         public readonly AmmoModification Modification;
 
         #region Constructors
+        /// <inheritdoc/>
         public Ammo(string name, ushort value, Effect[] effects, AmmoType ammoType, AmmoModification ammoModification) : base(name, 0, value, effects)
         {
             TypeOfAmmo = ammoType;

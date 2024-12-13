@@ -1,37 +1,43 @@
 ﻿using System;
 using System.Numerics;
+using System.Runtime.Serialization;
 
 namespace Pip_Boy.Data_Types
 {
     /// <summary>
     /// A point of interest on the <see cref="Objects.Map"/>
     /// </summary>
-    [Serializable]
+    [DataContract]
     public class Location
     {
         /// <summary>
         /// The <see cref="Location"/>'s name.
         /// </summary>
+        [DataMember]
         public readonly string Name;
 
         /// <summary>
         /// A description of the <see cref="Location"/>.
         /// </summary>
+        [DataMember]
         public readonly string Description;
 
         /// <summary>
         /// The <see cref="Location"/>'s icon.
         /// </summary>
+        [DataMember]
         public readonly string Icon;
 
         /// <summary>
         /// How many rads per second the location has.
         /// </summary>
+        [DataMember]
         public readonly byte Rads;
 
         /// <summary>
         /// Where the <see cref="Location"/> is on the <see cref="Objects.Map"/>.
         /// </summary>
+        [DataMember]
         public readonly Vector2 Position;
 
         #region Constructors
