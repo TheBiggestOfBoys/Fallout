@@ -6,6 +6,7 @@ namespace Pip_Boy.Items
     /// <summary>
     /// Can be junk, sellable items, or crafting components.
     /// </summary>
+    [DataContract]
     public class Misc : Item
     {
         [DataMember]

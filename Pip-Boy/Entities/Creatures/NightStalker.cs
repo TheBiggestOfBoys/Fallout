@@ -1,6 +1,9 @@
-﻿namespace Pip_Boy.Entities.Creatures
+﻿using System.Runtime.Serialization;
+
+namespace Pip_Boy.Entities.Creatures
 {
-    internal class NightStalker : Canine
+    [DataContract]
+    public class NightStalker : Canine
     {
         /// <inheritdoc/>
         public NightStalker() : base() { }

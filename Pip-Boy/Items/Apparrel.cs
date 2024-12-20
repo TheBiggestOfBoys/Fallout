@@ -6,6 +6,7 @@ namespace Pip_Boy.Items
     /// <summary>
     /// A wearable item, which can reduce damage taken.
     /// </summary>
+    [DataContract]
     public abstract class Apparel : Equipable
     {
         [DataMember]
@@ -17,8 +18,7 @@ namespace Pip_Boy.Items
         /// <summary>
         /// How much damage the <see cref="Apparel"/> will negate
         /// </summary>
-        [DataMember]
-        public byte DamageThreshold { get => (byte)(originalDamageThreshold * Condition); }
+        public byte DamageThreshold => (byte)(originalDamageThreshold * Condition);
 
         /// <summary>
         /// If the <see cref="Apparel"/> object need the "Power Armor Training" <see cref="Perk"/> to be worn.

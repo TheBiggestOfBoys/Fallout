@@ -1,5 +1,8 @@
-﻿namespace Pip_Boy.Entities.Mutants
+﻿using System.Runtime.Serialization;
+
+namespace Pip_Boy.Entities.Mutants
 {
+    [DataContract]
     public class Nightkin : SuperMutant
     {
         /// <inheritdoc/>

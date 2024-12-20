@@ -1,9 +1,9 @@
 ﻿using Pip_Boy.Entities;
 using Pip_Boy.Items;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace Pip_Boy.Objects
 {
@@ -190,26 +190,11 @@ namespace Pip_Boy.Objects
         /// </summary>
         public void Save()
         {
-            foreach (Weapon weapon in Weapons)
-            {
-                PipBoy.ToFile(WeaponFolderPath, weapon);
-            }
-            foreach (Apparel apparel in Apparels)
-            {
-                PipBoy.ToFile(ApparelFolderPath, apparel);
-            }
-            foreach (Aid aid in Aids)
-            {
-                PipBoy.ToFile(AidFolderPath, aid);
-            }
-            foreach (Misc misc in Miscs)
-            {
-                PipBoy.ToFile(MiscFolderPath, misc);
-            }
-            foreach (Ammo ammo in Ammos)
-            {
-                PipBoy.ToFile(AmmoFolderPath, ammo);
-            }
+            Weapons.ForEach(x => PipBoy.ToFile(WeaponFolderPath, x));
+            Apparels.ForEach(x => PipBoy.ToFile(ApparelFolderPath, x));
+            Aids.ForEach(x => PipBoy.ToFile(AidFolderPath, x));
+            Apparels.ForEach(x => PipBoy.ToFile(ApparelFolderPath, x));
+            Ammos.ForEach(x => PipBoy.ToFile(AmmoFolderPath, x));
         }
 
         #region Inventory Management
@@ -321,47 +306,20 @@ namespace Pip_Boy.Objects
         #endregion
 
         /// <returns>A table of every <see cref="itemPage"/> <see cref="Item"/>'s <see cref="Item.ToString()"/></returns>
-        public override string ToString()
-        {
-            StringBuilder stringBuilder = new($"{CurrentCarryWeight}/{MaxCarryWeight} -- Over Encumbered?: {IsOverEncumbered}");
-            stringBuilder.AppendLine();
-            stringBuilder.AppendLine(new string('-', 15));
-            switch (itemPage)
+        public override string ToString() =>
+            $"{CurrentCarryWeight}/{MaxCarryWeight} -- Over Encumbered?: {IsOverEncumbered}"
+            + Environment.NewLine
+            + new string('-', 15)
+            + Environment.NewLine
+            + itemPage switch
             {
-                case ItemsPages.Weapons:
-                    foreach (Weapon weapon in Weapons)
-                    {
-                        stringBuilder.AppendLine(weapon.ToString());
-                    }
-                    return stringBuilder.ToString();
-                case ItemsPages.Apparel:
-                    foreach (Apparel apparel in Apparels)
-                    {
-                        stringBuilder.AppendLine(apparel.ToString());
-                    }
-                    return stringBuilder.ToString();
-                case ItemsPages.Aid:
-                    foreach (Aid aid in Aids)
-                    {
-                        stringBuilder.AppendLine(aid.ToString());
-                    }
-                    return stringBuilder.ToString();
-                case ItemsPages.Ammo:
-                    foreach (Ammo ammo in Ammos)
-                    {
-                        stringBuilder.AppendLine(ammo.ToString());
-                    }
-                    return stringBuilder.ToString();
-                case ItemsPages.Misc:
-                    foreach (Misc misc in Miscs)
-                    {
-                        stringBuilder.AppendLine(misc.ToString());
-                    }
-                    return stringBuilder.ToString();
-                default:
-                    throw new InvalidDataException("Invalid ItemsPage!");
-            }
-        }
+                ItemsPages.Weapons => string.Join(Environment.NewLine, Weapons),
+                ItemsPages.Apparel => string.Join(Environment.NewLine, Apparels),
+                ItemsPages.Aid => string.Join(Environment.NewLine, Aids),
+                ItemsPages.Ammo => string.Join(Environment.NewLine, Ammos),
+                ItemsPages.Misc => string.Join(Environment.NewLine, Miscs),
+                _ => throw new InvalidDataException("Invalid ItemsPage!"),
+            };
 
         /// <summary>
         /// <see cref="Item"/> sub-menu pages

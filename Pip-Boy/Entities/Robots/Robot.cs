@@ -1,5 +1,8 @@
-﻿namespace Pip_Boy.Entities.Robots
+﻿using System.Runtime.Serialization;
+
+namespace Pip_Boy.Entities.Robots
 {
+    [DataContract]
     public class Robot : Entity
     {
         /// <inheritdoc/>

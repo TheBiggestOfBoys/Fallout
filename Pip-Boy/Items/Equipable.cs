@@ -1,15 +1,16 @@
 ﻿using Pip_Boy.Data_Types;
 using Pip_Boy.Entities;
+using Pip_Boy.Objects;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace Pip_Boy.Items
 {
     /// <summary>
     /// Defines behaviors for <see cref="Equipable"/> sub-classes, such as <see cref="Weapon"/>, <see cref="HeadPiece"/>, <see cref="TorsoPiece"/> and <see cref="Ammo"/>.
     /// </summary>
+    [DataContract]
     public abstract class Equipable : Item
     {
         /// <summary>
@@ -85,15 +86,10 @@ namespace Pip_Boy.Items
         }
 
         /// <returns>The (un)equipped character, <see cref="Item.ToString()"/>, <see cref="Effects"/> and <see cref="Condition"/>.</returns>
-        public override string ToString()
-        {
-            char isEquippedChar = IsEquipped ? '*' : 'O';
-            StringBuilder effectsString = new();
-            foreach (Effect effect in Effects)
-            {
-                effectsString.AppendLine($"\t\t{effect}");
-            }
-            return isEquippedChar + base.ToString() + effectsString.ToString() + $"{Environment.NewLine}\t\tCND: {Condition:0.00}";
-        }
+        public override string ToString() =>
+            (IsEquipped ? '*' : 'O')
+            + base.ToString()
+            + ((Effects is null || Effects.Count == 0) ? string.Empty : Environment.NewLine + PipBoy.DisplayCollection(nameof(Effects), Effects) + Environment.NewLine)
+            + "\t\tCND: " + string.Format(Condition.ToString(), "0.00");
     }
 }

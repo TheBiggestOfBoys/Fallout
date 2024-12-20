@@ -1,16 +1,17 @@
 ﻿using Pip_Boy.Data_Types;
-using System;
+using Pip_Boy.Objects;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Xml.Serialization;
 
 namespace Pip_Boy.Items
 {
     /// <summary>
     /// Can be used to attack <see cref="Entities.Entity"/>s.
     /// </summary>
+    [DataContract]
     public class Weapon : Equipable
     {
+        #region Variables
         /// <summary>
         /// The original damage, unaffected by the <see cref="Weapon"/>'s <see cref="Equipable.Condition"/>.
         /// </summary>
@@ -54,8 +55,9 @@ namespace Pip_Boy.Items
         /// <summary>
         /// All equipped modifications on the <see cref="Weapon"/>.
         /// </summary>
-        [XmlArray]
+        [DataMember]
         public List<string> Modifications = [];
+        #endregion
 
         #region Constructors
         /// <inheritdoc/>
@@ -106,21 +108,6 @@ namespace Pip_Boy.Items
         }
 
         /// <returns><see cref="Equipable.ToString()"/> is there are no <see cref="Modifications"/>.  If there are, then add them to the string.</returns>
-        public override string ToString()
-        {
-            if (Modifications.Count == 0)
-            {
-                return base.ToString();
-            }
-            else
-            {
-                string tempString = base.ToString();
-                foreach (string modification in Modifications)
-                {
-                    tempString += $"{Environment.NewLine}\t\t{modification}";
-                }
-                return tempString;
-            }
-        }
+        public override string ToString() => Modifications.Count == 0 ? base.ToString() : PipBoy.DisplayCollection(nameof(Modifications), Modifications);
     }
 }

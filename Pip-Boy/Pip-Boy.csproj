@@ -41,6 +41,12 @@
 		<Folder Include="PIP-Boy\Quests\Completed Quests\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="Saved Code Snippets\Inventory Styling.css">
+	    <SubType>Designer</SubType>
+	  </None>
+	</ItemGroup>
+
 	<Target Name="CopyPipBoyFolder" AfterTargets="Build">
 		<ItemGroup>
 			<PipBoyFiles Include="PIP-Boy\**\*.*" />

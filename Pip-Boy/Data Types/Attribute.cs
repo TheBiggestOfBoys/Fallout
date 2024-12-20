@@ -3,7 +3,7 @@
 namespace Pip_Boy.Data_Types
 {
     [DataContract]
-    public struct Attribute(Attribute.AttributeName name, byte value)
+    public class Attribute(Attribute.AttributeName name, byte value)
     {
         /// <summary>
         /// The name of the <see cref="Attribute"/>
@@ -25,7 +25,7 @@ namespace Pip_Boy.Data_Types
 
         /// <inheritdoc/>
         /// <returns>The <see cref="Attribute"/>'s info.</returns>
-        public override readonly string ToString() => $"{Name}{Icon}:\t{Value}";
+        public override string ToString() => $"{Name}{Icon}:\t{Value}";
 
         /// <summary>
         /// The possible <see cref="Attribute"/> types.

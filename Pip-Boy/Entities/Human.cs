@@ -1,5 +1,8 @@
-﻿namespace Pip_Boy.Entities
+﻿using System.Runtime.Serialization;
+
+namespace Pip_Boy.Entities
 {
+    [DataContract]
     public class Human : Humanoid
     {
         /// <inheritdoc/>

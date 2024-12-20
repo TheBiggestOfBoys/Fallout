@@ -1,5 +1,8 @@
 ﻿using Pip_Boy.Data_Types;
 using Pip_Boy.Entities;
+using Pip_Boy.Entities.Creatures;
+using Pip_Boy.Entities.Mutants;
+using Pip_Boy.Entities.Robots;
 using Pip_Boy.Items;
 using System;
 using System.Collections.Generic;
@@ -10,6 +13,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Xml;
+using System.Xml.Xsl;
 
 namespace Pip_Boy.Objects
 {
@@ -394,6 +398,14 @@ namespace Pip_Boy.Objects
         #endregion
 
         #region Page Logic
+        /// <param name="collection">The array of objects</param>
+        /// <param name="header">The title of the list</param>
+        /// <returns>A string representation of all items in an array.</returns>
+        public static string DisplayCollection<T>(string header, IEnumerable<T> collection) =>
+            header + ':'
+            + Environment.NewLine
+            + string.Join(Environment.NewLine + '\t', collection);
+
         /// <summary>
         /// Logic behind showing the Stats Page's submenus
         /// </summary>
@@ -401,9 +413,9 @@ namespace Pip_Boy.Objects
         public string ShowStats() => statPage switch
         {
             StatsPages.Status => player.ShowStatus(),
-            StatsPages.SPECIAL => player.ShowSPECIAL(),
-            StatsPages.Skills => player.ShowSkills(),
-            StatsPages.Perks => player.ShowPerks(),
+            StatsPages.SPECIAL => DisplayCollection(nameof(player.SPECIAL), player.SPECIAL),
+            StatsPages.Skills => DisplayCollection(nameof(player.Skills), player.Skills),
+            StatsPages.Perks => DisplayCollection(nameof(player.Perks), player.Perks),
             StatsPages.General => ShowFactions(),
             _ => throw new NotImplementedException()
         };
@@ -589,7 +601,7 @@ namespace Pip_Boy.Objects
                     _ => throw new Exception("Object is invalid type!")
                 };
 
-                if (name == string.Empty)
+                if (name == string.Empty || name is null)
                 {
                     name = type.Name;
                 }
@@ -609,8 +621,10 @@ namespace Pip_Boy.Objects
                 };
 
                 XmlWriter writer = XmlWriter.Create(filePath, writerSettings);
+                writer.WriteProcessingInstruction("xml-stylesheet", "type=\"text/css\" href=\"..\\Inventory Styling.css\"");
                 x.WriteObject(writer, obj);
                 writer.Close();
+
                 return filePath;
             }
             throw new DirectoryNotFoundException("Folder not found. " + folderPath);
@@ -644,8 +658,10 @@ namespace Pip_Boy.Objects
                         CloseInput = true,
                     };
 
-                    XmlReader reader = XmlReader.Create(filePath, readerSettings);
-                    return (T)x.ReadObject(reader);
+                    using (XmlReader reader = XmlReader.Create(filePath, readerSettings))
+                    {
+                        return (T)x.ReadObject(reader);
+                    }
                 }
                 throw new FileLoadException("File is not '*.xml'. ", filePath);
             }
@@ -668,7 +684,35 @@ namespace Pip_Boy.Objects
                     XmlDocument doc = new();
                     doc.Load(filePath);
                     string typeName = doc.DocumentElement?.LocalName ?? throw new NullReferenceException("No head object tag found!");
-                    return Type.GetType("Pip_Boy.Items." + typeName, true);
+                    return typeName switch
+                    {
+                        #region Items
+                        "Weapon" => typeof(Weapon),
+                        "HeadPiece" => typeof(HeadPiece),
+                        "TorsoPiece" => typeof(TorsoPiece),
+                        "Aid" => typeof(Aid),
+                        "Ammo" => typeof(Ammo),
+                        "Misc" => typeof(Misc),
+                        #endregion
+                        #region Entities
+                        "Player" => typeof(Player),
+                        "Human" => typeof(Human),
+                        "Robot" => typeof(Robot),
+                        #region Mutants
+                        "Ghoul" => typeof(Ghoul),
+                        "Feral" => typeof(Feral),
+                        "SuperMutant" => typeof(SuperMutant),
+                        "Nightkin" => typeof(Nightkin),
+                        #endregion
+                        #region Creatures
+                        "Dog" => typeof(Dog),
+                        "NightStalker" => typeof(NightStalker),
+                        "BloatFly" => typeof(BloatFly),
+                        "DeathClaw" => typeof(DeathClaw),
+                        #endregion
+                        #endregion
+                        _ => throw new TypeLoadException("Invalid Type!")
+                    };
                 }
                 throw new FormatException("File is not '*.xml'!");
             }

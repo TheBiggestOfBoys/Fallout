@@ -13,6 +13,7 @@ namespace Pip_Boy.Entities
     /// <summary>
     /// This contains all player behavior.
     /// </summary>
+    [DataContract]
     public class Player : Human
     {
         #region Radiation Stuff
@@ -25,13 +26,11 @@ namespace Pip_Boy.Entities
         /// <summary>
         /// How sick the <see cref="Player"/> is, based on <see cref="Rads"/>. 
         /// </summary>
-        [DataMember]
         public RadiationSicknessLevels RadiationSicknessLevel => (RadiationSicknessLevels)Rads;
 
         /// <summary>
         /// The emoji icon that represents the current <see cref="RadiationSicknessLevel"/>.
         /// </summary>
-        [DataMember]
         public string RadiationIcon => IconDeterminer.Determine(RadiationSicknessLevel);
 
         /// <summary>
@@ -66,16 +65,19 @@ namespace Pip_Boy.Entities
         /// <summary>
         /// The directory from which files will be loaded and saved
         /// </summary>
+        [DataMember]
         public readonly string activeDirectory;
 
         /// <summary>
         /// The directory from which <c>Perk</c>s will be loaded and saved
         /// </summary>
+        [DataMember]
         public readonly string perksDirectory;
 
         /// <summary>
         /// The directory from which <see cref="Inventory"/> <see cref="Items.Item"/>s will be loaded and saved.
         /// </summary>
+        [DataMember]
         public readonly string inventoryDirectory;
         #endregion
 
@@ -135,21 +137,6 @@ namespace Pip_Boy.Entities
             {
                 Perks.Add(PipBoy.FromFile<Perk>(filePath));
             }
-        }
-
-        /// <summary>
-        /// Shows all the player's perks
-        /// </summary>
-        /// <returns>A table of every perk's name, level and description</returns>
-        public string ShowPerks()
-        {
-            StringBuilder stringBuilder = new("Perks:");
-            stringBuilder.AppendLine();
-            foreach (Perk perk in Perks)
-            {
-                stringBuilder.AppendLine('\t' + perk.ToString());
-            }
-            return stringBuilder.ToString();
         }
 
         /// <summary>

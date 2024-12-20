@@ -1,6 +1,9 @@
-﻿namespace Pip_Boy.Entities.Creatures
+﻿using System.Runtime.Serialization;
+
+namespace Pip_Boy.Entities.Creatures
 {
-    internal abstract class Canine : Creature
+    [DataContract]
+    public abstract class Canine : Creature
     {
         /// <inheritdoc/>
         public Canine() : base() { }

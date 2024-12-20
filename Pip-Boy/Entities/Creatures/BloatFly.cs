@@ -1,6 +1,9 @@
-﻿namespace Pip_Boy.Entities.Creatures
+﻿using System.Runtime.Serialization;
+
+namespace Pip_Boy.Entities.Creatures
 {
-    internal class BloatFly : Creature
+    [DataContract]
+    public class BloatFly : Creature
     {
         /// <inheritdoc/>
         public BloatFly() : base() { }

@@ -17,7 +17,7 @@ namespace Pip_Boy.Objects
         /// <summary>
         /// What the songs will be played from.
         /// </summary>
-        public SoundPlayer soundPlayer = new SoundPlayer();
+        public SoundPlayer soundPlayer = new();
 
         /// <summary>
         /// The list of all <c>*.wav</c> audio files.

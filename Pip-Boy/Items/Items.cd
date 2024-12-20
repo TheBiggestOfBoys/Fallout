@@ -1,65 +1,120 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="Pip_Boy.Items.Aid" Collapsed="true">
-    <Position X="11.25" Y="4" Width="1.5" />
+  <Class Name="Pip_Boy.Items.Aid">
+    <Position X="8" Y="7.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Pip_Boy.Items.Aid.AidType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Items\Aid.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAgAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
       <FileName>Items\Aid.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Pip_Boy.Items.Ammo" Collapsed="true">
-    <Position X="13" Y="4" Width="1.5" />
+  <Class Name="Pip_Boy.Items.Ammo">
+    <Position X="10" Y="7.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Pip_Boy.Items.Ammo.AmmoType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Items\Ammo.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Pip_Boy.Items.Ammo.AmmoModification" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Items\Ammo.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAABAAAAAAAAAAAEAAAAAAAIAAAAAAAEAAAAAAAAAgA=</HashCode>
+      <HashCode>AAABAAAAAAAAAAAEAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Items\Ammo.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Pip_Boy.Items.HeadPiece" Collapsed="true">
-    <Position X="15.5" Y="5.25" Width="1.5" />
+  <Class Name="Pip_Boy.Items.HeadPiece">
+    <Position X="11.5" Y="12" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAQAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Items\HeadPiece.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Pip_Boy.Items.Item" Collapsed="true">
-    <Position X="12.75" Y="1" Width="1.5" />
+  <Class Name="Pip_Boy.Items.Item">
+    <Position X="12.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAgAAAAAAAAAEAAAAAAQAACABAEAAAAAgAAEAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAQAACAAAAAAAAAgAAEAAAA=</HashCode>
       <FileName>Items\Item.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Pip_Boy.Items.Misc" Collapsed="true">
-    <Position X="11.75" Y="2.5" Width="1.5" />
+  <Class Name="Pip_Boy.Items.Misc">
+    <Position X="9.25" Y="3.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Pip_Boy.Items.Misc.MiscType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Items\Misc.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Items\Misc.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Pip_Boy.Items.Weapon" Collapsed="true">
-    <Position X="14.75" Y="4" Width="1.5" />
+  <Class Name="Pip_Boy.Items.Weapon">
+    <Position X="14.75" Y="3.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Pip_Boy.Items.Weapon.WeaponType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Items\Weapon.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAACACAAAAAAAAkAAABAAAEAAAAAAAEBBAAAAAAAAI=</HashCode>
+      <HashCode>AAAACACAAAAAAAAkAAABAAAEAAAAAAAABBAAAAAAAAI=</HashCode>
       <FileName>Items\Weapon.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Pip_Boy.Items.Equipable" Collapsed="true">
-    <Position X="13.5" Y="2.5" Width="1.5" />
+  <Class Name="Pip_Boy.Items.Equipable">
+    <Position X="12.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAACACAAEAAQAAAAAAAAEAAAgAAAAAYAAAAA=</HashCode>
       <FileName>Items\Equipable.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Pip_Boy.Items.Apparel" Collapsed="true">
-    <Position X="16.5" Y="4" Width="1.5" />
+  <Class Name="Pip_Boy.Items.Apparel">
+    <Position X="12.25" Y="7.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Pip_Boy.Items.Apparel.PieceType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Items\Apparrel.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAACAAAAAFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAACAAAQAFAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
       <FileName>Items\Apparrel.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Pip_Boy.Items.TorsoPiece" Collapsed="true">
-    <Position X="17.5" Y="5.25" Width="1.5" />
+  <Class Name="Pip_Boy.Items.TorsoPiece">
+    <Position X="13.25" Y="12" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Items\TorsoPiece.cs</FileName>
     </TypeIdentifier>
   </Class>

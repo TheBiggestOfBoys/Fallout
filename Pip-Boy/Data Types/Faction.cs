@@ -1,28 +1,35 @@
-﻿namespace Pip_Boy.Data_Types
+﻿using System.Runtime.Serialization;
+
+namespace Pip_Boy.Data_Types
 {
     /// <summary>
     /// The faction object which can have reputation.
     /// </summary>
+    [DataContract]
     public class Faction(string name, string description)
     {
         /// <summary>
         /// The faction's name.
         /// </summary>
+        [DataMember]
         public readonly string Name = name;
 
         /// <summary>
         /// The faction's description.
         /// </summary>
+        [DataMember]
         public readonly string Description = description;
 
         /// <summary>
         /// The reputation value
         /// </summary>
+        [DataMember]
         public sbyte ReputationValue = 0;
 
         /// <summary>
         /// The type of reputation, base on the <see cref="ReputationValue"/>
         /// </summary>
+        [DataMember]
         public Reputation reputation = Reputation.Neutral;
 
         /// <summary>

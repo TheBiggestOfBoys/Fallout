@@ -1,10 +1,12 @@
 ﻿using Pip_Boy.Data_Types;
+using System.Runtime.Serialization;
 
 namespace Pip_Boy.Items
 {
     /// <summary>
     /// A torso armor
     /// </summary>
+    [DataContract]
     public class TorsoPiece : Apparel
     {
         #region Constructors

@@ -1,88 +1,154 @@
 ﻿/* Fallout-themed CSS */
 body {
-	font-family: 'Courier New';
-	background-color: #000;
-	margin: 10px;
-	padding: 20px;
+    font-family: 'Courier New';
+    background-color: #000;
+    margin: 10px;
+    padding: 20px;
 }
 
-Name, Weight, Value, Condition, IsEquipped, Effects, Damage, RateOfFire, DPS, DamageThreshold, RequiresPowerArmorTraining {
-	display: block; /* Ensure each variable is on a new line */
-	margin-bottom: 10px;
-	color: #34bd32;
-	font-weight: bold;
-	text-shadow: 0 0 5px #00FF00;
+Name, Weight, Value, Condition, IsEquipped, Effects, Damage, RateOfFire, DPS, DamageThreshold, RequiresPowerArmorTraining, originalValue, DamageThreshold, StrenghtRequirement, SkillsRequirement, TypeOfWeapon, originalDamageThreshold, TypeOfAmmo, AmmoModification, TypeOfAid {
+    display: block; /* Ensure each variable is on a new line */
+    margin-bottom: 10px;
+    color: #34bd32;
+    font-weight: bold;
+    text-shadow: 0 0 5px #00FF00;
 }
 
-	Name::before {
-		content: "Name: ";
-	}
+/* Before */
+Name::before {
+    content: "Name: ";
+}
 
-	Weight::before {
-		content: "Weight: ";
-	}
+Icon:before {
+    content: "Icon: ";
+}
 
-	Value::before {
-		content: "Value: ";
-	}
+Weight::before {
+    content: "Weight: ";
+}
 
-	Condition::before {
-		content: "Condition: ";
-	}
+Value::before {
+    content: "Value: ";
+}
 
-	IsEquipped::before {
-		content: "Is Equipped?: ";
-	}
+originalValue::before {
+    content: "Original Value: "
+}
 
-	Effects::before {
-		content: "Effects: ";
-	}
+Condition::before {
+    content: "Condition: ";
+}
 
-	Damage::before {
-		content: "Damage: ";
-	}
+IsEquipped::before {
+    content: "Is Equipped?: ";
+}
 
-	RateOfFire::before {
-		content: "Rate of Fire: ";
-	}
+Effects::before {
+    content: "Effects: ";
+}
 
-	DPS::before {
-		content: "DPS: ";
-	}
+Damage::before {
+    content: "Damage: ";
+}
 
-	DamageThreshold::before{
-		content: "Damage Threshold: "
-	}
+RateOfFire::before {
+    content: "Rate of Fire: ";
+}
 
-	RequiresPowerArmorTraining::before {
-		content: "Requires Power Armor Training?: "
-	}
+DPS::before {
+    content: "DPS: ";
+}
+
+DamageThreshold::before {
+    content: "Damage Threshold: "
+}
+
+RequiresPowerArmorTraining::before {
+    content: "Requires Power Armor Training?: "
+}
+
+StrengthRequirement::before {
+    content: "Stength Requirement: "
+}
+
+SkillRequirement::before {
+    content: "Skill Requirement: "
+}
+
+TypeOfWeapon::before {
+    content: "Weapon Type: "
+}
+
+originalDamageThreshold::before {
+    content: "Original Damage Threshold: "
+}
+
+TypeOfAmmo::before {
+    content: "Ammo Type: "
+}
+
+AmmoModification::before {
+    content: "Ammo Modification: "
+}
+
+TypeOfAid::before {
+    content: "Aid Type: "
+}
 
 /* Table styling for Effects */
 Effects {
-	display: table;
-	width: 100%;
-	border-collapse: collapse;
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
 }
 
-	Effects > Header {
-		display: table-header-group;
-		font-weight: bold;
-		background-color: #002200;
-	}
+    Effects > Header {
+        display: table-header-group;
+        font-weight: bold;
+        background-color: #002200;
+    }
 
-		Effects > Header > * {
-			display: table-cell;
-			border: 1px solid #00FF00;
-			padding: 5px;
-		}
+        Effects > Header > * {
+            display: table-cell;
+            border: 1px solid #00FF00;
+            padding: 5px;
+        }
 
-	Effects > Effect {
-		display: table-row;
-	}
+    Effects > Effect {
+        display: table-row;
+    }
 
-		Effects > Effect > * {
-			display: table-cell;
-			border: 1px solid #00FF00;
-			padding: 5px;
-		}
+        Effects > Effect > * {
+            display: table-cell;
+            border: 1px solid #00FF00;
+            padding: 5px;
+        }
+
+/* Table styling for Modifications */
+Modifications {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    Modifications > Header {
+        display: table-header-group;
+        font-weight: bold;
+        background-color: #002200;
+    }
+
+        Modifications > Header > * {
+            display: table-cell;
+            border: 1px solid #00FF00;
+            padding: 5px;
+        }
+
+    Modifications > Modification {
+        display: table-row;
+    }
+
+        Modifications > Modification > * {
+            display: table-cell;
+            border: 1px solid #00FF00;
+            padding: 5px;
+        }

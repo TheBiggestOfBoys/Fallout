@@ -31,31 +31,37 @@ namespace Pip_Boy.Data_Types
         /// <param name="instructions"></param>
         /// <param name="position"></param>
         /// <param name="optional"></param>
-        public struct Step(string instructions, Vector2 position, bool optional)
+        [DataContract]
+        public class Step(string instructions, Vector2 position, bool optional)
         {
             /// <summary>
             /// What must be done for the <see cref="Step"/> to be completed
             /// </summary>
+            [DataMember]
             public readonly string Instructions = instructions;
 
             /// <summary>
             /// If the step is completed or not
             /// </summary>
+            [DataMember]
             public bool Completed = false;
 
             /// <summary>
             /// If the step is optional, this can't be changed after construction
             /// </summary>
+            [DataMember]
             public readonly bool Optional = optional;
 
             /// <summary>
             /// If the step is hidden, when the previous step is completed, <see cref="Completed"/> will be <c>true</c> and <see cref="Hidden"/> will be <c>false</c>.
             /// </summary>
+            [DataMember]
             public bool Hidden = true;
 
             /// <summary>
             /// The location of the <see cref="Quest"/>'s <see cref="Step"/> on the <see cref="Objects.Map"/>
             /// </summary>
+            [DataMember]
             public readonly Vector2 PositionX = position;
         }
 

@@ -6,6 +6,7 @@ namespace Pip_Boy.Entities
     /// <summary>
     /// Entities with 2 arms and 2 legs
     /// </summary>
+    [DataContract]
     public abstract class Humanoid : Entity
     {
         /// <summary>
@@ -20,7 +21,14 @@ namespace Pip_Boy.Entities
         /// <inheritdoc/>
         public Humanoid(string name, byte level) : base(name, level)
         {
-            Limbs = [new("Head", "😐", []), new("Left Arm", "💪", []), new("Torso", "👕", []), new("Right Arm", "💪", []), new("Left Leg", "🦵", []), new("Right Leg", "🦵", [])];
+            Limbs = [
+                new("Head", "😐", []),
+                new("Left Arm", "💪", []),
+                new("Torso", "👕", []),
+                new("Right Arm", "💪", []),
+                new("Left Leg", "🦵", []),
+                new("Right Leg", "🦵", [])
+            ];
         }
 
         /// <inheritdoc/>

@@ -7,6 +7,7 @@ namespace Pip_Boy.Items
     /// <summary>
     /// What the non <see cref="Weapon.WeaponType.Melee"/> and <see cref="Weapon.WeaponType.Unarmed"/> <see cref="Weapon"/>s need.
     /// </summary>
+    [DataContract]
     public class Ammo : Equipable
     {
 

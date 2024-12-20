@@ -309,63 +309,21 @@ namespace Pip_Boy.Entities
 
         #region Show Entity Info
         /// <summary>
-        /// Shows the player's SPECIAL attributes
-        /// </summary>
-        /// <returns>A table of all SPECIAL attributes and their values</returns>
-        public string ShowSPECIAL()
-        {
-            StringBuilder stringBuilder = new("S.P.E.C.I.A.L.:");
-            stringBuilder.AppendLine();
-            foreach (Data_Types.Attribute attribute in SPECIAL)
-            {
-                stringBuilder.AppendLine('\t' + attribute.ToString());
-            }
-            return stringBuilder.ToString();
-        }
-
-        /// <summary>
         /// Shows the <see cref="Entity"/>'s current status
         /// </summary>
         /// <returns>A table of the <see cref="Entity"/>'s name, level and current health</returns>
         public string ShowStatus()
         {
-            StringBuilder stringBuilder = new();
+            StringBuilder stringBuilder = new("Status:");
             stringBuilder.AppendLine("Name:\t" + Name + Icon);
             stringBuilder.AppendLine("Level:\t" + Level);
             stringBuilder.AppendLine("Health:\t" + CurrentHealth + '/' + MaxHealth);
             stringBuilder.AppendLine("Action Points:\t" + ActionPoints + '/' + MaxActionPoints);
-
             return stringBuilder.ToString();
         }
 
-        /// <summary>
-        /// Shows the <see cref="Entity"/>'s skill levels
-        /// </summary>
-        /// <returns>A table with every skill and its associated value</returns>
-        public string ShowSkills()
-        {
-            StringBuilder stringBuilder = new("Skills:");
-            stringBuilder.AppendLine();
-            foreach (Data_Types.Attribute skill in Skills)
-            {
-                stringBuilder.AppendLine('\t' + skill.ToString());
-            }
-            return stringBuilder.ToString();
-        }
-
-        /// <summary>
-        /// Display the <see cref="Limb"/>s and their conditions.
-        /// </summary>
-        /// <returns></returns>
-        public virtual string ShowLimbs()
-        {
-            StringBuilder stringBuilder = new();
-            foreach (Limb limb in Limbs)
-            {
-                stringBuilder.Append($"{limb.Icon}:{limb.Condition:P}");
-            }
-            return stringBuilder.ToString();
-        }
+        /// <returns>The limbs and their percentages</returns>
+        public virtual string ShowLimbs() => PipBoy.DisplayCollection(nameof(Limbs), Limbs);
 
         /// <summary>
         /// Show 1-line preview of the <see cref="Entity"/>

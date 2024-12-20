@@ -1,5 +1,4 @@
 ﻿using System.Runtime.Serialization;
-using System.Text.RegularExpressions;
 
 namespace Pip_Boy.Data_Types
 {
@@ -64,20 +63,6 @@ namespace Pip_Boy.Data_Types
             TimeLeft = Duration;
         }
         #endregion
-
-        /// <summary>
-        /// Changes the <see cref="Effector"/> from "TheEffect" to "The Effect".
-        /// </summary>
-        /// <returns>The modified name.</returns>
-        public string ToTitleCase()
-        {
-            // Use a regular expression to split the string at capital letters
-            Regex regex = new("(?<=[a-z])(?=[A-Z])");
-            string[] words = regex.Split(Effector.ToString());
-
-            // Join the words with spaces
-            return string.Join(' ', words);
-        }
 
         /// <summary>
         /// A string representation of the <see cref="Effect"/>.

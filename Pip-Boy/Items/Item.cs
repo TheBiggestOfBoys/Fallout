@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Pip_Boy.Items
@@ -9,6 +10,7 @@ namespace Pip_Boy.Items
     [DataContract]
     public abstract class Item
     {
+        #region Variables
         /// <summary>
         /// What the <see cref="Item"/> is called.
         /// </summary>
@@ -32,6 +34,7 @@ namespace Pip_Boy.Items
         /// </summary>
         [DataMember]
         public string Icon;
+        #endregion
 
         #region Constructors
         /// <summary>
@@ -58,13 +61,9 @@ namespace Pip_Boy.Items
         /// <returns>The <see cref="Item"/>'s <see cref="Name"/>, <see cref="Icon"/>, <see cref="Value"/> and <see cref="Weight"/>, with logic handling if <see cref="Value"/> or <see cref="Weight"/> are 0</returns>
         public override string ToString()
         {
-            StringBuilder defaultHeading = new('\t' + Name + ':' + Icon);
-            defaultHeading.AppendLine();
-            defaultHeading.Append("\t\tValue: ");
-            defaultHeading.Append(Value == 0 ? "--" : Value.ToString());
-            defaultHeading.AppendLine();
-            defaultHeading.Append("\t\tWeight: ");
-            defaultHeading.Append(Weight == 0 ? "--" : Weight.ToString());
+            StringBuilder defaultHeading = new('\t' + Name + ':' + Icon + Environment.NewLine);
+            defaultHeading.AppendLine("\t\tValue: " + (Value == 0 ? "--" : Value.ToString()));
+            defaultHeading.AppendLine("\t\tWeight: " + (Weight == 0 ? "--" : Weight.ToString()));
             return defaultHeading.ToString();
         }
     }
