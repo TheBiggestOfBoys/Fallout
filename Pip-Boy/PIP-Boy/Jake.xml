@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="..\Inventory Styling.css"?>
+<Player xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/Pip_Boy.Entities">
+	<ActionPoints>34</ActionPoints>
+	<CurrentHealth>109</CurrentHealth>
+	<DamageResistance>0</DamageResistance>
+	<Effects xmlns:d2p1="http://schemas.datacontract.org/2004/07/Pip_Boy.Data_Types" />
+	<Gender>false</Gender>
+	<Icon>🕹️</Icon>
+	<Inventory xmlns:d2p1="http://schemas.datacontract.org/2004/07/Pip_Boy.Objects">
+		<d2p1:itemPage>Weapons</d2p1:itemPage>
+	</Inventory>
+	<Level>1</Level>
+	<Limbs xmlns:d2p1="http://schemas.datacontract.org/2004/07/Pip_Boy.Data_Types">
+		<d2p1:Limb>
+			<d2p1:Condition>1</d2p1:Condition>
+			<d2p1:CrippledEffects />
+			<d2p1:Icon>😐</d2p1:Icon>
+			<d2p1:Name>Head</d2p1:Name>
+		</d2p1:Limb>
+		<d2p1:Limb>
+			<d2p1:Condition>1</d2p1:Condition>
+			<d2p1:CrippledEffects />
+			<d2p1:Icon>💪</d2p1:Icon>
+			<d2p1:Name>Left Arm</d2p1:Name>
+		</d2p1:Limb>
+		<d2p1:Limb>
+			<d2p1:Condition>1</d2p1:Condition>
+			<d2p1:CrippledEffects />
+			<d2p1:Icon>👕</d2p1:Icon>
+			<d2p1:Name>Torso</d2p1:Name>
+		</d2p1:Limb>
+		<d2p1:Limb>
+			<d2p1:Condition>1</d2p1:Condition>
+			<d2p1:CrippledEffects />
+			<d2p1:Icon>💪</d2p1:Icon>
+			<d2p1:Name>Right Arm</d2p1:Name>
+		</d2p1:Limb>
+		<d2p1:Limb>
+			<d2p1:Condition>1</d2p1:Condition>
+			<d2p1:CrippledEffects />
+			<d2p1:Icon>🦵</d2p1:Icon>
+			<d2p1:Name>Left Leg</d2p1:Name>
+		</d2p1:Limb>
+		<d2p1:Limb>
+			<d2p1:Condition>1</d2p1:Condition>
+			<d2p1:CrippledEffects />
+			<d2p1:Icon>🦵</d2p1:Icon>
+			<d2p1:Name>Right Leg</d2p1:Name>
+		</d2p1:Limb>
+	</Limbs>
+	<Location xmlns:d2p1="http://schemas.datacontract.org/2004/07/System.Numerics">
+		<d2p1:X>0</d2p1:X>
+		<d2p1:Y>0</d2p1:Y>
+	</Location>
+	<MaxActionPoints>34</MaxActionPoints>
+	<MaxHealth>109</MaxHealth>
+	<Name>Jake</Name>
+	<SPECIAL xmlns:d2p1="http://schemas.datacontract.org/2004/07/Pip_Boy.Data_Types">
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>4</d2p1:Value>
+		</d2p1:Attribute>
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>4</d2p1:Value>
+		</d2p1:Attribute>
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>4</d2p1:Value>
+		</d2p1:Attribute>
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>4</d2p1:Value>
+		</d2p1:Attribute>
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>4</d2p1:Value>
+		</d2p1:Attribute>
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>4</d2p1:Value>
+		</d2p1:Attribute>
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>4</d2p1:Value>
+		</d2p1:Attribute>
+	</SPECIAL>
+	<Skills xmlns:d2p1="http://schemas.datacontract.org/2004/07/Pip_Boy.Data_Types">
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>66</d2p1:Value>
+		</d2p1:Attribute>
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>60</d2p1:Value>
+		</d2p1:Attribute>
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>24</d2p1:Value>
+		</d2p1:Attribute>
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>62</d2p1:Value>
+		</d2p1:Attribute>
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>68</d2p1:Value>
+		</d2p1:Attribute>
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>50</d2p1:Value>
+		</d2p1:Attribute>
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>55</d2p1:Value>
+		</d2p1:Attribute>
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>83</d2p1:Value>
+		</d2p1:Attribute>
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>56</d2p1:Value>
+		</d2p1:Attribute>
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>45</d2p1:Value>
+		</d2p1:Attribute>
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>48</d2p1:Value>
+		</d2p1:Attribute>
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>73</d2p1:Value>
+		</d2p1:Attribute>
+		<d2p1:Attribute>
+			<d2p1:Icon i:nil="true" />
+			<d2p1:Name>Strength</d2p1:Name>
+			<d2p1:Value>14</d2p1:Value>
+		</d2p1:Attribute>
+	</Skills>
+	<Caps>0</Caps>
+	<Perks xmlns:d2p1="http://schemas.datacontract.org/2004/07/Pip_Boy.Data_Types" />
+	<RadiationResistance>0</RadiationResistance>
+	<Rads>0</Rads>
+	<activeDirectory i:nil="true" />
+	<inventoryDirectory i:nil="true" />
+	<perksDirectory i:nil="true" />
+</Player>

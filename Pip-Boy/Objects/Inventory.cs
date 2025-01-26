@@ -149,7 +149,7 @@ namespace Pip_Boy.Objects
                 if (subDirectories.Contains(expectedSubDirectory))
                 {
                     string currentFolder = folderPath + expectedSubDirectory + '\\';
-                    string[] filePaths = Directory.GetFiles(currentFolder);
+                    string[] filePaths = Directory.GetFiles(currentFolder, "*.xml");
                     foreach (string filePath in filePaths)
                     {
                         switch (expectedSubDirectory)

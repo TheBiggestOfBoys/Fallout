@@ -23,22 +23,68 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Content Include="PIP-Boy\Sounds\**\*.wav">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="System.Windows.Extensions" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="Entity Files\" />
-		<Folder Include="PIP-Boy\Data\" />
-		<Folder Include="PIP-Boy\Factions\" />
-		<Folder Include="PIP-Boy\Map Locations\" />
-		<Folder Include="PIP-Boy\Quests\Active Quests\" />
-		<Folder Include="PIP-Boy\Quests\Completed Quests\" />
+		<Folder Include="PIP-Boy\Data\Data.txt" />
+		<Folder Include="PIP-Boy\Data\Data.wav" />
+		<Folder Include="PIP-Boy\Factions\Boomers.txt" />
+		<Folder Include="PIP-Boy\Factions\Brotherhood of Steel.txt" />
+		<Folder Include="PIP-Boy\Factions\Caesar%27s Legion.txt" />
+		<Folder Include="PIP-Boy\Factions\Followers of the Apocalypse.txt" />
+		<Folder Include="PIP-Boy\Factions\Free Side.txt" />
+		<Folder Include="PIP-Boy\Factions\Great Khans.txt" />
+		<Folder Include="PIP-Boy\Factions\New California Republic.txt" />
+		<Folder Include="PIP-Boy\Factions\Powder Gangers.txt" />
+		<Folder Include="PIP-Boy\Factions\The Strip.txt" />
+		<Folder Include="PIP-Boy\Inventory\Aid\Stimpack.xml" />
+		<Folder Include="PIP-Boy\Inventory\Ammo\10mm Ammo.xml" />
+		<Folder Include="PIP-Boy\Inventory\Apparel\Baseball Cap.xml" />
+		<Folder Include="PIP-Boy\Inventory\Apparel\Vault 13 Jumpsuit.xml" />
+		<Folder Include="PIP-Boy\Inventory\Inventory Styling.css" />
+		<Folder Include="PIP-Boy\Inventory\Misc\Journal Entry.xml" />
+		<Folder Include="PIP-Boy\Inventory\Weapon\10mm Pistol.xml" />
+		<Folder Include="PIP-Boy\Jake.xml" />
+		<Folder Include="PIP-Boy\Map Locations\Map Locations.txt" />
+		<Folder Include="PIP-Boy\Perks\Perks.txt" />
+		<Folder Include="PIP-Boy\Quests\Active Quests\Active Quests.txt" />
+		<Folder Include="PIP-Boy\Quests\Completed Quests\Completed Quests.txt" />
+		<Folder Include="PIP-Boy\Songs\.gitignore" />
+		<Folder Include="PIP-Boy\Sounds\radiation\a\ui_pipboy_radiation_a_01.wav" />
+		<Folder Include="PIP-Boy\Sounds\radiation\a\ui_pipboy_radiation_a_02.wav" />
+		<Folder Include="PIP-Boy\Sounds\radiation\a\ui_pipboy_radiation_a_03.wav" />
+		<Folder Include="PIP-Boy\Sounds\radiation\b\ui_pipboy_radiation_b_01.wav" />
+		<Folder Include="PIP-Boy\Sounds\radiation\b\ui_pipboy_radiation_b_02.wav" />
+		<Folder Include="PIP-Boy\Sounds\radiation\b\ui_pipboy_radiation_b_03.wav" />
+		<Folder Include="PIP-Boy\Sounds\radiation\c\ui_pipboy_radiation_c_01.wav" />
+		<Folder Include="PIP-Boy\Sounds\radiation\c\ui_pipboy_radiation_c_02.wav" />
+		<Folder Include="PIP-Boy\Sounds\radiation\c\ui_pipboy_radiation_c_03.wav" />
+		<Folder Include="PIP-Boy\Sounds\radiation\ui_pipboy_radiation_test_lp.wav" />
+		<Folder Include="PIP-Boy\Sounds\static\ui_static_c_01.wav" />
+		<Folder Include="PIP-Boy\Sounds\static\ui_static_c_02.wav" />
+		<Folder Include="PIP-Boy\Sounds\static\ui_static_c_03.wav" />
+		<Folder Include="PIP-Boy\Sounds\static\ui_static_c_04.wav" />
+		<Folder Include="PIP-Boy\Sounds\static\ui_static_c_05.wav" />
+		<Folder Include="PIP-Boy\Sounds\static\ui_static_d_01.wav" />
+		<Folder Include="PIP-Boy\Sounds\static\ui_static_d_02.wav" />
+		<Folder Include="PIP-Boy\Sounds\static\ui_static_d_03.wav" />
+		<Folder Include="PIP-Boy\Sounds\static\ui_static_d_04.wav" />
+		<Folder Include="PIP-Boy\Sounds\static\ui_static_d_05.wav" />
+		<Folder Include="PIP-Boy\Sounds\ui_pipboy_access_down.wav" />
+		<Folder Include="PIP-Boy\Sounds\ui_pipboy_access_up.wav" />
+		<Folder Include="PIP-Boy\Sounds\ui_pipboy_clampon.wav" />
+		<Folder Include="PIP-Boy\Sounds\ui_pipboy_highlight.wav" />
+		<Folder Include="PIP-Boy\Sounds\ui_pipboy_holotape_start.wav" />
+		<Folder Include="PIP-Boy\Sounds\ui_pipboy_holotape_stop.wav" />
+		<Folder Include="PIP-Boy\Sounds\ui_pipboy_hum_lp.wav" />
+		<Folder Include="PIP-Boy\Sounds\ui_pipboy_light_off.wav" />
+		<Folder Include="PIP-Boy\Sounds\ui_pipboy_light_on.wav" />
+		<Folder Include="PIP-Boy\Sounds\ui_pipboy_mode.wav" />
+		<Folder Include="PIP-Boy\Sounds\ui_pipboy_select.wav" />
+		<Folder Include="PIP-Boy\Sounds\ui_pipboy_tab.wav" />
+		<Folder Include="PIP-Boy\Sounds\ui_pipboy_tuner.wav" />
 	</ItemGroup>
 
 	<ItemGroup>

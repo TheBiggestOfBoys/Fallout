@@ -1,0 +1,1 @@
+Here is where the "*.xml" files for the maps locations will be stored.

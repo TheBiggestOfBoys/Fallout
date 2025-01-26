@@ -8,17 +8,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Media;
+using System.Numerics;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Xml;
-using System.Xml.Xsl;
 
 namespace Pip_Boy.Objects
 {
     /// <summary>
-    /// The <c>PIPBoy</c> object, which displays player info, <c>Inventory</c>, and other data.
+    /// Displays <see cref="Player"/> info, <see cref="Inventory"/>, and other data.
     /// It controls output and error handling
     /// </summary>
     public class PipBoy
@@ -56,31 +56,17 @@ namespace Pip_Boy.Objects
         /// <summary>
         /// A list of all unfinished quests, it can be added to, and quests will be removed and added to the `finishedQuests`, once finished.
         /// </summary>
-        public List<Quest> quests = [new("Finish the game", [new("Do stuff", new(16, 16), false), new("Do things", new(32, 32), false)])];
+        public List<Quest> quests = [];
+
         /// <summary>
         /// A list of all finished quests, which will grow.
         /// </summary>
         public List<Quest> finishedQuests = [];
 
         /// <summary>
-        /// Data items collected
-        /// </summary>
-        public string[] miscData = [];
-
-        /// <summary>
         /// An array of all factions.  Descriptions are taken from the Fallout Wiki (phrasing breaks immersion).  I might change these later.
         /// </summary>
-        public Faction[] factions = [
-            new("New California Republic", "The New California Republic (NCR) is a post-War federal republic founded in New California in 2189. It is comprised of five contiguous states located in southern California, with additional territorial holdings in northern California, Oregon and Nevada."),
-            new("Caesar's Legion", "Also referred to simply as The Legion, is an imperialistic slaver society and totalitarian dictatorship founded in 2247 by Edward 'Caesar' Sallow and Joshua Graham, built on the conquest and enslavement of tribal societies in the American southwest. To enforce unity in the absence of any civilian institutions, the Legion loosely models itself after the military of the Roman Empire, repurposing its language and aesthetics for the post-apocalypse."),
-            new("Brotherhood of Steel", "The Brotherhood of Steel (commonly abbreviated to BoS) is a post-War technology-focused paramilitary order with chapters operating across the territory of the former United States. Founded by rogue U.S. Army officer Captain Roger Maxson shortly after the Great War, the Brotherhood's core purpose is to preserve advanced technology and regulate its usage. Despite often being relatively isolationist, the Brotherhood has proved to be one of the most important organizations in the history of the wasteland, though their exact levels of power and influence have varied over time and by chapter."),
-            new("Boomers", "The Boomers are a tribe formed out of a group of vault dwellers who originally inhabited Vault 34. The overstocked, unprotected armory led to the emergence of a particularly gun-centric culture among the dwellers. The Boomers were a group particularly obsessed with weapons and the right to keep and bear them freely. When the population of the Vault ballooned in the early 23rd century, the Vault's overseer attempted to salvage the situation by introducing population control measures and sealing the armory. The efforts backfired, as rioting began, quickly turning into full-out rebellion. The future Boomers attacked the armory, taking most of the heavy weapons and equipment, then fought their way out of the vault. The reactor was damaged in the attack, dooming the vault."),
-            new("Great Khans", "The Khans were a raider tribe descended from one of the three raider clans that originated from Vault 15. They have a long and turbulent history and have been nearly wiped out on three occasions. After the original Khans faced near-extinction following the Vault Dweller's actions, they were succeeded by the New Khans and then the Great Khans."),
-            new("Followers of the Apocalypse", "The Followers of the Apocalypse, or simply the Followers, are a humanitarian organization originating in New California. Followers focus on providing education and medical services to those in need, as well as furthering research in non-military areas. Once allies of the New California Republic, they have since parted ways due to disagreements over NCR foreign policy."),
-            new("Powder Gangers", "The Powder Gangers (also referred to as Powder Gangsters by Johnson Nash) are a gang of escaped prisoners operating in the Mojave Wasteland in 2281."),
-            new("The Strip", "The New Vegas Strip is a part of New Vegas in the Mojave Wasteland in 2281."),
-            new("Free Side", "Free Side is a district of New Vegas in Fallout: New Vegas.")
-        ];
+        public Faction[] factions = [];
 
         /// <summary>
         /// The current index of the selected <see cref="Faction"/> in the <c>General</c> sub page of the <c>STAT</c> page
@@ -105,10 +91,22 @@ namespace Pip_Boy.Objects
         #endregion
         #endregion
 
+        #region Directories
         /// <summary>
         /// The directory from which files will be loaded and saved
         /// </summary>
         public readonly string activeDirectory;
+
+        /// <summary>
+        /// The directory from which data files will be loaded and saved
+        /// </summary>
+        public readonly string dataDirectory;
+
+        /// <summary>
+        /// The directory from which factions will be loaded and saved
+        /// </summary>
+        public readonly string factionDirectory;
+        #endregion
 
         /// <summary>
         /// The path of the player's <c>*.xml</c> file.
@@ -126,6 +124,17 @@ namespace Pip_Boy.Objects
         /// <param name="boot">Whether to show the boot screen.</param>
         public PipBoy(string workingDirectory, ConsoleColor color, bool boot)
         {
+            dataDirectory = workingDirectory + "Data\\";
+            factionDirectory = workingDirectory + "Factions\\";
+
+            string[] filePaths = Directory.GetFiles(factionDirectory, "*.txt");
+            factions = new Faction[filePaths.Length];
+            // Factions
+            for (int i = 0; i < filePaths.Length; i++)
+            {
+                factions[i] = new(Path.GetFileNameWithoutExtension(filePaths[i]), File.ReadAllText(filePaths[i]));
+            }
+
             // Sounds
             sounds = Directory.GetFiles(workingDirectory + "Sounds\\", "*.wav");
             staticSounds = Directory.GetFiles(workingDirectory + "Sounds\\static\\", "*wav");
@@ -198,7 +207,7 @@ namespace Pip_Boy.Objects
 
                 ShowSubMenu(GetSubMenu());
 
-                key = Console.ReadKey().Key;
+                key = Console.ReadKey(true).Key;
 
                 switch (key)
                 {
@@ -261,9 +270,16 @@ namespace Pip_Boy.Objects
                         break;
                     #endregion
 
+                    #region Object Creation (for testing)
                     case ConsoleKey.L:
                         Spawner.Prompt();
                         break;
+
+                    case ConsoleKey.P:
+                        Location location = CreateLocation();
+                        ToFile(activeDirectory + "Map Locations\\", location);
+                        break;
+                    #endregion
                 }
             }
             Shutdown();
@@ -468,11 +484,22 @@ namespace Pip_Boy.Objects
         public string ShowDataNotes()
         {
             StringBuilder stringBuilder = new();
-            foreach (string data in miscData)
+            foreach (string data in Directory.GetFiles(dataDirectory))
             {
-                stringBuilder.AppendLine(Path.GetFileNameWithoutExtension(data));
+                string extension = Path.GetExtension(data);
+                string icon = extension switch
+                {
+                    ".txt" => "📄",
+                    ".wav" => "🔊",
+                    _ => "?",
+                };
+
+                stringBuilder.AppendLine(icon + ' ' + Path.GetFileNameWithoutExtension(data));
                 stringBuilder.AppendLine(new string('-', 10));
-                stringBuilder.AppendLine(File.ReadAllText(data));
+                if (extension == ".txt")
+                {
+                    stringBuilder.AppendLine(File.ReadAllText(data));
+                }
             }
             return stringBuilder.ToString();
         }
@@ -598,6 +625,7 @@ namespace Pip_Boy.Objects
                     Item item => item.Name,
                     Entity entity => entity.Name,
                     Perk perk => perk.Name,
+                    Location location => location.Name,
                     _ => throw new Exception("Object is invalid type!")
                 };
 
@@ -740,6 +768,34 @@ namespace Pip_Boy.Objects
                 }
             }
             return obj;
+        }
+
+        public static Location CreateLocation()
+        {
+            Console.WriteLine("Location Creation");
+            Console.Write("Enter name: ");
+            string name = Console.ReadLine();
+
+            Console.Write("Enter description: ");
+            string description = Console.ReadLine();
+
+            Console.Write("Enter icon: ");
+            string icon = Console.ReadLine();
+
+            byte rads;
+            do { Console.Write("Enter rads: "); }
+            while (!byte.TryParse(Console.ReadLine(), out rads));
+
+            Vector2 position = new();
+
+            Console.WriteLine("Enter position: ");
+            do { Console.Write("Enter X: "); }
+            while (!float.TryParse(Console.ReadLine(), out position.X));
+
+            do { Console.Write("Enter Y: "); }
+            while (!float.TryParse(Console.ReadLine(), out position.Y));
+
+            return new(name, description, icon, rads, position);
         }
 
         #region Enums

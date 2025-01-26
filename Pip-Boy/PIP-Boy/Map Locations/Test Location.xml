@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="..\Inventory Styling.css"?>
+<Location xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/Pip_Boy.Data_Types">
+	<Description>A test location</Description>
+	<Icon>🏠</Icon>
+	<Name>Test Location</Name>
+	<Position xmlns:d2p1="http://schemas.datacontract.org/2004/07/System.Numerics">
+		<d2p1:X>0</d2p1:X>
+		<d2p1:Y>0</d2p1:Y>
+	</Position>
+	<Rads>0</Rads>
+</Location>

@@ -20,7 +20,7 @@ namespace Pip_Boy.Objects
             ConsoleKey key = ConsoleKey.Escape;
             while (key != ConsoleKey.Q)
             {
-                key = Console.ReadKey().Key;
+                key = Console.ReadKey(true).Key;
                 Console.Clear();
                 switch (key)
                 {
@@ -51,8 +51,7 @@ namespace Pip_Boy.Objects
                         break;
                 }
 
-
-                key = Console.ReadKey().Key; // Pause to see the result
+                key = Console.ReadKey(true).Key; // Pause to see the result
             }
         }
     }

@@ -183,7 +183,7 @@ namespace Pip_Boy.Entities
                 {
                     Console.WriteLine($"Total Points: {totalPoints - value}");
                     Console.WriteLine($"Enter {attribute} {IconDeterminer.Determine(attribute)} value (1 - 10): {value}");
-                    key = Console.ReadKey().Key;
+                    key = Console.ReadKey(true).Key;
                     switch (key)
                     {
                         case ConsoleKey.LeftArrow when value > 1 && value < totalPoints:

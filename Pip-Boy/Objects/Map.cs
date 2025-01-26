@@ -1,6 +1,8 @@
 ﻿using Pip_Boy.Data_Types;
 using Pip_Boy.Entities;
+using System;
 using System.IO;
+using System.Numerics;
 using System.Text;
 
 namespace Pip_Boy.Objects
@@ -19,6 +21,11 @@ namespace Pip_Boy.Objects
         /// The 2D <see cref="Location"/> array, which is the visual representation of the <see cref="Map"/>.
         /// </summary>
         public readonly Location?[,] Grid;
+
+        /// <summary>
+        /// The location of the <see cref="Player"/>
+        /// </summary>
+        Vector2 PlayerLocation = new();
 
         #region Constructor
         /// <summary>
@@ -59,7 +66,7 @@ namespace Pip_Boy.Objects
         /// <returns></returns>
         public static Location[] LoadLocations(string folder)
         {
-            string[] filePaths = Directory.GetFiles(folder);
+            string[] filePaths = Directory.GetFiles(folder, "*.xml");
             Location[] tempLocations = new Location[filePaths.Length];
             for (int i = 0; i < filePaths.Length; i++)
             {
@@ -77,6 +84,8 @@ namespace Pip_Boy.Objects
         /// <param name="player">The Player object to get the <see cref="Entity.Location"/> value from</param>
         public void MovePlayer(bool? up, bool? right, Player player)
         {
+            PlayerLocation = player.Location;
+
             switch (up)
             {
                 case true when player.Location.Y > 0:
@@ -109,11 +118,19 @@ namespace Pip_Boy.Objects
             {
                 for (int col = 0; col < Grid.GetLength(1); col++)
                 {
-                    Location? location = Grid[row, col];
-                    stringBuilder.Append(location is not null ? location.Icon : " ");
+                    if (PlayerLocation == new Vector2(col, row))
+                    {
+                        stringBuilder.Append("🕹️");
+                    }
+                    else
+                    {
+                        Location? location = Grid[row, col];
+                        stringBuilder.Append(location is not null ? location.Icon : ' ');
+                    }
                 }
                 stringBuilder.AppendLine();
             }
+            stringBuilder.AppendLine(string.Join(Environment.NewLine, (object[])Locations));
             return stringBuilder.ToString();
         }
     }
