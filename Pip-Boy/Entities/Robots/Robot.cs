@@ -2,19 +2,19 @@
 
 namespace Pip_Boy.Entities.Robots
 {
-    [DataContract]
-    public class Robot : Entity
-    {
-        /// <inheritdoc/>
-        public Robot() : base() { }
+	[DataContract]
+	public class Robot : Entity
+	{
+		/// <inheritdoc/>
+		public Robot() : base() { }
 
-        /// <inheritdoc/>
-        public Robot(string name, byte level) : base(name, level)
-        {
-            headPiece = null;
-            torsoPiece = null;
-            weapon = null;
-            Icon = "🤖";
-        }
-    }
+		/// <inheritdoc/>
+		public Robot(string name, byte level) : base(name, level)
+		{
+			headPiece = null;
+			torsoPiece = null;
+			weapon = null;
+			Icon = "🤖";
+		}
+	}
 }

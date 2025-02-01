@@ -2,13 +2,13 @@
 
 namespace Pip_Boy.Entities.Creatures
 {
-    [DataContract]
-    public abstract class Creature : Entity
-    {
-        /// <inheritdoc/>
-        public Creature() : base() { }
+	[DataContract]
+	public abstract class Creature : Entity
+	{
+		/// <inheritdoc/>
+		public Creature() : base() { }
 
-        /// <inheritdoc/>
-        public Creature(string name, byte level) : base(name, level) { }
-    }
+		/// <inheritdoc/>
+		public Creature(string name, byte level) : base(name, level) { }
+	}
 }
