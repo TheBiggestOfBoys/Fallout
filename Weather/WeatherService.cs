@@ -6,24 +6,18 @@ using System.Threading.Tasks;
 
 namespace Weather
 {
-	public class WeatherService
+	public class WeatherService(string key)
 	{
 		private static readonly HttpClient client = new();
-		private readonly string apiKey;
+		private readonly string apiKey = key;
 		private const string apiUrl = "http://api.openweathermap.org/data/2.5/weather";
-		public readonly bool Metric;
-
-		public WeatherService(string key)
-		{
-			apiKey = key;
-			Metric = new RegionInfo(CultureInfo.CurrentCulture.Name).IsMetric;
-		}
+		public readonly bool Metric = new RegionInfo(CultureInfo.CurrentCulture.Name).IsMetric;
 
 		public async Task<WeatherData?> GetWeatherDataAsync(string city)
 		{
 			try
 			{
-				string url = $"{apiUrl}?q={city}&appid={apiKey}&units={(Metric ? "metric" : "imperial")}";
+				string url = apiUrl + $"?q={city}&appid={apiKey}&units={(Metric ? "metric" : "imperial")}";
 				HttpResponseMessage response = await client.GetAsync(url);
 				response.EnsureSuccessStatusCode();
 

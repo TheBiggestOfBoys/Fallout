@@ -711,15 +711,13 @@ namespace Pip_Boy.Objects
 			}
 			throw new DirectoryNotFoundException("Folder not found. " + folderPath);
 		}
-		#endregion
 
-		#region From File
 		/// <summary>
-		/// Deserializes an <see cref="Entity"/> object from an <c>*.xml</c> file.
+		/// Deserializes an object from an <c>*.xml</c> file.
 		/// </summary>
-		/// <typeparam name="T">The <see cref="Entity"/> sub-class type to serialize to</typeparam>
+		/// <typeparam name="T">The type to deserialize to</typeparam>
 		/// <param name="filePath">The path to the <c>*.xml</c> file.</param>
-		/// <returns>The deserialized <see cref="Entity"/> object.</returns>
+		/// <returns>The deserialized object.</returns>
 		/// <exception cref="NullReferenceException">If the <c>*.xml</c> file returns a null object.</exception>
 		public static T FromFile<T>(string filePath)
 		{
@@ -731,17 +729,17 @@ namespace Pip_Boy.Objects
 
 					XmlReaderSettings readerSettings = new()
 					{
-						IgnoreWhitespace = true,     // Ignore insignificant whitespace
-						IgnoreComments = true,       // Ignore comments in the XML
-						IgnoreProcessingInstructions = true, // Ignore processing instructions
-						CheckCharacters = true,      // Ensure valid XML characters
-						DtdProcessing = DtdProcessing.Ignore, // Disable DTD processing for security
-						ValidationType = ValidationType.None, // Change to Schema if XML schema validation is needed
+						IgnoreWhitespace = true,
+						IgnoreComments = true,
+						IgnoreProcessingInstructions = true,
+						CheckCharacters = true,
+						DtdProcessing = DtdProcessing.Ignore,
+						ValidationType = ValidationType.None,
 						CloseInput = true,
 					};
 
 					using XmlReader reader = XmlReader.Create(filePath, readerSettings);
-					return (T)x.ReadObject(reader);
+					return (T)x.ReadObject(reader) ?? throw new NullReferenceException("Deserialized object is null.");
 				}
 				throw new FileLoadException("File is not '*.xml'. ", filePath);
 			}
