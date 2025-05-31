@@ -53,7 +53,12 @@ namespace Pip_Boy.Items
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Apparel"/> class for serialization.
 		/// </summary>
-		public Apparel() : base() { }
+		public Apparel() : base() {
+			originalDamageThreshold = 0;
+			RequiresPowerArmorTraining = false;
+			pieceType = 0;
+			Icon = string.Empty;
+		}
 		#endregion
 
 		/// <summary>

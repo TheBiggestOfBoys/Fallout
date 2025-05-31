@@ -2,6 +2,8 @@
 using Pip_Boy.Objects;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using static Pip_Boy.Items.Weapon;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Pip_Boy.Items
 {
@@ -73,7 +75,15 @@ namespace Pip_Boy.Items
 		}
 
 		/// <inheritdoc/>
-		public Weapon() : base() { }
+		public Weapon() : base() {
+			TypeOfWeapon = 0;
+			StrengthRequirement = 0;
+			SkillRequirement = 0;
+			originalDamage = 0;
+			RateOfFire = 0;
+
+			Icon = string.Empty;
+		}
 		#endregion
 
 		/// <summary>

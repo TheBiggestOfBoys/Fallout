@@ -21,7 +21,10 @@ namespace Pip_Boy.Items
 		}
 
 		/// <inheritdoc/>
-		public Misc() : base() { }
+		public Misc() : base() {
+			miscType = 0;
+			Icon = string.Empty;
+		}
 		#endregion
 
 		/// <summary>

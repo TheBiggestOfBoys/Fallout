@@ -50,19 +50,48 @@ namespace PIP_Boy_Tests
 				Assert.IsTrue(actualTypes.Contains(expectedTypes[i]));
 			}
 
-			Weapon weaponDeserializaed = PipBoy.FromFile<Weapon>(serializedFiles[0]);
-			TorsoPiece torsoPieceDeserializaed = PipBoy.FromFile<TorsoPiece>(serializedFiles[1]);
-			HeadPiece headPieceDeserializaed = PipBoy.FromFile<HeadPiece>(serializedFiles[2]);
-			Ammo ammoDeserializaed = PipBoy.FromFile<Ammo>(serializedFiles[3]);
-			Aid aidDeserializaed = PipBoy.FromFile<Aid>(serializedFiles[4]);
-			Misc miscDeserializaed = PipBoy.FromFile<Misc>(serializedFiles[5]);
+			// Deserialize each file by determining its type at runtime using a switch statement
+			Weapon? weaponDeserialized = null;
+			TorsoPiece? torsoPieceDeserialized = null;
+			HeadPiece? headPieceDeserialized = null;
+			Ammo? ammoDeserialized = null;
+			Aid? aidDeserialized = null;
+			Misc? miscDeserialized = null;
 
-			Assert.AreEqual(weapon, weaponDeserializaed);
-			Assert.AreEqual(torsoPiece, torsoPieceDeserializaed);
-			Assert.AreEqual(headPiece, headPieceDeserializaed);
-			Assert.AreEqual(ammo, ammoDeserializaed);
-			Assert.AreEqual(aid, aidDeserializaed);
-			Assert.AreEqual(misc, miscDeserializaed);
+			for (int i = 0; i < serializedFiles.Length; i++)
+			{
+				Type type = PipBoy.GetTypeFromXML(serializedFiles[i]);
+				switch (type.Name)
+				{
+					case nameof(Weapon):
+						weaponDeserialized = PipBoy.FromFile<Weapon>(serializedFiles[i]);
+						break;
+					case nameof(TorsoPiece):
+						torsoPieceDeserialized = PipBoy.FromFile<TorsoPiece>(serializedFiles[i]);
+						break;
+					case nameof(HeadPiece):
+						headPieceDeserialized = PipBoy.FromFile<HeadPiece>(serializedFiles[i]);
+						break;
+					case nameof(Ammo):
+						ammoDeserialized = PipBoy.FromFile<Ammo>(serializedFiles[i]);
+						break;
+					case nameof(Aid):
+						aidDeserialized = PipBoy.FromFile<Aid>(serializedFiles[i]);
+						break;
+					case nameof(Misc):
+						miscDeserialized = PipBoy.FromFile<Misc>(serializedFiles[i]);
+						break;
+					default:
+						throw new InvalidOperationException($"Unknown type: {type.Name}");
+				}
+			}
+
+			Assert.AreEqual(weapon, weaponDeserialized);
+			Assert.AreEqual(torsoPiece, torsoPieceDeserialized);
+			Assert.AreEqual(headPiece, headPieceDeserialized);
+			Assert.AreEqual(ammo, ammoDeserialized);
+			Assert.AreEqual(aid, aidDeserialized);
+			Assert.AreEqual(misc, miscDeserialized);
 
 			// Entity objects
 			Player testPlayer = new();

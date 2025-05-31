@@ -32,7 +32,10 @@ namespace Pip_Boy.Items
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Aid"/> class for serialization.
 		/// </summary>
-		public Aid() : base() { }
+		public Aid() : base() {
+			TypeOfAid = 0;
+			Icon = string.Empty;
+		}
 		#endregion
 
 		/// <summary>

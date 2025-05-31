@@ -1,6 +1,7 @@
 ﻿using Pip_Boy.Data_Types;
 using System;
 using System.Runtime.Serialization;
+using static Pip_Boy.Items.Ammo;
 
 namespace Pip_Boy.Items
 {
@@ -44,7 +45,12 @@ namespace Pip_Boy.Items
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Ammo"/> class for serialization.
 		/// </summary>
-		public Ammo() : base() { }
+		public Ammo() : base() {
+			TypeOfAmmo = 0;
+			Modification = 0;
+
+			Icon = string.Empty;
+		}
 		#endregion
 
 		#region Enums
