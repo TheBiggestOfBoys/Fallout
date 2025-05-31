@@ -28,7 +28,7 @@ namespace Pip_Boy
 				else if (arg.StartsWith("--color="))
 				{
 					string value = arg["--color=".Length..].Trim('"');
-					if (Enum.TryParse<ConsoleColor>(value, true, out var parsedColor))
+					if (Enum.TryParse<ConsoleColor>(value, true, out ConsoleColor parsedColor))
 						color = parsedColor;
 				}
 				else if (arg.Equals("--boot", StringComparison.OrdinalIgnoreCase))

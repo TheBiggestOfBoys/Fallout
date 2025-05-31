@@ -1,4 +1,5 @@
 ﻿using Pip_Boy.Data_Types;
+using System;
 using System.Runtime.Serialization;
 
 namespace Pip_Boy.Items
@@ -21,7 +22,8 @@ namespace Pip_Boy.Items
 		}
 
 		/// <inheritdoc/>
-		public Misc() : base() {
+		public Misc() : base()
+		{
 			miscType = 0;
 			Icon = string.Empty;
 		}
@@ -61,6 +63,24 @@ namespace Pip_Boy.Items
 			/// A package which can be delivered
 			/// </summary>
 			Package
+		}
+
+		/// <inheritdoc/>
+		public override bool Equals(object? obj)
+		{
+			if (!base.Equals(obj)) return false;
+			if (obj is not Misc other) return false;
+
+			return miscType == other.miscType;
+		}
+
+		/// <inheritdoc/>
+		public override int GetHashCode()
+		{
+			return HashCode.Combine(
+				base.GetHashCode(),
+				miscType
+			);
 		}
 	}
 }

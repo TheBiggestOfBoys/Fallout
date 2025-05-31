@@ -65,7 +65,7 @@ namespace Pip_Boy.Data_Types
 		#endregion
 
 		/// <summary>
-			/// Returns a string representation of the effect, including its icon, effector, and time left.
+		/// Returns a string representation of the effect, including its icon, effector, and time left.
 		/// </summary>
 		/// <returns>A string describing the effect.</returns>
 		public override string ToString() => $"{Icon} {Effector}: {TimeLeft}";

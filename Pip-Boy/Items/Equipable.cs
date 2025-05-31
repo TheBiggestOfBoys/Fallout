@@ -3,6 +3,7 @@ using Pip_Boy.Entities;
 using Pip_Boy.Objects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Pip_Boy.Items
@@ -91,5 +92,37 @@ namespace Pip_Boy.Items
 			+ base.ToString()
 			+ ((Effects is null || Effects.Count == 0) ? string.Empty : Environment.NewLine + PipBoy.DisplayCollection(nameof(Effects), Effects) + Environment.NewLine)
 			+ "\t\tCND: " + string.Format(Condition.ToString(), "0.00");
+
+		/// <inheritdoc/>
+		public override bool Equals(object? obj)
+		{
+			if (!base.Equals(obj)) return false;
+			if (obj is not Equipable other) return false;
+
+			// Compare originalValue, Condition, IsEquipped, and Effects
+			bool effectsEqual = (Effects == null && other.Effects == null) ||
+								(Effects != null && other.Effects != null && Effects.SequenceEqual(other.Effects));
+
+			return originalValue == other.originalValue
+				&& Condition == other.Condition
+				&& IsEquipped == other.IsEquipped
+				&& effectsEqual;
+		}
+
+		/// <inheritdoc/>
+		public override int GetHashCode()
+		{
+			int effectsHash = Effects != null
+				? Effects.Aggregate(0, (hash, effect) => HashCode.Combine(hash, effect?.GetHashCode() ?? 0))
+				: 0;
+
+			return HashCode.Combine(
+				base.GetHashCode(),
+				originalValue,
+				Condition,
+				IsEquipped,
+				effectsHash
+			);
+		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using Pip_Boy.Data_Types;
+using System;
 using System.Runtime.Serialization;
 
 namespace Pip_Boy.Items
@@ -53,7 +54,8 @@ namespace Pip_Boy.Items
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Apparel"/> class for serialization.
 		/// </summary>
-		public Apparel() : base() {
+		public Apparel() : base()
+		{
 			originalDamageThreshold = 0;
 			RequiresPowerArmorTraining = false;
 			pieceType = 0;
@@ -82,7 +84,7 @@ namespace Pip_Boy.Items
 		}
 
 		/// <summary>
-			/// Represents the approximate damage threshold category that the <see cref="Apparel"/> provides.
+		/// Represents the approximate damage threshold category that the <see cref="Apparel"/> provides.
 		/// </summary>
 		public enum PieceType : byte
 		{
@@ -102,6 +104,28 @@ namespace Pip_Boy.Items
 			/// Heavy armor, offering maximum protection but reduced mobility.
 			/// </summary>
 			Heavy
+		}
+
+		/// <inheritdoc/>
+		public override bool Equals(object? obj)
+		{
+			if (!base.Equals(obj)) return false;
+			if (obj is not Apparel other) return false;
+
+			return originalDamageThreshold == other.originalDamageThreshold
+				&& pieceType == other.pieceType
+				&& RequiresPowerArmorTraining == other.RequiresPowerArmorTraining;
+		}
+
+		/// <inheritdoc/>
+		public override int GetHashCode()
+		{
+			return HashCode.Combine(
+				base.GetHashCode(),
+				originalDamageThreshold,
+				pieceType,
+				RequiresPowerArmorTraining
+			);
 		}
 	}
 }

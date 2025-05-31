@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Media;
-using System.Numerics;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
@@ -283,7 +282,7 @@ namespace Pip_Boy.Objects
 						Console.WriteLine($"Press {ConsoleKey.Enter} to continue: ");
 						Console.ReadLine();
 						break;
-					#endregion
+						#endregion
 				}
 			}
 			Shutdown();

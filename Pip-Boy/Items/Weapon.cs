@@ -1,9 +1,9 @@
 ﻿using Pip_Boy.Data_Types;
 using Pip_Boy.Objects;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
-using static Pip_Boy.Items.Weapon;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Pip_Boy.Items
 {
@@ -75,7 +75,8 @@ namespace Pip_Boy.Items
 		}
 
 		/// <inheritdoc/>
-		public Weapon() : base() {
+		public Weapon() : base()
+		{
 			TypeOfWeapon = 0;
 			StrengthRequirement = 0;
 			SkillRequirement = 0;
@@ -119,5 +120,33 @@ namespace Pip_Boy.Items
 
 		/// <returns><see cref="Equipable.ToString()"/> is there are no <see cref="Modifications"/>.  If there are, then add them to the string.</returns>
 		public override string ToString() => Modifications.Count == 0 ? base.ToString() : PipBoy.DisplayCollection(nameof(Modifications), Modifications);
+
+		/// <inheritdoc/>
+		public override bool Equals(object? obj)
+		{
+			if (!base.Equals(obj)) return false;
+			if (obj is not Weapon other) return false;
+
+			return TypeOfWeapon == other.TypeOfWeapon
+				&& StrengthRequirement == other.StrengthRequirement
+				&& SkillRequirement == other.SkillRequirement
+				&& originalDamage == other.originalDamage
+				&& RateOfFire == other.RateOfFire
+				&& Modifications.SequenceEqual(other.Modifications);
+		}
+
+		/// <inheritdoc/>
+		public override int GetHashCode()
+		{
+			return HashCode.Combine(
+				base.GetHashCode(),
+				TypeOfWeapon,
+				StrengthRequirement,
+				SkillRequirement,
+				originalDamage,
+				RateOfFire,
+				Modifications != null ? string.Join(',', Modifications).GetHashCode() : 0
+			);
+		}
 	}
 }

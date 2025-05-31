@@ -1,4 +1,5 @@
 ﻿using Pip_Boy.Data_Types;
+using System;
 using System.Runtime.Serialization;
 
 namespace Pip_Boy.Items
@@ -32,7 +33,8 @@ namespace Pip_Boy.Items
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Aid"/> class for serialization.
 		/// </summary>
-		public Aid() : base() {
+		public Aid() : base()
+		{
 			TypeOfAid = 0;
 			Icon = string.Empty;
 		}
@@ -67,6 +69,24 @@ namespace Pip_Boy.Items
 			/// Smoked aid, such as cigarettes or cigars. May provide minor buffs or roleplay effects.
 			/// </summary>
 			Smoke
+		}
+
+		/// <inheritdoc/>
+		public override bool Equals(object? obj)
+		{
+			if (!base.Equals(obj)) return false;
+			if (obj is not Aid other) return false;
+
+			return TypeOfAid == other.TypeOfAid;
+		}
+
+		/// <inheritdoc/>
+		public override int GetHashCode()
+		{
+			return HashCode.Combine(
+				base.GetHashCode(),
+				TypeOfAid
+			);
 		}
 	}
 }

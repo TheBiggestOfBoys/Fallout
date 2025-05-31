@@ -1,7 +1,6 @@
 ﻿using Pip_Boy.Data_Types;
 using System;
 using System.Runtime.Serialization;
-using static Pip_Boy.Items.Ammo;
 
 namespace Pip_Boy.Items
 {
@@ -20,7 +19,7 @@ namespace Pip_Boy.Items
 
 		/// <summary>
 		/// The modification applied to the <see cref="Ammo"/>.
-			/// Modifications can change damage, damage type, or add special effects.
+		/// Modifications can change damage, damage type, or add special effects.
 		/// </summary>
 		[DataMember]
 		public readonly AmmoModification Modification;
@@ -45,7 +44,8 @@ namespace Pip_Boy.Items
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Ammo"/> class for serialization.
 		/// </summary>
-		public Ammo() : base() {
+		public Ammo() : base()
+		{
 			TypeOfAmmo = 0;
 			Modification = 0;
 
@@ -120,5 +120,25 @@ namespace Pip_Boy.Items
 		/// The base item string, followed by ammo type and modification details.
 		/// </returns>
 		public override string ToString() => base.ToString() + $"{Environment.NewLine}\t\tAmmo Type: {TypeOfAmmo}{Environment.NewLine}\t\tAmmo Modification: {Modification}{IconDeterminer.Determine(Modification)}";
+
+		/// <inheritdoc/>
+		public override bool Equals(object? obj)
+		{
+			if (!base.Equals(obj)) return false;
+			if (obj is not Ammo other) return false;
+
+			return TypeOfAmmo == other.TypeOfAmmo
+				&& Modification == other.Modification;
+		}
+
+		/// <inheritdoc/>
+		public override int GetHashCode()
+		{
+			return HashCode.Combine(
+				base.GetHashCode(),
+				TypeOfAmmo,
+				Modification
+			);
+		}
 	}
 }

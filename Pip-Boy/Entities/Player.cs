@@ -35,7 +35,7 @@ namespace Pip_Boy.Entities
 
 		/// <summary>
 		/// The <see cref="Effect"/>s to apply for each <see cref="RadiationSicknessLevel"/>.
-		 /// Each sub-array corresponds to a sickness level and contains the effects (e.g., stat penalties) applied at that level.
+		/// Each sub-array corresponds to a sickness level and contains the effects (e.g., stat penalties) applied at that level.
 		/// </summary>
 		[DataMember]
 		public static readonly Effect[][] RadiationSicknessEffects = [

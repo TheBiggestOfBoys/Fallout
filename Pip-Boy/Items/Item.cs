@@ -39,11 +39,11 @@ namespace Pip_Boy.Items
 
 		#region Constructors
 		/// <summary>
-		 /// Initializes a new instance of the <see cref="Item"/> class with the specified name, weight, and value.
-		 /// </summary>
-		 /// <param name="name">The name of the item.</param>
-		 /// <param name="weight">The weight of the item.</param>
-		 /// <param name="value">The value (in caps) of the item.</param>
+		/// Initializes a new instance of the <see cref="Item"/> class with the specified name, weight, and value.
+		/// </summary>
+		/// <param name="name">The name of the item.</param>
+		/// <param name="weight">The weight of the item.</param>
+		/// <param name="value">The value (in caps) of the item.</param>
 		public Item(string name, float weight, ushort value)
 		{
 			Name = name;
@@ -52,9 +52,9 @@ namespace Pip_Boy.Items
 		}
 
 		/// <summary>
-		 /// Initializes a new instance of the <see cref="Item"/> class for serialization.
-		 /// Sets default values for all properties.
-		 /// </summary>
+		/// Initializes a new instance of the <see cref="Item"/> class for serialization.
+		/// Sets default values for all properties.
+		/// </summary>
 		public Item()
 		{
 			Name = string.Empty;
@@ -76,6 +76,28 @@ namespace Pip_Boy.Items
 			defaultHeading.AppendLine("\t\tValue: " + (Value == 0 ? "--" : Value.ToString()));
 			defaultHeading.AppendLine("\t\tWeight: " + (Weight == 0 ? "--" : Weight.ToString()));
 			return defaultHeading.ToString();
+		}
+
+		/// <summary>
+		/// Checks if the contents of the 2 Items are the same
+		/// </summary>
+		/// <returns>If the Items are the same.</returns>
+		public override bool Equals(object? obj)
+		{
+			if (obj is not Item other) return false;
+			return Name == other.Name
+				&& Weight == other.Weight
+				&& Value == other.Value
+				&& Icon == other.Icon;
+		}
+
+		/// <summary>
+		/// Gets a hash code for the item based on its properties.
+		/// </summary>
+		/// <returns>The int Hash Code</returns>
+		public override int GetHashCode()
+		{
+			return HashCode.Combine(Name, Weight, Value, Icon);
 		}
 	}
 }
