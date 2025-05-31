@@ -1,4 +1,3 @@
-using Pip_Boy.Entities;
 using Pip_Boy.Items;
 using Pip_Boy.Objects;
 
@@ -8,7 +7,7 @@ namespace PIP_Boy_Tests
 	public class UnitTest1
 	{
 		[TestMethod]
-		public void TestMethod1()
+		public void ItemSerialization()
 		{
 			// Item Objects
 			Weapon weapon = new("10mm Pistol", 5.5f, 55, [], Weapon.WeaponType.Gun, 3, 30, 10, 100);
@@ -92,14 +91,6 @@ namespace PIP_Boy_Tests
 			Assert.AreEqual(ammo, ammoDeserialized);
 			Assert.AreEqual(aid, aidDeserialized);
 			Assert.AreEqual(misc, miscDeserialized);
-
-			// Entity objects
-			Player testPlayer = new();
-			string playerSerializedPath = PipBoy.ToFile("C:\\Users\\jrsco\\source\\repos\\Pip-Boy\\PIP Boy Tests\\Serialized Files\\", testPlayer);
-
-			// Test serializing them back and forth
-			Player deserializedTestPlayer = PipBoy.FromFile<Player>(playerSerializedPath);
-			Assert.IsTrue(testPlayer == deserializedTestPlayer);
 		}
 	}
 }

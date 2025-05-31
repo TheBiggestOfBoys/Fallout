@@ -7,13 +7,14 @@ namespace Pip_Boy.Items
 	/// <summary>
 	/// Represents an aid item, such as food, drink, or medicine, which can be used by the player to apply effects.
 	/// </summary>
+	[DataContract]
 	public class Aid : Equipable
 	{
 		/// <summary>
 		/// The specific type of aid this item represents (e.g., Food, Drink, Syringe).
 		/// </summary>
 		[DataMember]
-		public readonly AidType TypeOfAid;
+		public AidType TypeOfAid { get; private set; }
 
 		#region Constructors
 		/// <summary>

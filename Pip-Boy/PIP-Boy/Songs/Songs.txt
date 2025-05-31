@@ -1,0 +1,3 @@
+﻿This is where all the songs will go
+You can add your own custom songs
+*.wav files only

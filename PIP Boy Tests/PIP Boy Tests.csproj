@@ -21,18 +21,8 @@
     <ProjectReference Include="..\Pip-Boy\Pip-Boy.csproj" />
   </ItemGroup>
 
-	<ItemGroup>
-		<Content Include="PIP-Boy\**">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-
   <ItemGroup>
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Serialized Files\" />
   </ItemGroup>
 
 </Project>

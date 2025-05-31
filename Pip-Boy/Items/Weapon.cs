@@ -18,7 +18,7 @@ namespace Pip_Boy.Items
 		/// The original damage, unaffected by the <see cref="Weapon"/>'s <see cref="Equipable.Condition"/>.
 		/// </summary>
 		[DataMember]
-		private readonly byte originalDamage;
+		private byte originalDamage { get; set; }
 
 		/// <summary>
 		/// The varying damage which is just: <code><see cref="originalDamage"/> * <see cref="Equipable.Condition"/></code>
@@ -52,7 +52,7 @@ namespace Pip_Boy.Items
 		/// What kind of <see cref="Weapon"/> is it, determining the type of damage dealt.
 		/// </summary>
 		[DataMember]
-		public readonly WeaponType TypeOfWeapon;
+		public WeaponType TypeOfWeapon { get; private set; }
 
 		/// <summary>
 		/// All equipped modifications on the <see cref="Weapon"/>.

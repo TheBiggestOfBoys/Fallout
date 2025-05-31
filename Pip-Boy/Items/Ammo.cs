@@ -15,14 +15,14 @@ namespace Pip_Boy.Items
 		/// The type of ammo required for the <see cref="Weapon"/> (e.g., Bullet, Bomb, EnergyCell).
 		/// </summary>
 		[DataMember]
-		public readonly AmmoType TypeOfAmmo;
+		public AmmoType TypeOfAmmo { get; private set; }
 
 		/// <summary>
 		/// The modification applied to the <see cref="Ammo"/>.
 		/// Modifications can change damage, damage type, or add special effects.
 		/// </summary>
 		[DataMember]
-		public readonly AmmoModification Modification;
+		public AmmoModification Modification { get; private set; }
 
 		#region Constructors
 		/// <summary>

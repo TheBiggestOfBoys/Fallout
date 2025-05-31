@@ -18,7 +18,7 @@ namespace Pip_Boy.Items
 		/// The original value of the <see cref="Equipable"/>, unaffected by <see cref="Condition"/>.
 		/// </summary>
 		[DataMember]
-		private readonly ushort originalValue;
+		private ushort originalValue { get; set; }
 
 		/// <summary>
 		/// The percentage of the <see cref="Equipable"/> used to determine <see cref="Weapon.Damage"/>, <see cref="Apparel.DamageThreshold"/> and <see cref="Item.Value"/>.
@@ -36,7 +36,7 @@ namespace Pip_Boy.Items
 		/// The effects that the <see cref="Equipable"/> will apply when <see cref="Equip(Entity)"/>'d to an <see cref="Entity"/>.
 		/// </summary>
 		[DataMember]
-		public readonly List<Effect> Effects;
+		public List<Effect> Effects { get; private set; }
 
 		#region Constructors
 		/// <inheritdoc/>

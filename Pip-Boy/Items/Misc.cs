@@ -11,7 +11,7 @@ namespace Pip_Boy.Items
 	public class Misc : Item
 	{
 		[DataMember]
-		public readonly MiscType miscType;
+		public MiscType miscType { get; private set; }
 
 		#region Constructors
 		/// <inheritdoc/>

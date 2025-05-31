@@ -1,1 +1,3 @@
-Serialized Files/*
+# Ignore files created for Serilization Tests
+Serialized Files/*.xml
+!Serialized Files/.gitkeep

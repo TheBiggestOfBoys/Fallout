@@ -14,13 +14,13 @@ namespace Pip_Boy.Items
 		/// The original damage threshold value of the apparel before condition is applied.
 		/// </summary>
 		[DataMember]
-		private readonly byte originalDamageThreshold;
+		private byte originalDamageThreshold { get; set; }
 
 		/// <summary>
 		/// The type of armor piece (e.g., head, torso) this apparel represents.
 		/// </summary>
 		[DataMember]
-		public readonly PieceType pieceType;
+		public PieceType pieceType { get; private set; }
 
 		/// <summary>
 		/// Gets the current damage threshold, which is the amount of damage this apparel will negate, factoring in its condition.
@@ -31,7 +31,7 @@ namespace Pip_Boy.Items
 		/// Indicates whether this apparel requires the "Power Armor Training" <see cref="Perk"/> to be worn.
 		/// </summary>
 		[DataMember]
-		public readonly bool RequiresPowerArmorTraining;
+		public bool RequiresPowerArmorTraining { get; private set; }
 
 		#region Constructors
 		/// <summary>

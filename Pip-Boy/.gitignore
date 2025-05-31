@@ -1,9 +1,3 @@
-﻿# Folders to ignore
-Saved Code Snippets/
-Entity Files/
-
-# Ignore files
-    # Large *.wav files for songs
-PIP-Boy/Songs/*
-    # Any misc *.xml files in the oproject
-*.xml
+﻿# Ignore large *.wav files for songs
+PIP-Boy/Songs/*.wav
+!PIP-Boy/Songs/.gitkeep
