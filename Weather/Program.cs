@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -6,14 +7,20 @@ namespace Weather
 {
 	internal class Program
 	{
+		static readonly IConfigurationRoot config = new ConfigurationBuilder()
+			.AddUserSecrets<Program>()
+			.Build();
+
 		static async Task Main()
 		{
+
 			if (WeatherService.IsInternetAvailable().Result)
 			{
 				Console.WriteLine("Internet connection available.");
 
 				Console.OutputEncoding = Encoding.UTF8;
-				const string apiKey = "0852680cb401df381bedf177ee3ea4f9";
+
+				string apiKey = config["WeatherApiKey"];
 
 				Console.Write("Enter city name: ");
 				string city = Console.ReadLine();

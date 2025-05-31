@@ -8,13 +8,14 @@ using System.Linq;
 namespace Pip_Boy.Objects
 {
 	/// <summary>
-	/// Controls behavior of the sub-lists, and the <see cref="Item"/>s contained within.
+	/// Manages the player's inventory, including all item sub-lists (Weapons, Apparel, Aid, Misc, Ammo).
+	/// Handles loading, saving, adding, and removing items, as well as carry weight calculations.
 	/// </summary>
 	public class Inventory
 	{
 		#region Lists
 		/// <summary>
-		/// All <see cref="Weapon"/>s in the<see cref="Inventory"/>.
+		/// All <see cref="Weapon"/>s in the <see cref="Inventory"/>.
 		/// </summary>
 		public List<Weapon> Weapons { get; private set; } = [];
 
@@ -46,59 +47,59 @@ namespace Pip_Boy.Objects
 
 		#region Folders
 		/// <summary>
-		/// The sub-directories needed in the <see cref="InventoryFolderPath"/> directory
+		/// The sub-directories expected in the <see cref="InventoryFolderPath"/> directory.
 		/// </summary>
 		readonly string[] expectedSubDirectories = ["Weapon", "Apparel", "Aid", "Misc", "Ammo"];
 
 		/// <summary>
-		/// Directory which holds all sub-directories for <see cref="Inventory"/> <see cref="Item"/>s
+		/// Directory which holds all sub-directories for <see cref="Inventory"/> <see cref="Item"/>s.
 		/// </summary>
 		public readonly string InventoryFolderPath;
 
 		/// <summary>
-		/// Directory which holds all Serialized <see cref="Weapon"/> objects for the <see cref="Weapons"/> list
+		/// Directory which holds all serialized <see cref="Weapon"/> objects for the <see cref="Weapons"/> list.
 		/// </summary>
 		public readonly string WeaponFolderPath;
 
 		/// <summary>
-		/// Directory which holds all Serialized <see cref="Apparel"/> objects for the <see cref="Apparels"/> list
+		/// Directory which holds all serialized <see cref="Apparel"/> objects for the <see cref="Apparels"/> list.
 		/// </summary>
 		public readonly string ApparelFolderPath;
 
 		/// <summary>
-		/// Directory which holds all Serialized <see cref="Aid"/> objects for the <see cref="Aids"/> list
+		/// Directory which holds all serialized <see cref="Aid"/> objects for the <see cref="Aids"/> list.
 		/// </summary>
 		public readonly string AidFolderPath;
 
 		/// <summary>
-		/// Directory which holds all Serialized <see cref="Misc"/> objects for the <see cref="Miscs"/> list
+		/// Directory which holds all serialized <see cref="Misc"/> objects for the <see cref="Miscs"/> list.
 		/// </summary>
 		public readonly string MiscFolderPath;
 
 		/// <summary>
-		/// Directory which holds all Serialized <see cref="Ammo"/> objects for the <see cref="Ammos"/> list
+		/// Directory which holds all serialized <see cref="Ammo"/> objects for the <see cref="Ammos"/> list.
 		/// </summary>
 		public readonly string AmmoFolderPath;
 		#endregion
 
 		/// <summary>
-		/// The maximum weight the player can carry
+		/// The maximum weight the player can carry.
 		/// </summary>
 		public ushort MaxCarryWeight { get; private set; }
 
 		/// <summary>
-		/// The current weight of all items in <see cref="Inventory"/>
+		/// The current weight of all items in the <see cref="Inventory"/>.
 		/// </summary>
 		public float CurrentCarryWeight => CalculateWeight();
 
 		/// <summary>
-		/// If <see cref="CurrentCarryWeight"/> is greater than or equal to the <see cref="MaxCarryWeight"/>
+		/// Indicates if the player is over-encumbered (i.e., carrying too much weight).
 		/// </summary>
 		public bool IsOverEncumbered => CurrentCarryWeight >= MaxCarryWeight;
 
 		#region Constructors
 		/// <summary>
-		/// Empty constructor for serialization.
+		/// Initializes a new, empty <see cref="Inventory"/> for serialization.
 		/// </summary>
 		public Inventory()
 		{
@@ -111,10 +112,11 @@ namespace Pip_Boy.Objects
 		}
 
 		/// <summary>
-		/// Creates an inventory from folder and <see cref="Player"/>.
+		/// Initializes a new <see cref="Inventory"/> by loading items from the specified folder and player.
 		/// </summary>
-		/// <param name="folderPath">Where to load the items from.</param>
-		/// <param name="player">Used to determine max carry weight.</param>
+		/// <param name="folderPath">The folder to load the items from.</param>
+		/// <param name="player">The player, used to determine max carry weight.</param>
+		/// <exception cref="DirectoryNotFoundException">Thrown if the folder does not exist.</exception>
 		public Inventory(string folderPath, Player player)
 		{
 			if (!Directory.Exists(folderPath))
@@ -134,6 +136,7 @@ namespace Pip_Boy.Objects
 			MiscFolderPath = InventoryFolderPath + "Misc\\";
 			AmmoFolderPath = InventoryFolderPath + "Ammo\\";
 
+			// Max carry weight is based on player's Strength SPECIAL stat
 			MaxCarryWeight = (ushort)(150 + (player.SPECIAL[0].Value * 10));
 
 			// Get the sub-directories of the Inventory directory
@@ -180,9 +183,9 @@ namespace Pip_Boy.Objects
 		#endregion
 
 		/// <summary>
-		/// Sums up the weight of all items in the <see cref="Inventory"/>
+		/// Calculates the total weight of all items in the <see cref="Inventory"/>.
 		/// </summary>
-		/// <returns>The total weight</returns>
+		/// <returns>The total weight of all items.</returns>
 		private float CalculateWeight() => Weapons.Sum(x => x.Weight) + Apparels.Sum(x => x.Weight) + Aids.Sum(x => x.Weight) + Miscs.Sum(x => x.Weight) + Ammos.Sum(x => x.Weight);
 
 		/// <summary>
@@ -199,7 +202,7 @@ namespace Pip_Boy.Objects
 
 		#region Inventory Management
 		/// <summary>
-		/// Clear all <c>Inventory</c> sub-lists.
+		/// Clears all <see cref="Inventory"/> sub-lists, removing all items.
 		/// </summary>
 		public void Clear()
 		{
@@ -211,9 +214,9 @@ namespace Pip_Boy.Objects
 		}
 
 		/// <summary>
-		/// Adds a generic item to its correct list
+		/// Adds a generic <see cref="Item"/> to its correct sub-list and sorts the list by name.
 		/// </summary>
-		/// <param name="item">The <c>Item</c> to add</param>
+		/// <param name="item">The <see cref="Item"/> to add.</param>
 		public void Add(Item item)
 		{
 			switch (item)
@@ -242,9 +245,9 @@ namespace Pip_Boy.Objects
 		}
 
 		/// <summary>
-		/// Removes a item from its list
+		/// Removes an <see cref="Item"/> from its sub-list and sorts the list by name.
 		/// </summary>
-		/// <param name="item">The <c>Item</c> to drop</param>
+		/// <param name="item">The <see cref="Item"/> to remove.</param>
 		public void Drop(Item item)
 		{
 			switch (item)
@@ -273,11 +276,11 @@ namespace Pip_Boy.Objects
 		}
 
 		/// <summary>
-		/// Counts how many occurrences of an <see cref="Item"/> are in a <see cref="List{Item}"/>
+		/// Counts how many occurrences of an <see cref="Item"/> are in a <see cref="List{Item}"/>.
 		/// </summary>
 		/// <param name="list">The <see cref="List{Item}"/> to search through.</param>
 		/// <param name="item">The <see cref="Item"/> to look for.</param>
-		/// <returns></returns>
+		/// <returns>The number of occurrences of the item in the list.</returns>
 		public static int CountItem(List<Item> list, Item item)
 		{
 			if (list.Contains(item))
@@ -305,7 +308,12 @@ namespace Pip_Boy.Objects
 		}
 		#endregion
 
-		/// <returns>A table of every <see cref="itemPage"/> <see cref="Item"/>'s <see cref="Item.ToString()"/></returns>
+		/// <summary>
+		/// Returns a string representation of the inventory, including carry weight and the current item page's items.
+		/// </summary>
+		/// <returns>
+		/// A table of every <see cref="itemPage"/> <see cref="Item"/>'s <see cref="Item.ToString()"/>.
+		/// </returns>
 		public override string ToString() =>
 			$"{CurrentCarryWeight}/{MaxCarryWeight} -- Over Encumbered?: {IsOverEncumbered}"
 			+ Environment.NewLine
@@ -322,14 +330,29 @@ namespace Pip_Boy.Objects
 			};
 
 		/// <summary>
-		/// <see cref="Item"/> sub-menu pages
+		/// Enumerates the possible item sub-menu pages for the inventory.
 		/// </summary>
 		public enum ItemsPages
 		{
+			/// <summary>
+			/// The weapons page, displaying all <see cref="Weapon"/>s.
+			/// </summary>
 			Weapons,
+			/// <summary>
+			/// The apparel page, displaying all <see cref="Apparel"/>s.
+			/// </summary>
 			Apparel,
+			/// <summary>
+			/// The aid page, displaying all <see cref="Aid"/>s.
+			/// </summary>
 			Aid,
+			/// <summary>
+			/// The ammo page, displaying all <see cref="Ammo"/>s.
+			/// </summary>
 			Ammo,
+			/// <summary>
+			/// The misc page, displaying all <see cref="Misc"/> items.
+			/// </summary>
 			Misc
 		}
 	}

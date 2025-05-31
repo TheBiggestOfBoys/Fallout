@@ -4,30 +4,44 @@ using System.Runtime.Serialization;
 namespace Pip_Boy.Items
 {
 	/// <summary>
-	/// A wearable item, which can reduce damage taken.
+	/// Represents a wearable item, such as armor, that can reduce damage taken by the player or entity.
 	/// </summary>
 	[DataContract]
 	public abstract class Apparel : Equipable
 	{
+		/// <summary>
+		/// The original damage threshold value of the apparel before condition is applied.
+		/// </summary>
 		[DataMember]
 		private readonly byte originalDamageThreshold;
 
+		/// <summary>
+		/// The type of armor piece (e.g., head, torso) this apparel represents.
+		/// </summary>
 		[DataMember]
 		public readonly PieceType pieceType;
 
 		/// <summary>
-		/// How much damage the <see cref="Apparel"/> will negate
+		/// Gets the current damage threshold, which is the amount of damage this apparel will negate, factoring in its condition.
 		/// </summary>
 		public byte DamageThreshold => (byte)(originalDamageThreshold * Condition);
 
 		/// <summary>
-		/// If the <see cref="Apparel"/> object need the "Power Armor Training" <see cref="Perk"/> to be worn.
+		/// Indicates whether this apparel requires the "Power Armor Training" <see cref="Perk"/> to be worn.
 		/// </summary>
 		[DataMember]
 		public readonly bool RequiresPowerArmorTraining;
 
 		#region Constructors
-		/// <inheritdoc/>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Apparel"/> class with the specified parameters.
+		/// </summary>
+		/// <param name="name">The name of the apparel item.</param>
+		/// <param name="weight">The weight of the apparel item.</param>
+		/// <param name="value">The value (in caps) of the apparel item.</param>
+		/// <param name="effects">The effects this apparel applies when equipped.</param>
+		/// <param name="DT">The original damage threshold value.</param>
+		/// <param name="powerArmor">Whether this apparel requires Power Armor Training.</param>
 		public Apparel(string name, float weight, ushort value, Effect[] effects, byte DT, bool powerArmor) : base(name, weight, value, effects)
 		{
 			originalDamageThreshold = DT;
@@ -36,15 +50,17 @@ namespace Pip_Boy.Items
 			Icon = IconDeterminer.Determine(this);
 		}
 
-		/// <inheritdoc/>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Apparel"/> class for serialization.
+		/// </summary>
 		public Apparel() : base() { }
 		#endregion
 
 		/// <summary>
-		/// Gets
+		/// Determines the <see cref="PieceType"/> of the given <see cref="Apparel"/> based on its weight and type.
 		/// </summary>
-		/// <param name="apparel"></param>
-		/// <returns></returns>
+		/// <param name="apparel">The apparel item to evaluate.</param>
+		/// <returns>The determined <see cref="PieceType"/> (Nothing, Light, Medium, or Heavy).</returns>
 		public static PieceType GetPieceType(Apparel apparel)
 		{
 			int nothingWeight = apparel is HeadPiece ? 1 : 10;
@@ -61,13 +77,25 @@ namespace Pip_Boy.Items
 		}
 
 		/// <summary>
-		/// The approximate <see cref="DamageThreshold"/> the <see cref="Apparel"/> gives.
+			/// Represents the approximate damage threshold category that the <see cref="Apparel"/> provides.
 		/// </summary>
 		public enum PieceType : byte
 		{
+			/// <summary>
+			/// No significant protection (e.g., clothing or very light gear).
+			/// </summary>
 			Nothing,
+			/// <summary>
+			/// Light armor, offering minimal protection but high mobility.
+			/// </summary>
 			Light,
+			/// <summary>
+			/// Medium armor, balancing protection and mobility.
+			/// </summary>
 			Medium,
+			/// <summary>
+			/// Heavy armor, offering maximum protection but reduced mobility.
+			/// </summary>
 			Heavy
 		}
 	}

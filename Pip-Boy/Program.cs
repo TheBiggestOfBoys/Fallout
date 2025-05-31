@@ -9,11 +9,35 @@ namespace Pip_Boy
 	/// </summary>
 	public class Program
 	{
-		static void Main()
+		static void Main(string[] args)
 		{
-			string folderPath = Directory.GetCurrentDirectory() + "\\PIP-Boy\\";
-			PipBoy pipBoy = new(folderPath, ConsoleColor.DarkYellow, false);
+			// Default values
+			string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "PIP-Boy\\");
+			ConsoleColor color = ConsoleColor.DarkYellow;
+			bool boot = false;
 
+			// Parse args
+			foreach (string arg in args)
+			{
+				if (arg.StartsWith("--folder="))
+				{
+					string value = arg["--folder=".Length..].Trim('"');
+					if (!string.IsNullOrWhiteSpace(value))
+						folderPath = value;
+				}
+				else if (arg.StartsWith("--color="))
+				{
+					string value = arg["--color=".Length..].Trim('"');
+					if (Enum.TryParse<ConsoleColor>(value, true, out var parsedColor))
+						color = parsedColor;
+				}
+				else if (arg.Equals("--boot", StringComparison.OrdinalIgnoreCase))
+				{
+					boot = true;
+				}
+			}
+
+			PipBoy pipBoy = new(folderPath, color, boot);
 			pipBoy.MainLoop();
 		}
 	}

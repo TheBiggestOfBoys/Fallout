@@ -18,13 +18,13 @@ namespace Pip_Boy.Entities
 	{
 		#region Radiation Stuff
 		/// <summary>
-		/// How much radiation the <see cref="Player"/> has.
+		/// How much radiation the <see cref="Player"/> has, measured in RADs.
 		/// </summary>
 		[DataMember]
 		public uint Rads { get; private set; } = 0u;
 
 		/// <summary>
-		/// How sick the <see cref="Player"/> is, based on <see cref="Rads"/>. 
+		/// The current level of radiation sickness the <see cref="Player"/> is experiencing, based on <see cref="Rads"/>.
 		/// </summary>
 		public RadiationSicknessLevels RadiationSicknessLevel => (RadiationSicknessLevels)Rads;
 
@@ -35,6 +35,7 @@ namespace Pip_Boy.Entities
 
 		/// <summary>
 		/// The <see cref="Effect"/>s to apply for each <see cref="RadiationSicknessLevel"/>.
+		 /// Each sub-array corresponds to a sickness level and contains the effects (e.g., stat penalties) applied at that level.
 		/// </summary>
 		[DataMember]
 		public static readonly Effect[][] RadiationSicknessEffects = [
@@ -47,7 +48,7 @@ namespace Pip_Boy.Entities
         ];
 
 		/// <summary>
-		/// The percentage resistance to radiation.
+		/// The percentage resistance to radiation, reducing the amount of RADs gained.
 		/// </summary>
 		[DataMember]
 		public float RadiationResistance { get; private set; }
@@ -172,7 +173,7 @@ namespace Pip_Boy.Entities
 			int index = 0;
 
 			Data_Types.Attribute.AttributeName[] SPECIALAttributes = (Data_Types.Attribute.AttributeName[])Enum.GetValues(typeof(Data_Types.Attribute.AttributeName));
-			SPECIALAttributes = SPECIALAttributes.Take(7).ToArray();
+			SPECIALAttributes = [.. SPECIALAttributes.Take(7)];
 			foreach (Data_Types.Attribute.AttributeName attribute in SPECIALAttributes)
 			{
 				byte value = 1;
@@ -222,15 +223,33 @@ namespace Pip_Boy.Entities
 			return stringBuilder.ToString();
 		}
 
+		/// <summary>
+		/// Represents the different levels of radiation sickness a player can experience, based on accumulated RADs.
+		/// </summary>
 		public enum RadiationSicknessLevels : uint
 		{
+			/// <summary>
+			/// No radiation sickness (0-199 RADs). No negative effects.
+			/// </summary>
 			None = 0u,
+			/// <summary>
+			/// Minor radiation sickness (200-399 RADs). Small penalties to Endurance.
+			/// </summary>
 			Minor = 200u,
+			/// <summary>
+			/// Advanced radiation sickness (400-599 RADs). Greater penalties to Endurance and Agility.
+			/// </summary>
 			Advanced = 400u,
+			/// <summary>
+			/// Critical radiation sickness (600-799 RADs). Severe penalties to Endurance, Agility, and Strength.
+			/// </summary>
 			Critical = 600u,
+			/// <summary>
+			/// Deadly radiation sickness (800-999 RADs). Maximum stat penalties, near-fatal condition.
+			/// </summary>
 			Deadly = 800u,
 			/// <summary>
-			/// Instant Death
+			/// Fatal radiation poisoning (1000+ RADs). Instant death.
 			/// </summary>
 			Fatal = 1000u,
 		}

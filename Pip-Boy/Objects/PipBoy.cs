@@ -7,6 +7,7 @@ using Pip_Boy.Items;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Media;
 using System.Numerics;
 using System.Reflection;
@@ -147,7 +148,6 @@ namespace Pip_Boy.Objects
 			activeDirectory = workingDirectory;
 			dateTime = DateTime.Now;
 			Color = color;
-			playerFilePath = Directory.GetFiles(activeDirectory, "*.xml")[0];
 
 			Console.ForegroundColor = Color;
 			Console.Title = "PIP-Boy 3000 MKIV";
@@ -158,15 +158,17 @@ namespace Pip_Boy.Objects
 				Boot();
 			}
 
-			if (Directory.GetFiles(activeDirectory, "*.xml").Length == 0)
+			try
 			{
-				player = Player.CreatePlayer(activeDirectory);
-			}
-			else
-			{
+				playerFilePath = Directory.GetFiles(activeDirectory, "*.xml")[0];
 				player = FromFile<Player>(playerFilePath);
 				player.Inventory = new(activeDirectory + "Inventory\\", player);
 			}
+			catch (IndexOutOfRangeException)
+			{
+				player = Player.CreatePlayer(activeDirectory);
+			}
+
 			map.MovePlayer(null, null, player);
 		}
 		#endregion
@@ -272,14 +274,16 @@ namespace Pip_Boy.Objects
 
 					#region Object Creation (for testing)
 					case ConsoleKey.L:
-						Spawner.Prompt();
+						Console.Write("Enter the type of object to create (e.g., Weapon, Player, Ghoul): ");
+						string enteredType = Console.ReadLine();
+						Type type = GetSerializableTypeByName(enteredType);
+						object createdObject = CreateFromInput(type);
+						string filePath = ToFile(Directory.GetCurrentDirectory(), createdObject);
+						Console.WriteLine($"Created object of type {type.Name} and saved to file: {filePath}");
+						Console.WriteLine($"Press {ConsoleKey.Enter} to continue: ");
+						Console.ReadLine();
 						break;
-
-					case ConsoleKey.P:
-						Location location = CreateLocation();
-						ToFile(activeDirectory + "Map Locations\\", location);
-						break;
-						#endregion
+					#endregion
 				}
 			}
 			Shutdown();
@@ -594,6 +598,129 @@ namespace Pip_Boy.Objects
 		}
 
 		/// <summary>
+		/// Creates an instance of the specified <paramref name="type"/> by prompting the user to enter values for each constructor parameter.
+		/// </summary>
+		/// <param name="type">The type of object to create. Must have a public constructor.</param>
+		/// <returns>
+		/// An instance of <paramref name="type"/> with its constructor parameters set to the values entered by the user.
+		/// </returns>
+		public static object CreateFromInput(Type type)
+		{
+			ArgumentNullException.ThrowIfNull(type);
+
+			// Get the constructor with the most parameters (prefer the most complete one)
+			ConstructorInfo ctor = type.GetConstructors()
+			.OrderByDescending(c => c.GetParameters().Length)
+			.FirstOrDefault() ?? throw new InvalidOperationException($"No public constructor found for type {type.FullName}.");
+			ParameterInfo[] parameters = ctor.GetParameters();
+			object[] args = new object[parameters.Length];
+
+			for (int i = 0; i < parameters.Length; i++)
+			{
+				ParameterInfo param = parameters[i];
+				Type paramType = param.ParameterType;
+				object value;
+
+				// Use EnterValue<T> for primitives and strings, otherwise fallback to recursion for complex types
+				if (paramType.IsPrimitive || paramType == typeof(string) || paramType == typeof(decimal))
+				{
+					MethodInfo enterValueMethod = typeof(PipBoy).GetMethod(nameof(EnterValue)).MakeGenericMethod(paramType);
+					value = enterValueMethod.Invoke(null, [$"Enter value for {param.Name}"]);
+				}
+				else if (paramType.IsEnum)
+				{
+					Console.WriteLine($"Select {param.Name} ({paramType.Name}):");
+					string[] names = Enum.GetNames(paramType);
+					for (int j = 0; j < names.Length; j++)
+						Console.WriteLine($"{j}: {names[j]}");
+					int selected = -1;
+					while (selected < 0 || selected >= names.Length)
+					{
+						Console.Write("Enter number: ");
+						string input = Console.ReadLine();
+						if (int.TryParse(input, out selected) && selected >= 0 && selected < names.Length)
+							break;
+						Console.WriteLine("Invalid selection.");
+					}
+					value = Enum.Parse(paramType, names[selected]);
+				}
+				else
+				{
+					Console.WriteLine($"Creating value for parameter '{param.Name}' of type '{paramType.Name}'...");
+					value = CreateFromInput(paramType);
+				}
+
+				args[i] = value;
+			}
+
+			return ctor.Invoke(args);
+		}
+
+		/// <summary>
+		/// Returns the corresponding Type for a given serializable item/entity name.
+		/// </summary>
+		/// <param name="typeName">The name of the type (e.g., "Weapon", "Player", "Ghoul").</param>
+		/// <returns>The Type if found; otherwise, null.</returns>
+		public static Type? GetSerializableTypeByName(string typeName)
+		{
+			// List of serializable base types
+			Type[] baseTypes = [
+				typeof(Item),
+				typeof(Entity),
+				typeof(Perk),
+				typeof(Location),
+				typeof(Quest),
+				typeof(Effect),
+				typeof(Faction)
+			];
+
+			// Gather all non-abstract subclasses for each base type
+			foreach (Type baseType in baseTypes)
+			{
+				// If the base type matches the name
+				if (baseType.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase))
+				{
+					List<Type> subtypes = [.. GetAllSubtypesOf(baseType)];
+					if (subtypes.Count == 0)
+						Console.WriteLine($"No non-abstract subclasses found for '{baseType.Name}'.");
+					else
+					{
+						Console.WriteLine($"Subclasses of {baseType.Name}:");
+						foreach (Type subtype in subtypes)
+							Console.WriteLine($"- {subtype.FullName}");
+					}
+					return baseType;
+				}
+
+				// If a subclass matches the name
+				List<Type> subtypesList = [.. GetAllSubtypesOf(baseType)];
+				Type? subtypeMatch = subtypesList.FirstOrDefault(t => t.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase));
+				if (subtypeMatch != null)
+				{
+					Console.WriteLine($"Subclasses of {baseType.Name}:");
+					foreach (Type subtype in subtypesList)
+						Console.WriteLine($"- {subtype.FullName}");
+					return subtypeMatch;
+				}
+			}
+
+			Console.WriteLine($"Type '{typeName}' not found among serializable base types or their subclasses.");
+			return null;
+		}
+
+		/// <summary>
+		/// Gets all non-abstract subclasses of the specified base type from its assembly.
+		/// </summary>
+		/// <param name="baseType">The base type to find subclasses of.</param>
+		/// <returns>An enumerable of all non-abstract subclasses of <paramref name="baseType"/>.</returns>
+		public static IEnumerable<Type> GetAllSubtypesOf(Type baseType)
+		{
+			return Assembly.GetAssembly(baseType)
+			.GetTypes()
+			.Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(baseType));
+		}
+
+		/// <summary>
 		/// Slowly Type out a message to the console
 		/// </summary>
 		/// <param name="message">The message</param>
@@ -798,45 +925,6 @@ namespace Pip_Boy.Objects
 		}
 		#endregion
 		#endregion
-
-		/// <summary>
-		/// Enter the values to create an object from the console.
-		/// </summary>
-		/// <typeparam name="T">The <see cref="Type"/> of <see cref="object"/> to construct.</typeparam>
-		/// <returns>The <see cref="object"/> of the given <see cref="Type"/>.</returns>
-		public static T CreateObject<T>() where T : new()
-		{
-			T obj = new();
-			foreach (PropertyInfo prop in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
-			{
-				if (prop.CanWrite)
-				{
-					string input = EnterValue<string>($"Enter the value for {prop.Name} ({prop.PropertyType})");
-
-					object value = Convert.ChangeType(input, prop.PropertyType);
-					prop.SetValue(obj, value);
-				}
-			}
-			return obj;
-		}
-
-		public static Location CreateLocation()
-		{
-			Console.WriteLine("Location Creation");
-
-			string name = EnterValue<string>("Enter name");
-
-			string description = EnterValue<string>("Enter description");
-
-			string icon = EnterValue<string>("Enter icon");
-
-			byte rads = EnterValue<byte>("Enter rads");
-
-			Console.WriteLine("Enter position:");
-			Vector2 position = new(EnterValue<float>("Enter X"), EnterValue<float>("Enter Y"));
-
-			return new(name, description, icon, rads, position);
-		}
 
 		#region Enums
 		/// <summary>

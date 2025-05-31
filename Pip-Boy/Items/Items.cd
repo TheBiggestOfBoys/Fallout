@@ -40,7 +40,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Pip_Boy.Items.HeadPiece">
-    <Position X="11.5" Y="12" Width="1.5" />
+    <Position X="11.25" Y="12" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Items\HeadPiece.cs</FileName>
@@ -54,7 +54,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Pip_Boy.Items.Misc">
-    <Position X="9.25" Y="3.25" Width="1.5" />
+    <Position X="9.25" Y="3.5" Width="1.5" />
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
@@ -71,7 +71,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Pip_Boy.Items.Weapon">
-    <Position X="14.75" Y="3.75" Width="1.5" />
+    <Position X="14.75" Y="3.5" Width="1.5" />
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>

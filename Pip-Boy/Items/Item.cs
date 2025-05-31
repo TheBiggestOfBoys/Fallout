@@ -6,31 +6,32 @@ namespace Pip_Boy.Items
 {
 	/// <summary>
 	/// Generic super-class for all other <see cref="Objects.Inventory"/> items.
+	/// Provides common properties such as name, weight, value, and icon.
 	/// </summary>
 	[DataContract]
 	public abstract class Item
 	{
 		#region Variables
 		/// <summary>
-		/// What the <see cref="Item"/> is called.
+		/// The name of the <see cref="Item"/>.
 		/// </summary>
 		[DataMember]
 		public readonly string Name;
 
 		/// <summary>
-		/// How much the <see cref="Item"/> weighs.
+		/// The weight of the <see cref="Item"/>.
 		/// </summary>
 		[DataMember]
 		public readonly float Weight;
 
 		/// <summary>
-		/// How much the <see cref="Item"/> costs.
+		/// The value (in caps) of the <see cref="Item"/>.
 		/// </summary>
 		[DataMember]
 		public ushort Value;
 
 		/// <summary>
-		/// An emoji representation of the <see cref="Item"/>.
+		/// An emoji or icon representation of the <see cref="Item"/>.
 		/// </summary>
 		[DataMember]
 		public string Icon;
@@ -38,8 +39,11 @@ namespace Pip_Boy.Items
 
 		#region Constructors
 		/// <summary>
-		/// Constructs an new <see cref="Item"/> from the given values
-		/// </summary>
+		 /// Initializes a new instance of the <see cref="Item"/> class with the specified name, weight, and value.
+		 /// </summary>
+		 /// <param name="name">The name of the item.</param>
+		 /// <param name="weight">The weight of the item.</param>
+		 /// <param name="value">The value (in caps) of the item.</param>
 		public Item(string name, float weight, ushort value)
 		{
 			Name = name;
@@ -48,8 +52,9 @@ namespace Pip_Boy.Items
 		}
 
 		/// <summary>
-		/// Empty constructor for serialization.
-		/// </summary>
+		 /// Initializes a new instance of the <see cref="Item"/> class for serialization.
+		 /// Sets default values for all properties.
+		 /// </summary>
 		public Item()
 		{
 			Name = string.Empty;
@@ -58,7 +63,13 @@ namespace Pip_Boy.Items
 		}
 		#endregion
 
-		/// <returns>The <see cref="Item"/>'s <see cref="Name"/>, <see cref="Icon"/>, <see cref="Value"/> and <see cref="Weight"/>, with logic handling if <see cref="Value"/> or <see cref="Weight"/> are 0</returns>
+		/// <summary>
+		/// Returns a string representation of the item, including its name, icon, value, and weight.
+		/// If value or weight is zero, displays "--" instead.
+		/// </summary>
+		/// <returns>
+		/// A formatted string with the item's name, icon, value, and weight.
+		/// </returns>
 		public override string ToString()
 		{
 			StringBuilder defaultHeading = new('\t' + Name + ':' + Icon + Environment.NewLine);

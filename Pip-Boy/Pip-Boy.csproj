@@ -32,6 +32,10 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Entity Files\" />
+	</ItemGroup>
+
 	<Target Name="CopyPipBoyFolder" AfterTargets="Build">
 		<ItemGroup>
 			<PipBoyFiles Include="PIP-Boy\**\*.*" />
