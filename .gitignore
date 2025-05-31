@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /Pip-Boy/GlobalSuppressions.cs
 /Pip-Boy/Pip-Boy.csproj
+/Pip-Boy/Pip-Boy_TemporaryKey.pfx
