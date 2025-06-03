@@ -11,18 +11,20 @@ namespace Pip_Boy.Items
 	[DataContract]
 	public class Ammo : Equipable
 	{
+		#region Variable(s)
 		/// <summary>
 		/// The type of ammo required for the <see cref="Weapon"/> (e.g., Bullet, Bomb, EnergyCell).
 		/// </summary>
 		[DataMember]
-		public AmmoType TypeOfAmmo { get; private set; }
+		public readonly AmmoType TypeOfAmmo;
 
 		/// <summary>
 		/// The modification applied to the <see cref="Ammo"/>.
 		/// Modifications can change damage, damage type, or add special effects.
 		/// </summary>
 		[DataMember]
-		public AmmoModification Modification { get; private set; }
+		public readonly AmmoModification Modification;
+		#endregion
 
 		#region Constructors
 		/// <summary>
@@ -53,7 +55,10 @@ namespace Pip_Boy.Items
 		}
 		#endregion
 
-		#region Enums
+		#region Method(s)
+		#endregion
+
+		#region Enum(s)
 		/// <summary>
 		/// The type of ammo, which determines which <see cref="Weapon"/>s can use it.
 		/// </summary>
@@ -113,6 +118,7 @@ namespace Pip_Boy.Items
 		}
 		#endregion
 
+		#region Override Functions
 		/// <summary>
 		/// Returns a string representation of the ammo, including its type and modification.
 		/// </summary>
@@ -140,5 +146,6 @@ namespace Pip_Boy.Items
 				Modification
 			);
 		}
+		#endregion
 	}
 }

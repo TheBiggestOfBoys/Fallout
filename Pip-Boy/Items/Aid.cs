@@ -10,11 +10,13 @@ namespace Pip_Boy.Items
 	[DataContract]
 	public class Aid : Equipable
 	{
+		#region Variable(s)
 		/// <summary>
 		/// The specific type of aid this item represents (e.g., Food, Drink, Syringe).
 		/// </summary>
 		[DataMember]
-		public AidType TypeOfAid { get; private set; }
+		public readonly AidType TypeOfAid;
+		#endregion
 
 		#region Constructors
 		/// <summary>
@@ -41,6 +43,10 @@ namespace Pip_Boy.Items
 		}
 		#endregion
 
+		#region Method(s)
+		#endregion
+
+		#region Enum(s)
 		/// <summary>
 		/// Enumerates the possible types of aid items.
 		/// </summary>
@@ -71,7 +77,9 @@ namespace Pip_Boy.Items
 			/// </summary>
 			Smoke
 		}
+		#endregion
 
+		#region Override Functions
 		/// <inheritdoc/>
 		public override bool Equals(object? obj)
 		{
@@ -89,5 +97,6 @@ namespace Pip_Boy.Items
 				TypeOfAid
 			);
 		}
+		#endregion
 	}
 }

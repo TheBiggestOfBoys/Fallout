@@ -11,7 +11,7 @@ namespace Pip_Boy.Items
 	[DataContract]
 	public abstract class Item
 	{
-		#region Variables
+		#region Variable(s)
 		/// <summary>
 		/// The name of the <see cref="Item"/>.
 		/// </summary>
@@ -63,6 +63,13 @@ namespace Pip_Boy.Items
 		}
 		#endregion
 
+		#region Method(s)
+		#endregion
+
+		#region Enum(s)
+		#endregion
+
+		#region Override Functions
 		/// <summary>
 		/// Returns a string representation of the item, including its name, icon, value, and weight.
 		/// If value or weight is zero, displays "--" instead.
@@ -99,5 +106,6 @@ namespace Pip_Boy.Items
 		{
 			return HashCode.Combine(Name, Weight, Value, Icon);
 		}
+		#endregion
 	}
 }

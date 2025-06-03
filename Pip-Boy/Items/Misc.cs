@@ -10,8 +10,13 @@ namespace Pip_Boy.Items
 	[DataContract]
 	public class Misc : Item
 	{
+		#region Variable(s)
+		/// <summary>
+		/// Represents the type of miscellaneous data associated with this instance.
+		/// </summary>
 		[DataMember]
-		public MiscType miscType { get; private set; }
+		public readonly MiscType miscType;
+		#endregion
 
 		#region Constructors
 		/// <inheritdoc/>
@@ -29,6 +34,10 @@ namespace Pip_Boy.Items
 		}
 		#endregion
 
+		#region Method(s)
+		#endregion
+
+		#region Enum(s)
 		/// <summary>
 		/// The possible types for the <see cref="Misc"/> object.
 		/// </summary>
@@ -64,7 +73,9 @@ namespace Pip_Boy.Items
 			/// </summary>
 			Package
 		}
-
+		#endregion
+		
+		#region Override Functions
 		/// <inheritdoc/>
 		public override bool Equals(object? obj)
 		{
@@ -82,5 +93,6 @@ namespace Pip_Boy.Items
 				miscType
 			);
 		}
+		#endregion
 	}
 }

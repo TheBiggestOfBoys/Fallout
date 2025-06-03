@@ -1,3 +1,9 @@
 # Ignore files created for Serilization Tests
-Serialized Files/*.xml
-!Serialized Files/.gitkeep
+Serialized Files/Entities/*
+!Serialized Files/Entities/.gitkeep
+
+Serialized Files/Items/*
+!Serialized Files/Items/.gitkeep
+
+Serialized Files/Player/*
+!Serialized Files/Player/.gitkeep

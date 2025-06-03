@@ -14,11 +14,12 @@ namespace Pip_Boy.Items
 	[DataContract]
 	public abstract class Equipable : Item
 	{
+		#region Variable(s)
 		/// <summary>
 		/// The original value of the <see cref="Equipable"/>, unaffected by <see cref="Condition"/>.
 		/// </summary>
 		[DataMember]
-		private ushort originalValue { get; set; }
+		private readonly ushort originalValue;
 
 		/// <summary>
 		/// The percentage of the <see cref="Equipable"/> used to determine <see cref="Weapon.Damage"/>, <see cref="Apparel.DamageThreshold"/> and <see cref="Item.Value"/>.
@@ -36,7 +37,8 @@ namespace Pip_Boy.Items
 		/// The effects that the <see cref="Equipable"/> will apply when <see cref="Equip(Entity)"/>'d to an <see cref="Entity"/>.
 		/// </summary>
 		[DataMember]
-		public List<Effect> Effects { get; private set; }
+		public readonly List<Effect> Effects;
+		#endregion
 
 		#region Constructors
 		/// <inheritdoc/>
@@ -54,6 +56,7 @@ namespace Pip_Boy.Items
 		}
 		#endregion
 
+		#region Method(s)
 		/// <summary>
 		/// Equips this <see cref="Equipable"/> to an <see cref="Entity"/>.
 		/// </summary>
@@ -85,7 +88,12 @@ namespace Pip_Boy.Items
 		{
 			Value = (ushort)(originalValue * Condition);
 		}
+		#endregion
 
+		#region Enum(s)
+		#endregion
+
+		#region Override Functions
 		/// <returns>The (un)equipped character, <see cref="Item.ToString()"/>, <see cref="Effects"/> and <see cref="Condition"/>.</returns>
 		public override string ToString() =>
 			(IsEquipped ? '*' : 'O')
@@ -124,5 +132,6 @@ namespace Pip_Boy.Items
 				effectsHash
 			);
 		}
+		#endregion
 	}
 }

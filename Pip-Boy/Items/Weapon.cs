@@ -13,12 +13,12 @@ namespace Pip_Boy.Items
 	[DataContract]
 	public class Weapon : Equipable
 	{
-		#region Variables
+		#region Variable(s)
 		/// <summary>
 		/// The original damage, unaffected by the <see cref="Weapon"/>'s <see cref="Equipable.Condition"/>.
 		/// </summary>
 		[DataMember]
-		private byte originalDamage { get; set; }
+		private readonly byte originalDamage;
 
 		/// <summary>
 		/// The varying damage which is just: <code><see cref="originalDamage"/> * <see cref="Equipable.Condition"/></code>
@@ -52,7 +52,7 @@ namespace Pip_Boy.Items
 		/// What kind of <see cref="Weapon"/> is it, determining the type of damage dealt.
 		/// </summary>
 		[DataMember]
-		public WeaponType TypeOfWeapon { get; private set; }
+		public readonly WeaponType TypeOfWeapon;
 
 		/// <summary>
 		/// All equipped modifications on the <see cref="Weapon"/>.
@@ -87,6 +87,10 @@ namespace Pip_Boy.Items
 		}
 		#endregion
 
+		#region Method(s)
+		#endregion
+
+		#region Enum(s)
 		/// <summary>
 		/// The type of weapon, which determines what <see cref="Ammo"/> can be used.
 		/// </summary>
@@ -117,7 +121,9 @@ namespace Pip_Boy.Items
 			/// </summary>
 			Unarmed
 		}
+		#endregion
 
+		#region Override Functions
 		/// <returns><see cref="Equipable.ToString()"/> is there are no <see cref="Modifications"/>.  If there are, then add them to the string.</returns>
 		public override string ToString() => Modifications.Count == 0 ? base.ToString() : PipBoy.DisplayCollection(nameof(Modifications), Modifications);
 
@@ -148,5 +154,6 @@ namespace Pip_Boy.Items
 				Modifications != null ? string.Join(',', Modifications).GetHashCode() : 0
 			);
 		}
+		#endregion
 	}
 }

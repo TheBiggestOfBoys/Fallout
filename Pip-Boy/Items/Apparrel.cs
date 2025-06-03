@@ -10,17 +10,18 @@ namespace Pip_Boy.Items
 	[DataContract]
 	public abstract class Apparel : Equipable
 	{
+		#region Variable(s)
 		/// <summary>
 		/// The original damage threshold value of the apparel before condition is applied.
 		/// </summary>
 		[DataMember]
-		private byte originalDamageThreshold { get; set; }
+		private readonly byte originalDamageThreshold;
 
 		/// <summary>
 		/// The type of armor piece (e.g., head, torso) this apparel represents.
 		/// </summary>
 		[DataMember]
-		public PieceType pieceType { get; private set; }
+		public readonly PieceType pieceType;
 
 		/// <summary>
 		/// Gets the current damage threshold, which is the amount of damage this apparel will negate, factoring in its condition.
@@ -31,7 +32,8 @@ namespace Pip_Boy.Items
 		/// Indicates whether this apparel requires the "Power Armor Training" <see cref="Perk"/> to be worn.
 		/// </summary>
 		[DataMember]
-		public bool RequiresPowerArmorTraining { get; private set; }
+		public readonly bool RequiresPowerArmorTraining;
+		#endregion
 
 		#region Constructors
 		/// <summary>
@@ -63,6 +65,7 @@ namespace Pip_Boy.Items
 		}
 		#endregion
 
+		#region Method(s)
 		/// <summary>
 		/// Determines the <see cref="PieceType"/> of the given <see cref="Apparel"/> based on its weight and type.
 		/// </summary>
@@ -82,7 +85,9 @@ namespace Pip_Boy.Items
 				_ => PieceType.Heavy,
 			};
 		}
+		#endregion
 
+		#region Enum(s)
 		/// <summary>
 		/// Represents the approximate damage threshold category that the <see cref="Apparel"/> provides.
 		/// </summary>
@@ -105,7 +110,9 @@ namespace Pip_Boy.Items
 			/// </summary>
 			Heavy
 		}
+		#endregion
 
+		#region Override Functions
 		/// <inheritdoc/>
 		public override bool Equals(object? obj)
 		{
@@ -127,5 +134,6 @@ namespace Pip_Boy.Items
 				RequiresPowerArmorTraining
 			);
 		}
+		#endregion
 	}
 }
